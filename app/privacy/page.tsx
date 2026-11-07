@@ -27,9 +27,9 @@ export default function PrivacyPage() {
         <h2>What goes to Gemini</h2>
         <p>
           When you choose Interpret brief, the payment instruction and up to three contact names go
-          through our server to Google’s Gemini API. Recipient addresses and wallet credentials are
-          not included in that request. Do not put confidential or personal information in your
-          brief.
+          through our server to Google’s Gemini API. The app adds no address-book addresses or
+          wallet credentials to that request. Anything you type in the brief is sent as written. Do
+          not enter confidential or personal information.
         </p>
         <p>
           Manual Mode makes no Gemini request. The Interactions request sets store=false; other
