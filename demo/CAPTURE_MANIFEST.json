@@ -1,0 +1,28 @@
+{
+  "capturedAt": "2026-11-07T22:49:44.581Z",
+  "clips": [
+    {
+      "path": "demo/raw/01-opening.webm",
+      "elapsedMs": 15338,
+      "source": "http://127.0.0.1:3002"
+    },
+    {
+      "path": "demo/raw/02-product.webm",
+      "elapsedMs": 43066,
+      "source": "http://127.0.0.1:3002"
+    },
+    {
+      "path": "demo/raw/04-close.webm",
+      "elapsedMs": 13129,
+      "source": "http://127.0.0.1:3002"
+    }
+  ],
+  "realAIClip": false,
+  "walletApprovalClip": false,
+  "publicDevnetReceiptClip": false,
+  "missing": [
+    "demo/raw/03-phantom-receipt.mp4: user records genuine Phantom review, approval, confirmed receipt, and Explorer",
+    "Replace 02-product with a successful live Gemini interpretation before claiming the AI Track demo is verified."
+  ],
+  "notes": "No simulated wallet, model, or RPC was used. Opening/closing title slates are motion-title material, not blockchain evidence."
+}

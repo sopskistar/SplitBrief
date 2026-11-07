@@ -1,0 +1,73 @@
+{
+  "name": "splitbrief",
+  "description": "From payment instructions to one Solana transaction.",
+  "keywords": [
+    "kit",
+    "nextjs",
+    "react",
+    "solana-kit",
+    "tailwind",
+    "typescript"
+  ],
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "build": "next build",
+    "ci": "npm run lint && npm run typecheck && npm run test && npm run build",
+    "dev": "next dev",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint",
+    "start": "next start",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "test:local": "node --import tsx scripts/local-chain-test.ts",
+    "test:devnet": "node --env-file-if-exists=.env.local --import tsx scripts/devnet-test.ts",
+    "test:ai": "node --env-file-if-exists=.env.local --import tsx scripts/ai-smoke.ts",
+    "test:e2e": "playwright test",
+    "demo:capture": "node --import tsx scripts/capture-demo.ts",
+    "demo:assemble": "bash scripts/assemble-demo.sh",
+    "proof:record": "node --env-file-if-exists=.env.local --import tsx scripts/record-proof.ts",
+    "demo:screenshots": "node --import tsx scripts/screenshots.ts"
+  },
+  "dependencies": {
+    "@solana-program/system": "0.14.1",
+    "@solana/kit": "8.6.0",
+    "@solana/kit-plugin-rpc": "0.19.0",
+    "@solana/kit-plugin-wallet": "0.20.0",
+    "@solana/react": "8.6.0",
+    "next": "16.4.3",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "ws": "8.22.1",
+    "@google/genai": "3.0.0",
+    "zod": "4.6.7",
+    "lucide-react": "1.70.0",
+    "geist": "1.9.2",
+    "server-only": "0.0.1"
+  },
+  "devDependencies": {
+    "@solana/surfpool": "1.7.0",
+    "@tailwindcss/postcss": "4.3.5",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/react": "16.3.3",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@wallet-standard/wallet": "1.1.1",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.3",
+    "jsdom": "26.1.0",
+    "prettier": "3.9.10",
+    "tailwindcss": "4.3.5",
+    "typescript": "5.9.3",
+    "vitest": "4.1.12",
+    "@playwright/test": "1.65.0",
+    "@testing-library/jest-dom": "7.0.1",
+    "tsx": "4.23.15"
+  },
+  "type": "module"
+}

@@ -1,0 +1,20 @@
+{
+  "scanned": "2026-11-07",
+  "scope": "app",
+  "findings": {
+    "existing": "Initial README and LICENSE; no app code",
+    "palette": "User requested warm off-white, ink, violet, lime",
+    "framework": "Official Solana Kit Next.js starter"
+  },
+  "preserve": [
+    "README identity",
+    "LICENSE",
+    "Git history",
+    ".env.local"
+  ],
+  "introduce": [
+    "editable transfer ledger",
+    "Devnet wallet controls",
+    "independent receipt verification"
+  ]
+}

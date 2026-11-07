@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-11-07T22:18:58.948Z",
+  "model": "gemini-3.8-flash",
+  "instruction": "Pay Ada 0.002 SOL for design, Chidi 0.001 SOL for delivery, and send 0.003 SOL to Reserve.",
+  "source": "live Google Gemini API",
+  "success": false,
+  "error": {
+    "status": 504,
+    "code": "TIMEOUT",
+    "message": "Gemini timed out. Use Manual Mode or try again."
+  },
+  "elapsedMs": 22235
+}

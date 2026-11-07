@@ -1,0 +1,11 @@
+node_modules/
+.next/
+package-lock.json
+demo/raw/
+demo/output/
+test-results/
+playwright-report/
+.env*
+.local-test-keys/
+.local-evidence/
+.hallmark/

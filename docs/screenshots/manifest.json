@@ -1,0 +1,12 @@
+{
+  "capturedAt": "2026-11-07T22:48:30.437Z",
+  "source": "http://127.0.0.1:3002",
+  "screenshots": [
+    "workspace-desktop.png",
+    "manual-draft-desktop.png",
+    "workspace-mobile.png",
+    "judges-desktop.png",
+    "verifier-empty.png"
+  ],
+  "kind": "Actual app screens. No mocked RPC, wallet, or provider responses; no confirmed transaction claimed."
+}

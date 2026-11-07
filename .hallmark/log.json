@@ -1,0 +1,25 @@
+[
+ {
+  "scope": "app",
+  "shape": "app screen",
+  "theme": "Ultraviolet adapted to user palette",
+  "axes": "light/grotesk-sans/cool",
+  "nav": "compact top bar",
+  "footer": "hackathon disclosure and privacy links",
+  "signature": "editable transfer ledger and atomic payment review",
+  "sections": [
+   "brief",
+   "draft",
+   "review",
+   "receipt",
+   "contacts",
+   "history"
+  ],
+  "imagery": "actual product screenshots",
+  "entry": "SplitBrief hackathon build",
+  "prompt": "SplitBrief payment workspace",
+  "waived": [],
+  "date": "2026-11-07",
+  "mode": "build"
+ }
+]

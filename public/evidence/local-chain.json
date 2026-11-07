@@ -1,0 +1,73 @@
+{
+  "checkedAt": "2026-11-07T22:28:52.005Z",
+  "network": "local Surfpool (NOT public Devnet)",
+  "node": "v24.22.2",
+  "success": true,
+  "checks": [
+    "Exactly 3 System Program transfer instructions in ONE message",
+    "One signed transaction submitted with the expected signature",
+    "Full decoded chain transaction matches payer, destinations, amounts, order, and count",
+    "All 3 recipient balance deltas equal their exact bigint lamport amounts",
+    "Payer debit equals total transfers plus actual network fee",
+    "Underfunded transaction actually executes and reports failed status",
+    "Atomic rollback: no recipient retains any transfer from the failed transaction",
+    "Independent verifier rejects a mismatched expected payer"
+  ],
+  "payer": "95Ubb81XryPymJXQZGAtHxe5eL8CP7DwAZEC7phJqLmu",
+  "recipients": [
+    {
+      "id": "local-0",
+      "name": "Ada",
+      "address": "2iYu1ptGL2F79HkFH8sy9uncKkK3TD2nzL26BysWYKZe",
+      "description": "Disposable local test address"
+    },
+    {
+      "id": "local-1",
+      "name": "Chidi",
+      "address": "3FzFuBCTQdYE35vLcakiiDyntC4HWXxu6o2D261hnxri",
+      "description": "Disposable local test address"
+    },
+    {
+      "id": "local-2",
+      "name": "Reserve",
+      "address": "4VRdavzSvzCAi9gbiWN324hyLdeTpEMMd1fJmdeJspB2",
+      "description": "Disposable local test address"
+    }
+  ],
+  "signature": "5Xpg4z6WLVupP83XeYRJpW9Y6YJn5URDfqw2abwtFh7D2xg5MxbcMcSM6A3Dm9mQkpJd1vEq31wB3HtYiBsvoVry",
+  "failedSignature": "42QrbKE3iTL6iY9HDW8wZRQmav6ENjYhSDv16dfv4b8e6UkoZuovK7NXAcb4fRkMFvzLsi9Wz3D612pFJhjC7jtx",
+  "receipt": {
+    "signature": "5Xpg4z6WLVupP83XeYRJpW9Y6YJn5URDfqw2abwtFh7D2xg5MxbcMcSM6A3Dm9mQkpJd1vEq31wB3HtYiBsvoVry",
+    "network": "local Surfpool",
+    "state": "confirmed",
+    "payer": "95Ubb81XryPymJXQZGAtHxe5eL8CP7DwAZEC7phJqLmu",
+    "transfers": [
+      {
+        "source": "95Ubb81XryPymJXQZGAtHxe5eL8CP7DwAZEC7phJqLmu",
+        "destination": "2iYu1ptGL2F79HkFH8sy9uncKkK3TD2nzL26BysWYKZe",
+        "lamports": "2000000",
+        "inner": false
+      },
+      {
+        "source": "95Ubb81XryPymJXQZGAtHxe5eL8CP7DwAZEC7phJqLmu",
+        "destination": "3FzFuBCTQdYE35vLcakiiDyntC4HWXxu6o2D261hnxri",
+        "lamports": "1000000",
+        "inner": false
+      },
+      {
+        "source": "95Ubb81XryPymJXQZGAtHxe5eL8CP7DwAZEC7phJqLmu",
+        "destination": "4VRdavzSvzCAi9gbiWN324hyLdeTpEMMd1fJmdeJspB2",
+        "lamports": "3000000",
+        "inner": false
+      }
+    ],
+    "instructionCount": 3,
+    "feeLamports": "5000",
+    "slot": "31",
+    "timestamp": 1794090532,
+    "matchesPlan": true,
+    "issues": []
+  },
+  "assertions": 8,
+  "privateKeys": "Generated in memory only; discarded when this process exits."
+}
