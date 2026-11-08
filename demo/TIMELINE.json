@@ -1,0 +1,87 @@
+{
+  "durationSeconds": 108,
+  "fps": 30,
+  "voice": "Sulafat",
+  "provider": "Google Gemini 3.8 Flash TTS",
+  "apiVersion": "v1beta",
+  "music": "None; clear original narration",
+  "scenes": [
+    {
+      "id": "01-problem",
+      "seconds": 16,
+      "heading": "Three payments. One instruction. Too many steps.",
+      "text": "Imagine running a small business. Your designer, delivery partner, and project reserve all need payments. The instructions arrive in one message, but preparing separate wallet transfers takes time and creates more opportunities for mistakes.",
+      "start": 0,
+      "duration": 15.866666666666667,
+      "frames": 476,
+      "rawNarrationSeconds": 14.4,
+      "narration": "demo/output/final/01-problem-narration.wav"
+    },
+    {
+      "id": "02-introduction",
+      "seconds": 14,
+      "heading": "From one brief to one transaction.",
+      "text": "Meet SplitBrief, built for the MLH Solana Hackathon. Describe who needs to be paid in ordinary language, instead of repeating the same payment steps. SplitBrief turns that message into a clear payment plan.",
+      "start": 15.866666666666667,
+      "duration": 13.933333333333334,
+      "frames": 418,
+      "rawNarrationSeconds": 12.64,
+      "narration": "demo/output/final/02-introduction-narration.wav"
+    },
+    {
+      "id": "03-gemini",
+      "seconds": 13,
+      "heading": "AI prepares an editable draft.",
+      "text": "Google Gemini extracts the exact amounts: zero point zero zero two SOL for Ada, zero point zero zero one for Chidi, and zero point zero zero three for Reserve. This is an editable draft, not an automatic payment.",
+      "start": 29.8,
+      "duration": 14.933333333333334,
+      "frames": 448,
+      "rawNarrationSeconds": 13.88,
+      "narration": "demo/output/final/03-gemini-narration.wav"
+    },
+    {
+      "id": "04-review",
+      "seconds": 16,
+      "heading": "You control the recipients.",
+      "text": "Names resolve against public addresses you have saved. Check every destination, edit the amounts, and review the total and network fee before signing. Gemini never controls your private keys or approves a payment.",
+      "start": 44.733333333333334,
+      "duration": 14.933333333333334,
+      "frames": 448,
+      "rawNarrationSeconds": 13.64,
+      "narration": "demo/output/final/04-review-narration.wav"
+    },
+    {
+      "id": "05-atomic",
+      "seconds": 18,
+      "heading": "One approval. Three transfers.",
+      "text": "When you are satisfied, approve once in Phantom. Solana groups the three native transfers into one atomic transaction. Their transfer effects succeed together or roll back together; network fees can still apply on failure.",
+      "start": 59.66666666666667,
+      "duration": 15.566666666666666,
+      "frames": 467,
+      "rawNarrationSeconds": 13.92,
+      "narration": "demo/output/final/05-atomic-narration.wav"
+    },
+    {
+      "id": "06-verification",
+      "seconds": 20,
+      "heading": "A real payment. Independently verified.",
+      "text": "Here is the actual Solana Devnet result: three transfers totaling zero point zero zero six SOL in one finalized transaction. SplitBrief checks the on-chain recipients, amounts, instructions, and status, producing a receipt anyone can inspect independently.",
+      "start": 75.23333333333333,
+      "duration": 18.066666666666666,
+      "frames": 542,
+      "rawNarrationSeconds": 16.24,
+      "narration": "demo/output/final/06-verification-narration.wav"
+    },
+    {
+      "id": "07-conclusion",
+      "seconds": 11,
+      "heading": "AI organizes. You approve. Solana verifies.",
+      "text": "SplitBrief makes payment preparation simpler while the final decision stays with you. Solana makes settlement atomic and verifiable. One brief, one approval, a clearer way to pay a team. Try SplitBrief today.",
+      "start": 93.3,
+      "duration": 14.7,
+      "frames": 441,
+      "rawNarrationSeconds": 13.44,
+      "narration": "demo/output/final/07-conclusion-narration.wav"
+    }
+  ]
+}

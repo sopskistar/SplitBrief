@@ -1,0 +1,10 @@
+{
+  "source": "Google Gemini official neural TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Sulafat",
+  "checkedAt": "2026-11-08T09:28:08.350Z",
+  "elapsedMs": 6088,
+  "bytes": 651238,
+  "script": "SplitBrief makes payment preparation simpler while the final decision stays with you. Solana makes settlement atomic and verifiable. One brief, one approval, a clearer way to pay a team. Try SplitBrief today.",
+  "terms": "https://ai.google.dev/gemini-api/terms"
+}

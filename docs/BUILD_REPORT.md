@@ -1,3 +1,7 @@
+# Final delivery update — November 8
+
+The genuine outgoing 0.006 SOL batch is finalized and independently verified. The owner supplied its successful application receipt screenshot. See [current proof](DEVNET_PROOF.md), [current narrated film](DEMO_SCRIPT.md), [current tests](TESTING.md) and [submission links](SUBMISSION.md). Older notes below describe the earlier implementation checkpoint and are historical.
+
 # Final delivery report
 
 Continued the existing `sopskistar/SplitBrief` repository, preserving its Git history, MIT license, architecture, and Solana Kit payment flow. Fast-forwarded to the supplied branding commit before making changes. Original uploaded PNGs were copied byte-for-byte into public branding, retaining RGBA transparency and aspect ratio; favicon and OG assets derive from that artwork.

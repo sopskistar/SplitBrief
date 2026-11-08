@@ -1,4 +1,5 @@
 import { chromium, expect } from '@playwright/test';
+import { lamportsToSolExact } from '../lib/payments';
 import { readFile, writeFile } from 'node:fs/promises';
 const origin = process.env.PLAYWRIGHT_BASE_URL || 'https://splitbrief-zeta.vercel.app';
 const chain = JSON.parse(await readFile('public/evidence/devnet.json', 'utf8'));
@@ -16,6 +17,10 @@ try {
   for (const route of [
     '/',
     '/verify',
+    '/demo',
+    '/demo/splitbrief-poster.webp',
+    '/demo/splitbrief-captions.vtt',
+    '/evidence/devnet-batch.json',
     '/how-it-works',
     '/judges',
     '/privacy',
@@ -114,8 +119,10 @@ try {
   const receipt = page.locator('.receipt-panel');
   await expect(receipt).toContainText(chain.receipt.payer);
   await expect(receipt).toContainText(chain.receipt.transfers[0].destination);
-  await expect(receipt).toContainText('2.5');
-  await expect(receipt).toContainText('0.000005495 SOL');
+  await expect(receipt).toContainText(lamportsToSolExact(chain.totalLamports));
+  for (const transfer of chain.receipt.transfers)
+    await expect(receipt).toContainText(transfer.destination);
+  await expect(receipt).toContainText(`${lamportsToSolExact(chain.feeLamports)} SOL`);
   await expect(receipt).toContainText('finalized');
   await expect(receipt).toContainText('No expected plan was supplied');
   await expect(page.getByRole('button', { name: 'Copy signature', exact: true })).toBeVisible();
@@ -126,7 +133,7 @@ try {
     throw new Error('Mobile receipt overflows.');
   await page.screenshot({ path: 'docs/screenshots/production-receipt-mobile.png', fullPage: true });
   checks.push(
-    'Real Devnet funding receipt: actual payer/destination/2.5 SOL/fee/finality; no invented plan match; mobile fit',
+    'Real Devnet batch receipt: actual payer/three destinations/0.006 SOL/fee/finality; no invented original-plan match; mobile fit',
   );
   await page.reload();
   await expect(
@@ -135,6 +142,35 @@ try {
   await page.goto(origin, { waitUntil: 'networkidle' });
   await expect(page.locator('#history')).toContainText(chain.signature);
   checks.push('Verified reference persists across reload/navigation with a fresh RPC check');
+  await page.goto(`${origin}/demo`, { waitUntil: 'domcontentloaded' });
+  const video = page.locator('video');
+  await expect
+    .poll(() => video.evaluate((v: HTMLVideoElement) => v.readyState), { timeout: 30000 })
+    .toBeGreaterThan(0);
+  const playback = await video.evaluate(async (v: HTMLVideoElement) => {
+    await v.play();
+    await new Promise((r) => setTimeout(r, 2500));
+    v.pause();
+    return {
+      time: v.currentTime,
+      duration: v.duration,
+      width: v.videoWidth,
+      height: v.videoHeight,
+      error: v.error?.message,
+    };
+  });
+  if (
+    playback.error ||
+    playback.time < 1 ||
+    playback.duration < 105 ||
+    playback.duration >= 120 ||
+    playback.width !== 1920 ||
+    playback.height !== 1080
+  )
+    throw new Error('Production video failed playback: ' + JSON.stringify(playback));
+  checks.push(
+    'Public narrated MP4 loads and plays; 1920x1080, under two minutes, native controls/captions',
+  );
   if (errors.length) throw new Error(`Browser errors: ${errors.join('; ')}`);
   const evidence = {
     checkedAt: new Date().toISOString(),
@@ -143,7 +179,7 @@ try {
     checks,
     browserErrors: errors,
     transientNotes,
-    note: 'Anonymous public browser. Real RPC, no fixtures. Gemini is separately recorded; Phantom needs human approval.',
+    note: 'Anonymous public browser. Real RPC, no fixtures. Gemini is separately recorded; The owner supplied the genuine successful receipt; the approval popup was not recorded.',
   };
   await writeFile('public/evidence/deployment.json', JSON.stringify(evidence, null, 2) + '\n');
   console.log(JSON.stringify(evidence, null, 2));

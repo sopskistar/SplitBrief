@@ -45,6 +45,7 @@ export function Footer() {
         <span>Built for the MLH Solana Hackathon 2026</span>
       </div>
       <nav aria-label="Footer">
+        <Link href="/demo">Watch demo</Link>
         <Link href="/how-it-works">How it works</Link>
         <Link href="/privacy">Privacy</Link>
         <a href="https://github.com/sopskistar/SplitBrief" target="_blank" rel="noreferrer">

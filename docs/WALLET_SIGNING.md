@@ -1,6 +1,6 @@
 # Phantom signing mismatch: investigation and fix
 
-The owner recorded the pre-broadcast error “Wallet changed the reviewed transaction. Nothing was broadcast. Review a fresh draft.” That error proves the app rejected unequal message bytes; a recording of the error alone does not expose the exact two messages or original wallet-selected fees. No public batch settlement is inferred.
+The owner recorded the pre-broadcast error “Wallet changed the reviewed transaction. Nothing was broadcast. Review a fresh draft.” That error proves the app rejected unequal message bytes; a recording of the error alone does not expose the exact two messages or original wallet-selected fees. No public batch settlement is inferred from that failure. After the fix, the owner completed a genuine outgoing 0.006 SOL batch; its finalized transaction is independently verified in [DEVNET_PROOF.md](DEVNET_PROOF.md).
 
 ## What the installed SDK does
 

@@ -1,0 +1,61 @@
+{
+  "checkedAt": "2026-11-08T01:25:21.651Z",
+  "network": "devnet",
+  "source": "User-provided public transaction, independently reverified",
+  "success": false,
+  "signature": "iyxcjE2BWwJkmbHQiUcyeit6UTzhQwKq9zrdYXwJFubN94haGLKqaWYPx85eFYeLBrH3avgEjR2vPCim9XV15gh",
+  "payer": "dev2JBjyB5CshoGsiJCwzdmJYiEUwAXMdqDR7txoFBJ",
+  "expectedPayer": "9NTebUUdiqDzZDrBARaopnaN78YWeDbkM452Jb2EoZkR",
+  "networkTransactionVerified": true,
+  "appPaymentVerified": false,
+  "checks": {
+    "confirmedOrFinalized": true,
+    "expectedPayer": false,
+    "singleSignature": true,
+    "twoOrThreeTransfers": false,
+    "distinctDestinations": true,
+    "allTransfersFromFeePayer": true,
+    "onlyIntendedNativeTransferInstructions": false,
+    "withinAppTransferCaps": false,
+    "matchesOriginalPlan": null
+  },
+  "verificationSummary": "Transaction decoded, but it does not meet the supplied SplitBrief payment requirements. Inspect payer, transfer count, amounts, and extra instructions.",
+  "receipt": {
+    "signature": "iyxcjE2BWwJkmbHQiUcyeit6UTzhQwKq9zrdYXwJFubN94haGLKqaWYPx85eFYeLBrH3avgEjR2vPCim9XV15gh",
+    "network": "devnet",
+    "state": "finalized",
+    "payer": "dev2JBjyB5CshoGsiJCwzdmJYiEUwAXMdqDR7txoFBJ",
+    "transfers": [
+      {
+        "source": "dev2JBjyB5CshoGsiJCwzdmJYiEUwAXMdqDR7txoFBJ",
+        "destination": "9NTebUUdiqDzZDrBARaopnaN78YWeDbkM452Jb2EoZkR",
+        "lamports": "2500000000",
+        "inner": false
+      }
+    ],
+    "instructionCount": 3,
+    "signatureCount": 1,
+    "feeLamports": "5495",
+    "slot": "519777275",
+    "timestamp": 1794082572,
+    "matchesPlan": null,
+    "issues": [
+      "Outer instruction is not a plain native SOL transfer.",
+      "Outer instruction is not a plain native SOL transfer."
+    ],
+    "otherInstructions": [
+      {
+        "index": 1,
+        "programId": "ComputeBudget111111111111111111111111111111",
+        "inner": false
+      },
+      {
+        "index": 2,
+        "programId": "ComputeBudget111111111111111111111111111111",
+        "inner": false
+      }
+    ],
+    "feeControls": []
+  },
+  "walletApproval": "User reported a Phantom test; wallet approval was not observed by this read-only script."
+}

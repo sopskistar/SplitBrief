@@ -1,0 +1,10 @@
+{
+  "source": "Google Gemini official neural TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Sulafat",
+  "checkedAt": "2026-11-08T09:21:01.657Z",
+  "elapsedMs": 15771,
+  "bytes": 660838,
+  "script": "Names resolve against public addresses you have saved. Check every destination, edit the amounts, and review the total and network fee before signing. Gemini never controls your private keys or approves a payment.",
+  "terms": "https://ai.google.dev/gemini-api/terms"
+}

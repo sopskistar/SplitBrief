@@ -1,29 +1,31 @@
-# Recording and export provenance
+# Product-film sources and reproduction
 
-Original clips under `demo/raw/` are preserved. The final-delivery capture writes new genuine clips under **`demo/raw/delivery/`** and records their timing/provenance in [CAPTURE_MANIFEST.json](../demo/CAPTURE_MANIFEST.json). Raw footage and export files are ignored by Git and deployment.
+The new narrated edit replaces the old silent evidence cut. Original `demo/raw/` and `demo/raw/delivery/` clips are preserved; the new film does not simply add audio to that earlier sequence.
 
-| New source             | Content                                                                                                                                  |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `01-opening.webm`      | Supplied wordmark and MLH Solana Hackathon opening                                                                                       |
-| `02-product.webm`      | Real production onboarding, typed brief, actual bounded model request, actual result or explicit Manual Mode, editable draft and summary |
-| `03-verification.webm` | Fresh Devnet RPC lookup of the supplied incoming funding transaction; no unknown-plan match                                              |
-| `04-local-proof.webm`  | Production judges page and actual published local Surfpool evidence                                                                      |
-| `06-recorded-ai.webm`  | Published genuine Gemini JSON result; clearly labeled recorded evidence after the capture browser network failure                        |
-| `05-close.webm`        | Supplied branding, live app, and honest evidence limitations                                                                             |
+| Source                                              | Actual content and use                                                                                                                                                                                                         |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `demo/raw/final/workspace.webm`                     | Fresh production workspace; sample instruction typed, public demo addresses loaded, Manual Mode editor and actual editable purpose. No transaction is sent.                                                                    |
+| `demo/raw/final/recorded-ai.webm`                   | Actual rendered recorded-result component, reading the genuine published Google response; explicitly labeled recorded evidence. Captured from the local preview of the deployed component.                                     |
+| `demo/raw/SplitBrief_Successful_Devnet_Receipt.png` | Genuine owner-supplied production receipt with Payment completed, Finalized & matched, 0.006 SOL, all three transfers and actual signature. A rectangular crop removes browser/wallet chrome without changing receipt content. |
+| `demo/raw/final/batch-receipt.webm`                 | Fresh production public verification of the actual outgoing 0.006 SOL batch. No original plan injected.                                                                                                                        |
+| `demo/raw/final/explorer.webm`                      | Real Explorer capture remained loading; deliberately excluded from the final film. The working receipt includes its genuine Explorer link.                                                                                     |
+| `demo/narration/01-…07-*.wav`                       | Genuine Google `gemini-3.8-flash-tts` neural Sulafat narration, generated per scene. Metadata/scripts are committed; raw WAV files stay local.                                                                                 |
 
-No fixture wallet, mocked model, or intercepted RPC is used by the capture scripts. The provider wait is shortened in assembly and explicitly labeled. The user-reported Phantom test has **no supplied approval clip**, and its signature is funding, so the video does not claim an observed outgoing wallet approval.
+No successful approval-popup recording exists. The film uses the real post-approval screenshot and fresh chain data, never a fake prompt. Source SHA256 hashes and origins are in [FINAL_CAPTURE_MANIFEST.json](../demo/FINAL_CAPTURE_MANIFEST.json). The screenshot's original/crop hashes are in [batch evidence](../public/evidence/devnet-batch.json).
+
+## Rebuild
+
+Use Node 24, installed FFmpeg/FFprobe (including libx264, AAC and libass), Playwright Chromium and the existing Geist fonts. Generated speech is governed by [Google Gemini API terms](https://ai.google.dev/gemini-api/terms); the prebuilt voice is not a clone of a person. Original text and recordings belong to this project. No third-party music is used.
 
 ```bash
-# A deliberate real provider call can take up to 270 seconds.
-npm run demo:capture
-FFMPEG_PATH=/tmp/splitbrief-video-tools/ffmpeg \
-FFPROBE_PATH=/tmp/splitbrief-video-tools/ffprobe npm run demo:assemble
+node scripts/capture-final-demo.mjs
+# Requires the ignored server-only Gemini key; existing tracks are cached:
+node --env-file-if-exists=.env.local scripts/narrate-demo.mjs
+node scripts/prepare-demo-narration.mjs
+node --env-file-if-exists=.env.local scripts/transcribe-demo-narration.mjs
+node scripts/assemble-final-demo.mjs
 ```
 
-The assembly validates genuine chain and captured API evidence, refuses unsupported wallet/public-batch claims, and emits **`demo/output/splitbrief-105s.mp4`**. [EXPORT_MANIFEST.json](../demo/EXPORT_MANIFEST.json) records the completed **104.266667-second** export and source trims. The maintained static FFmpeg/ffprobe binaries were downloaded to `/tmp` with SHA256 verification; no system runtime was overwritten. Use an installed full FFmpeg instead by omitting those two variables.
+The assembler refuses missing batch verification or an uninspected owner receipt, uses only authenticated source pixels, and creates 1920×1080/30fps H.264 with AAC narration, synchronized captions, restrained zooms, branded scene framing and short dissolves. It writes the public MP4, WebVTT captions, poster, contact sheet and export manifest. Review the complete export and consult the manifest's measured QA results before submission.
 
-The completed 104.27-second cut is 1920×1080 H.264 with large captions and short fades. It is intentionally silent. Watch/inspect the complete export for blanks, clipping, caption legibility, transitions, and duration before uploading. No video account publication or MLH submission is claimed.
-
-To replace the funding section with real payout proof: personally record the full review, Phantom Devnet approval, confirmed/matched receipt, and Explorer. Use a desktop recorder capable of filming the extension prompt. Never record keys, recovery phrases, API-key settings, or sensitive tabs. Save as `demo/raw/03-phantom-receipt.mp4`; independently verify the exported receipt and update the script/narration together. Current assembly intentionally refuses to silently substitute a different transaction.
-
-Export QA decoded **all 3,128 frames** without errors; no black interval of 0.25 seconds or longer was detected. Chapter frames, the complete sampled contact sheet, actual chain details, captions, and the closing title were visually inspected. The current cut honestly shows Manual Mode following the captured browser transport failure and separately shows the genuine published Gemini result. It is a reviewable current-evidence demo, not footage of a completed public batch approval.
+Local deliverable: `demo/output/splitbrief-final-narrated.mp4`. Public route: https://splitbrief-zeta.vercel.app/demo. Direct downloadable MP4: https://splitbrief-zeta.vercel.app/demo/splitbrief-final-narrated.mp4. No YouTube upload or MLH submission is claimed.

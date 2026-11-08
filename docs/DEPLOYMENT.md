@@ -30,3 +30,5 @@ The route deadline is 270 seconds, browser deadline 285 seconds, and function ma
 The preview deployment may have Vercel authentication protection. The production alias above was separately checked anonymously. Production screenshots and `deployment.json` are actual browser results, not proof that a human Phantom approval occurred.
 
 References: [Next.js on Vercel](https://vercel.com/docs/frameworks/full-stack/nextjs), [environment variables](https://vercel.com/docs/environment-variables).
+
+The final demo is served as a deployment-compatible static asset: `public/demo/splitbrief-final-narrated.mp4` (about 7 MB), with a WebP poster and English WebVTT captions. It is embedded on `/`, `/demo` and `/judges`, uses native controls and metadata preloading, and never forces autoplay. The public `/demo` route also provides a transcript and real proof links. Raw captures, intermediate renders and WAV files remain excluded from deployment.

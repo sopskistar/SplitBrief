@@ -1,0 +1,10 @@
+{
+  "source": "Google Gemini official neural TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Sulafat",
+  "checkedAt": "2026-11-08T09:27:40.234Z",
+  "elapsedMs": 7616,
+  "bytes": 785638,
+  "script": "Here is the actual Solana Devnet result: three transfers totaling zero point zero zero six SOL in one finalized transaction. SplitBrief checks the on-chain recipients, amounts, instructions, and status, producing a receipt anyone can inspect independently.",
+  "terms": "https://ai.google.dev/gemini-api/terms"
+}

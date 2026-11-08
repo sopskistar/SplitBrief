@@ -1,0 +1,73 @@
+{
+  "checkedAt": "2026-11-08T10:19:55.794Z",
+  "source": "/demo/splitbrief-final-narrated.mp4",
+  "durationSeconds": 108,
+  "bytes": 7211702,
+  "sha256": "390e9d836345ecf89a2c3ef71d0798e59832c997cc5d525dbb7f4d36e29e69f7",
+  "probe": {
+    "programs": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 1,
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "108.000000",
+      "size": "7211702"
+    }
+  },
+  "narration": {
+    "provider": "Google Gemini",
+    "model": "gemini-3.8-flash-tts",
+    "apiVersion": "v1beta",
+    "voice": "Sulafat (prebuilt neural voice)",
+    "sceneSources": [
+      "demo/narration/01-problem.json",
+      "demo/narration/02-introduction.json",
+      "demo/narration/03-gemini.json",
+      "demo/narration/04-review.json",
+      "demo/narration/05-atomic.json",
+      "demo/narration/06-verification.json",
+      "demo/narration/07-conclusion.json"
+    ],
+    "music": "None",
+    "captions": "Word timestamps from genuine normalized narration, with proper-name spelling corrected",
+    "voiceNotCloned": true
+  },
+  "walletApprovalClip": false,
+  "actualPaymentSignature": "5mfAUjRWXLVDRjV74L9nL8Uk5heLW9NMiJyKpPoHVQmKRjen7DAcEh66DDTJGYDFj72zqRr3zfvzEzkPD5wdxfu",
+  "originalPlanIndependentlyMatched": false,
+  "qa": {
+    "checkedAt": "2026-11-08T10:19:55.794Z",
+    "pendingVisualReview": false,
+    "fullDecodeFrames": 3240,
+    "decodeExitCode": 0,
+    "blackIntervalsAtLeast025Seconds": 0,
+    "freezeDetectorNotes": [],
+    "audio": {
+      "integratedLufs": -16.55,
+      "truePeakDbtp": -0.9,
+      "loudnessRange": 2.9,
+      "method": "Full AAC decode and loudness measurement; real-browser WebAudio playback is separately tested."
+    },
+    "speechRecognition": {
+      "provider": "Google gemini-3.5-transcribe",
+      "wordCount": 229,
+      "finalWord": "today.",
+      "finalWordEndsAt": 106.4,
+      "note": "Complete generated narration was transcribed and compared with the intended story, including all payment amounts. Proper-name ASR spelling is corrected in captions. No human listening claim."
+    },
+    "visualReview": "Complete contact sheet and full-size product, AI, owner receipt, verification and ending frames inspected; final caption placement checked below the product annotations. No blank screens, clipped UI or frozen errors found. Audio verified through full decode, transcription, loudness and browser sample measurement; no human listening claim."
+  }
+}

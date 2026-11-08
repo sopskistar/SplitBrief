@@ -28,6 +28,6 @@ Solana Devnet: `https://api.devnet.solana.com`. Solana Testnet is a separate led
 
 Also manually test rejecting a wallet request. A rejection should produce no broadcast. If submission is uncertain, recheck its **original signature**; do not simply click pay again.
 
-The supplied public signature was independently verified as incoming funding, not an outgoing SplitBrief batch. See [exact proof results](DEVNET_PROOF.md). No Phantom approval footage was captured by the automated browser.
+The owner has now personally completed the 0.006 SOL outgoing Phantom payment. Its finalized three-recipient transaction and genuine receipt screenshot are independently documented in [proof results](DEVNET_PROOF.md). The earlier 2.5 SOL signature remains incoming funding, separately labeled. No successful Phantom approval-popup footage exists; the demo uses the genuine receipt and fresh chain lookup. No additional payment is required for submission.
 
 For the recorded Phantom message-change failure, use the deployed [signing fix and acceptance steps](WALLET_SIGNING.md). A repeated mismatch exposes a public diagnostic without private keys or signature bytes.

@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { ArrowUpRight, ExternalLink, ShieldCheck } from 'lucide-react';
 import { readFile } from 'node:fs/promises';
 import { explorerUrl } from '@/lib/payments';
+import { DemoVideo } from '../components/demo-video';
+import { BatchProof } from '../components/batch-proof';
+import { RecordedAiResult } from '../components/recorded-ai';
 
 export const metadata: Metadata = {
   title: 'For the judges',
@@ -20,7 +23,7 @@ export default async function JudgesPage() {
   const [ai, local, devnet] = await Promise.all([
     evidence('gemini'),
     evidence('local-chain'),
-    evidence('devnet'),
+    evidence('devnet-batch'),
   ]);
   const signature = typeof devnet.signature === 'string' ? devnet.signature : null;
   return (
@@ -33,6 +36,17 @@ export default async function JudgesPage() {
           transaction and an independently decoded receipt.
         </p>
       </div>
+      <section className="judges-demo">
+        <div className="section-heading">
+          <h2>Watch the 2-minute demo</h2>
+          <Link className="text-button" href="/demo">
+            Demo and transcript <ArrowUpRight size={14} />
+          </Link>
+        </div>
+        <DemoVideo id="judges-demo" />
+      </section>
+      <BatchProof detailed />
+      <RecordedAiResult />
       <div className="panel">
         <div className="panel-heading">
           <h2>Evidence, with its limits.</h2>
@@ -79,7 +93,11 @@ export default async function JudgesPage() {
               <td>
                 {devnet.success && signature ? (
                   <>
-                    <span>Public Devnet transaction independently decoded and checked.</span>
+                    <span>
+                      Finalized public batch: three transfers, 0.006 SOL total, actual fee 0.000005
+                      SOL. Payer, destination order, amounts, and reviewed fee controls match the
+                      published demo configuration.
+                    </span>
                     <p className="address">{signature}</p>
                     <Link className="evidence-link" href={`/verify?signature=${signature}`}>
                       Reverify the public signature <ArrowUpRight size={12} />
@@ -96,9 +114,8 @@ export default async function JudgesPage() {
                   </>
                 ) : (
                   <>
-                    The supplied signature is a finalized incoming funding transfer, not a
-                    SplitBrief payout. It sends 2.5 SOL from a different payer into the owner’s
-                    wallet. Multi-recipient public payment proof remains incomplete.
+                    Public batch evidence is temporarily unavailable. Use the verifier for a fresh
+                    RPC lookup.
                   </>
                 )}
                 {!devnet.success && signature && (
@@ -109,8 +126,13 @@ export default async function JudgesPage() {
                     </Link>
                   </>
                 )}
+                <p className="small muted">
+                  Original frozen-plan matching was reported by the owner’s app receipt; that
+                  snapshot is not available for independent matching here. The chain transaction and
+                  published demo recipients are independently verified.
+                </p>
                 <br />
-                <a className="evidence-link" href="/evidence/devnet.json">
+                <a className="evidence-link" href="/evidence/devnet-batch.json">
                   Read Devnet test evidence
                 </a>
               </td>
@@ -118,12 +140,16 @@ export default async function JudgesPage() {
             <tr>
               <td>Human Phantom approval</td>
               <td>
-                The owner recorded a blocked wallet-message change. Explicit reviewed fee controls
-                now prevent documented automatic fee additions, and SDK adapter regression tests
-                pass. A real extension retry and finalized outgoing batch remain unverified.
+                The owner completed the payment in Phantom on the deployed app. The outgoing batch
+                is independently finalized on Devnet. Popup approval footage has not been supplied;
+                browser automation never approved the owner’s wallet.
                 <br />
                 <a className="evidence-link" href="/evidence/signing.json">
-                  Read signing investigation evidence
+                  Read the earlier signing investigation
+                </a>
+                <br />
+                <a className="evidence-link" href="/evidence/devnet-funding.json">
+                  Earlier incoming funding, separately labeled
                 </a>
               </td>
             </tr>

@@ -1,0 +1,10 @@
+{
+  "source": "Google Gemini official neural TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Sulafat",
+  "checkedAt": "2026-11-08T09:20:45.886Z",
+  "elapsedMs": 5169,
+  "bytes": 672358,
+  "script": "Google Gemini extracts the exact amounts: zero point zero zero two SOL for Ada, zero point zero zero one for Chidi, and zero point zero zero three for Reserve. This is an editable draft, not an automatic payment.",
+  "terms": "https://ai.google.dev/gemini-api/terms"
+}

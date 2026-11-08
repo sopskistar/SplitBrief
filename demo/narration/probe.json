@@ -1,0 +1,10 @@
+{
+  "source": "Google Gemini official neural TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Sulafat",
+  "checkedAt": "2026-11-08T09:19:16.190Z",
+  "elapsedMs": 4553,
+  "bytes": 365158,
+  "script": "Meet SplitBrief, built for the MLH Solana Hackathon. AI organizes. You approve. Solana verifies.",
+  "terms": "https://ai.google.dev/gemini-api/terms"
+}

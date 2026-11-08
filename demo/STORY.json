@@ -1,0 +1,48 @@
+{
+  "title": "SplitBrief — MLH Solana Hackathon 2026",
+  "targetSeconds": 108,
+  "scenes": [
+    {
+      "id": "01-problem",
+      "seconds": 16,
+      "heading": "Three payments. One instruction. Too many steps.",
+      "text": "Imagine running a small business. Your designer, delivery partner, and project reserve all need payments. The instructions arrive in one message, but preparing separate wallet transfers takes time and creates more opportunities for mistakes."
+    },
+    {
+      "id": "02-introduction",
+      "seconds": 14,
+      "heading": "From one brief to one transaction.",
+      "text": "Meet SplitBrief, built for the MLH Solana Hackathon. Describe who needs to be paid in ordinary language, instead of repeating the same payment steps. SplitBrief turns that message into a clear payment plan."
+    },
+    {
+      "id": "03-gemini",
+      "seconds": 13,
+      "heading": "AI prepares an editable draft.",
+      "text": "Google Gemini extracts the exact amounts: zero point zero zero two SOL for Ada, zero point zero zero one for Chidi, and zero point zero zero three for Reserve. This is an editable draft, not an automatic payment."
+    },
+    {
+      "id": "04-review",
+      "seconds": 16,
+      "heading": "You control the recipients.",
+      "text": "Names resolve against public addresses you have saved. Check every destination, edit the amounts, and review the total and network fee before signing. Gemini never controls your private keys or approves a payment."
+    },
+    {
+      "id": "05-atomic",
+      "seconds": 18,
+      "heading": "One approval. Three transfers.",
+      "text": "When you are satisfied, approve once in Phantom. Solana groups the three native transfers into one atomic transaction. Their transfer effects succeed together or roll back together; network fees can still apply on failure."
+    },
+    {
+      "id": "06-verification",
+      "seconds": 20,
+      "heading": "A real payment. Independently verified.",
+      "text": "Here is the actual Solana Devnet result: three transfers totaling zero point zero zero six SOL in one finalized transaction. SplitBrief checks the on-chain recipients, amounts, instructions, and status, producing a receipt anyone can inspect independently."
+    },
+    {
+      "id": "07-conclusion",
+      "seconds": 11,
+      "heading": "AI organizes. You approve. Solana verifies.",
+      "text": "SplitBrief makes payment preparation simpler while the final decision stays with you. Solana makes settlement atomic and verifiable. One brief, one approval, a clearer way to pay a team. Try SplitBrief today."
+    }
+  ]
+}

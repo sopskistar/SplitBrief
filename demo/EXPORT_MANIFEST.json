@@ -1,83 +1,279 @@
 {
-  "exportedAt": "2026-11-08T00:18:24.592Z",
-  "output": "demo/output/splitbrief-105s.mp4",
-  "durationSeconds": 104.266667,
-  "source": "https://splitbrief-zeta.vercel.app",
-  "segments": [
+  "exportedAt": "2026-11-08T10:07:14.546Z",
+  "output": "demo/output/splitbrief-final-narrated.mp4",
+  "publicPath": "/demo/splitbrief-final-narrated.mp4",
+  "durationSeconds": 108,
+  "sourceCaptureManifest": "demo/FINAL_CAPTURE_MANIFEST.json",
+  "signature": "5mfAUjRWXLVDRjV74L9nL8Uk5heLW9NMiJyKpPoHVQmKRjen7DAcEh66DDTJGYDFj72zqRr3zfvzEzkPD5wdxfu",
+  "originalPlanIndependentlyMatched": false,
+  "ownerReceiptScreenshot": {
+    "source": "Owner-supplied genuine production-browser screenshot",
+    "localOriginal": "demo/raw/SplitBrief_Successful_Devnet_Receipt.png",
+    "publicCrop": "/evidence/successful-devnet-receipt.webp",
+    "originalSha256": "72ae34a8ad10ffd3b99fb8e325ed581a0509322b3389d7be2943318378a9e35c",
+    "cropSha256": "7c6c929d8d142b56f851970238c97d9634471743890458f75e0a1e65d0a8952d",
+    "changes": "Rectangular crop excludes browser chrome and wallet account UI; no receipt content altered.",
+    "visuallyInspected": true,
+    "signatureMatchesRpc": true,
+    "originalFrozenPlanRecovered": false
+  },
+  "walletApprovalClip": false,
+  "narration": {
+    "provider": "Google Gemini",
+    "model": "gemini-3.8-flash-tts",
+    "apiVersion": "v1beta",
+    "voice": "Sulafat (prebuilt neural voice)",
+    "sceneSources": [
+      "demo/narration/01-problem.json",
+      "demo/narration/02-introduction.json",
+      "demo/narration/03-gemini.json",
+      "demo/narration/04-review.json",
+      "demo/narration/05-atomic.json",
+      "demo/narration/06-verification.json",
+      "demo/narration/07-conclusion.json"
+    ],
+    "music": "None",
+    "captions": "Word timestamps from genuine normalized narration, with proper-name spelling corrected",
+    "voiceNotCloned": true
+  },
+  "parts": [
     {
-      "source": "demo/raw/delivery/01-opening.webm",
-      "start": 0,
+      "scene": 0,
+      "id": "problem",
+      "duration": 15.866666666666667,
+      "file": "demo/raw/final/workspace.webm",
+      "start": 16.3,
+      "available": 13.8,
+      "crop": [145, 85, 1310, 740],
+      "layout": "split",
+      "heading": "Three payments.\nOne instruction.\nToo many steps.",
+      "note": "A payment message should not mean three separate wallet workflows.",
+      "box": {
+        "x": 850,
+        "y": 245,
+        "w": 990,
+        "h": 684
+      },
+      "background": "demo/output/final/problem-background.png",
+      "render": "demo/output/final/problem.mp4"
+    },
+    {
+      "scene": 1,
+      "id": "introduction",
+      "duration": 13.933333333333334,
+      "file": "demo/raw/final/workspace.webm",
+      "start": 16.8,
+      "available": 13.5,
+      "crop": [145, 85, 1310, 650],
+      "heading": "From one brief to one transaction.",
+      "note": "Actual production workspace · Example draft · Nothing sent in this recording",
+      "box": {
+        "x": 100,
+        "y": 255,
+        "w": 1720,
+        "h": 664
+      },
+      "background": "demo/output/final/introduction-background.png",
+      "render": "demo/output/final/introduction.mp4"
+    },
+    {
+      "scene": 2,
+      "id": "gemini",
+      "duration": 14.933333333333334,
+      "file": "demo/raw/final/recorded-ai.webm",
+      "start": 8,
+      "available": 16.8,
+      "crop": [156, 176, 1288, 490],
+      "heading": "AI prepares an editable draft.",
+      "note": "Genuine recorded Gemini response · Exact amounts · No wallet addresses generated",
+      "box": {
+        "x": 100,
+        "y": 255,
+        "w": 1720,
+        "h": 664
+      },
+      "background": "demo/output/final/gemini-background.png",
+      "render": "demo/output/final/gemini.mp4"
+    },
+    {
+      "scene": 3,
+      "id": "contacts",
+      "duration": 6.2,
+      "file": "demo/raw/final/workspace.webm",
+      "start": 41.7,
+      "available": 7.5,
+      "crop": [156, 96, 1288, 516],
+      "heading": "You control the recipients.",
+      "note": "Actual saved public addresses · Disposable Devnet recipients",
+      "box": {
+        "x": 100,
+        "y": 255,
+        "w": 1720,
+        "h": 664
+      },
+      "background": "demo/output/final/contacts-background.png",
+      "render": "demo/output/final/contacts.mp4"
+    },
+    {
+      "scene": 3,
+      "id": "review",
+      "duration": 8.733333333333334,
+      "file": "demo/raw/final/workspace.webm",
+      "start": 32,
+      "available": 8.5,
+      "crop": [150, 85, 1300, 565],
+      "heading": "Check every address. Every amount.",
+      "note": "Manual editor demonstration · Exact 0.006 SOL total · Human approval required",
+      "box": {
+        "x": 100,
+        "y": 255,
+        "w": 1720,
+        "h": 664
+      },
+      "background": "demo/output/final/review-background.png",
+      "render": "demo/output/final/review.mp4"
+    },
+    {
+      "scene": 4,
+      "id": "approved-receipt",
+      "duration": 8.2,
+      "file": "public/evidence/successful-devnet-receipt.webp",
+      "still": true,
+      "crop": [0, 0, 1024, 335],
+      "heading": "One approval. Three transfers.",
+      "note": "Genuine owner-supplied application receipt · Phantom approval popup was not recorded",
+      "box": {
+        "x": 100,
+        "y": 255,
+        "w": 1720,
+        "h": 664
+      },
+      "background": "demo/output/final/approved-receipt-background.png",
+      "render": "demo/output/final/approved-receipt.mp4"
+    },
+    {
+      "scene": 4,
+      "id": "atomic-transfers",
+      "duration": 7.366666666666667,
+      "file": "demo/raw/final/batch-receipt.webm",
+      "start": 13.4,
+      "available": 7.2,
+      "crop": [174, 127, 1250, 510],
+      "heading": "One atomic Solana transaction.",
+      "note": "All transfer effects succeed together or roll back together. Network fees can still apply.",
+      "box": {
+        "x": 100,
+        "y": 255,
+        "w": 1720,
+        "h": 664
+      },
+      "background": "demo/output/final/atomic-transfers-background.png",
+      "render": "demo/output/final/atomic-transfers.mp4"
+    },
+    {
+      "scene": 5,
+      "id": "rpc-receipt",
       "duration": 8,
-      "caption": "Built for the MLH Solana Hackathon.\nFrom payment instructions to one Solana transaction."
+      "file": "demo/raw/final/batch-receipt.webm",
+      "start": 4.9,
+      "available": 7.4,
+      "crop": [156, 76, 1288, 600],
+      "heading": "A real payment. Independently verified.",
+      "note": "Fresh public Devnet RPC lookup · Finalized · No original review snapshot supplied",
+      "box": {
+        "x": 100,
+        "y": 255,
+        "w": 1720,
+        "h": 664
+      },
+      "background": "demo/output/final/rpc-receipt-background.png",
+      "render": "demo/output/final/rpc-receipt.mp4"
     },
     {
-      "source": "demo/raw/delivery/02-product.webm",
-      "start": 3.001999999999999,
-      "duration": 17,
-      "caption": "Save reviewed public addresses. Describe names and exact SOL amounts.\nThese are disposable Devnet recipients. Nothing has been sent."
+      "scene": 5,
+      "id": "rpc-transfers",
+      "duration": 10.066666666666666,
+      "file": "demo/raw/final/batch-receipt.webm",
+      "start": 13.6,
+      "available": 12.5,
+      "crop": [176, 125, 1250, 590],
+      "heading": "Three transfers. One public receipt.",
+      "note": "0.006 SOL transferred · Actual fee 0.000005 SOL · Explorer link and shareable signature",
+      "box": {
+        "x": 100,
+        "y": 255,
+        "w": 1720,
+        "h": 664
+      },
+      "background": "demo/output/final/rpc-transfers-background.png",
+      "render": "demo/output/final/rpc-transfers.mp4"
     },
     {
-      "source": "demo/raw/delivery/02-product.webm",
-      "start": 20.502,
-      "duration": 3,
-      "caption": "Genuine Gemini request. Provider waiting is shortened in this edit.\nAI cannot choose an address, control keys, or approve a payment."
-    },
-    {
-      "source": "demo/raw/delivery/06-recorded-ai.webm",
-      "start": 0.8,
-      "duration": 15,
-      "caption": "Genuine recorded Gemini response: Ada 0.002, Chidi 0.001, Reserve 0.003 SOL.\nThe captured browser request failed; this is the published successful provider record."
-    },
-    {
-      "source": "demo/raw/delivery/02-product.webm",
-      "start": 351.567,
-      "duration": 12,
-      "caption": "Manual Mode is selected after the captured browser network failure.\nThis editable draft is not AI output or a sent payment. Phantom footage is missing."
-    },
-    {
-      "source": "demo/raw/delivery/03-verification.webm",
-      "start": 5.004,
-      "duration": 24,
-      "caption": "Real Devnet lookup: finalized funding of 2.5 SOL into the test wallet.\nOne transfer, fee 0.000005495 SOL. This is NOT a batch payout or plan match."
-    },
-    {
-      "source": "demo/raw/delivery/04-local-proof.webm",
-      "start": 0.5,
-      "duration": 17,
-      "caption": "Local Surfpool proof: one transaction, three transfers, exact balance changes.\nEight assertions include atomic rollback. These signatures are LOCAL, not Devnet."
-    },
-    {
-      "source": "demo/raw/delivery/05-close.webm",
-      "start": 0,
-      "duration": 9,
-      "caption": "Try splitbrief-zeta.vercel.app · Source: github.com/sopskistar/SplitBrief\nPublic batch payment and genuine Phantom approval footage remain outstanding."
+      "scene": 6,
+      "id": "conclusion",
+      "duration": 14.7,
+      "file": "demo/raw/final/workspace.webm",
+      "start": 8.8,
+      "available": 5.4,
+      "crop": [145, 0, 1310, 900],
+      "layout": "end",
+      "heading": "AI organizes.\nYou approve.\nSolana verifies.",
+      "note": "Built for the MLH Solana Hackathon 2026",
+      "box": {
+        "x": 850,
+        "y": 245,
+        "w": 990,
+        "h": 684
+      },
+      "background": "demo/output/final/conclusion-background.png",
+      "render": "demo/output/final/conclusion.mp4"
     }
   ],
   "probe": {
     "programs": [],
-    "stream_groups": [],
     "streams": [
       {
         "codec_name": "h264",
         "codec_type": "video",
         "width": 1920,
-        "height": 1080
+        "height": 1080,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 1,
+        "r_frame_rate": "0/0"
       }
     ],
     "format": {
-      "duration": "104.266667",
-      "size": "3541590"
+      "duration": "108.000000",
+      "size": "7211702"
     }
   },
-  "audio": "Intentionally silent; readable burned-in captions. No simulated wallet or provider footage.",
-  "limits": "Supplied signature proves funding, not a multi-recipient payout. Local atomic execution is distinguished from public evidence. Phantom approval not captured.",
-  "sha256": "f899b43c69059626568f230e95c8a00a11f32fca8f1e147465af6bb1b3b14557",
-  "inspection": {
-    "checkedAt": "2026-11-08T00:26:52.455Z",
-    "fullDecodeFrames": 3128,
-    "decodeErrors": 0,
+  "bytes": 7211702,
+  "sha256": "390e9d836345ecf89a2c3ef71d0798e59832c997cc5d525dbb7f4d36e29e69f7",
+  "qa": {
+    "checkedAt": "2026-11-08T10:19:55.794Z",
+    "pendingVisualReview": false,
+    "fullDecodeFrames": 3240,
+    "decodeExitCode": 0,
     "blackIntervalsAtLeast025Seconds": 0,
-    "visualReview": "Sampled complete contact sheet, original-size AI and chain frames, closing frame; readable captions and no clipping found.",
-    "audio": "Intentionally silent"
+    "freezeDetectorNotes": [],
+    "audio": {
+      "integratedLufs": -16.55,
+      "truePeakDbtp": -0.9,
+      "loudnessRange": 2.9,
+      "method": "Full AAC decode and loudness measurement; real-browser WebAudio playback is separately tested."
+    },
+    "speechRecognition": {
+      "provider": "Google gemini-3.5-transcribe",
+      "wordCount": 229,
+      "finalWord": "today.",
+      "finalWordEndsAt": 106.4,
+      "note": "Complete generated narration was transcribed and compared with the intended story, including all payment amounts. Proper-name ASR spelling is corrected in captions. No human listening claim."
+    },
+    "visualReview": "Complete contact sheet and full-size product, AI, owner receipt, verification and ending frames inspected; final caption placement checked below the product annotations. No blank screens, clipped UI or frozen errors found. Audio verified through full decode, transcription, loudness and browser sample measurement; no human listening claim."
   }
 }

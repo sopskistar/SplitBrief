@@ -1,0 +1,117 @@
+{
+  "capturedAt": "2026-11-08T09:47:55.052Z",
+  "signature": "5mfAUjRWXLVDRjV74L9nL8Uk5heLW9NMiJyKpPoHVQmKRjen7DAcEh66DDTJGYDFj72zqRr3zfvzEzkPD5wdxfu",
+  "clips": [
+    {
+      "name": "workspace",
+      "path": "demo/raw/final/workspace.webm",
+      "origin": "https://splitbrief-zeta.vercel.app",
+      "marks": {
+        "home": 8.583,
+        "brief": 15.969,
+        "typed": 30.494,
+        "draft": 31.573,
+        "edited": 40.525,
+        "contacts": 41.328,
+        "end": 49.692
+      },
+      "rects": {
+        "brief": {
+          "x": 160,
+          "y": 99.640625,
+          "width": 926,
+          "height": 352
+        },
+        "typed": {
+          "x": 160,
+          "y": 100.328125,
+          "width": 926,
+          "height": 352
+        },
+        "draft": {
+          "x": 160,
+          "y": 100.171875,
+          "width": 926,
+          "height": 477.90625
+        },
+        "edited": {
+          "x": 160,
+          "y": 100.171875,
+          "width": 926,
+          "height": 477.90625
+        },
+        "contacts": {
+          "x": 160,
+          "y": 99.828125,
+          "width": 1280,
+          "height": 504.890625
+        }
+      },
+      "sha256": "ad59dd51f514ec2afb8a1fa7ce75f46c7a4b9d270b174a909d365e7823d40e13"
+    },
+    {
+      "name": "recorded-ai",
+      "path": "demo/raw/final/recorded-ai.webm",
+      "origin": "http://127.0.0.1:3001",
+      "marks": {
+        "result": 5.016,
+        "end": 22.744
+      },
+      "rects": {
+        "result": {
+          "x": 160,
+          "y": 180.078125,
+          "width": 1280,
+          "height": 481.90625
+        }
+      },
+      "sha256": "f055ad2848352bfc5a2928ac2ed47e8b2e4c81e8f00ec1942dfb4707057d5958"
+    },
+    {
+      "name": "batch-receipt",
+      "path": "demo/raw/final/batch-receipt.webm",
+      "origin": "https://splitbrief-zeta.vercel.app",
+      "marks": {
+        "top": 4.105,
+        "transfers": 12.809,
+        "summary": 21.14,
+        "end": 27.067
+      },
+      "rects": {
+        "top": {
+          "x": 160,
+          "y": 80.15625,
+          "width": 1280,
+          "height": 1023.5625
+        },
+        "transfers": {
+          "x": 185,
+          "y": 137.21875,
+          "width": 1230,
+          "height": 311.578125
+        },
+        "summary": {
+          "x": 185,
+          "y": 448.796875,
+          "width": 1230,
+          "height": 90.1875
+        }
+      },
+      "sha256": "aeb7ec36a07241aa2f57fe693be38b85453d613ef7a97c62ac3add2b377742f4"
+    },
+    {
+      "name": "explorer",
+      "path": "demo/raw/final/explorer.webm",
+      "origin": "https://splitbrief-zeta.vercel.app",
+      "marks": {
+        "explorer": 13.441,
+        "end": 20.381
+      },
+      "rects": {},
+      "sha256": "428f75606a00211a87b7d6c0f128b702e489515a44ef8f660a8161ee514142ed"
+    }
+  ],
+  "walletApprovalClip": false,
+  "originalPlanRecovered": false,
+  "notes": "Fresh production workspace and real RPC receipt. The recorded Gemini component displays the genuine published provider record, not a simulated live response. No wallet or RPC fixtures, no payments sent."
+}

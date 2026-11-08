@@ -1,0 +1,119 @@
+{
+  "checkedAt": "2026-11-08T09:59:00.974Z",
+  "network": "devnet",
+  "source": "Independently retrieved full finalized transaction from public Solana Devnet RPC",
+  "success": true,
+  "signature": "5mfAUjRWXLVDRjV74L9nL8Uk5heLW9NMiJyKpPoHVQmKRjen7DAcEh66DDTJGYDFj72zqRr3zfvzEzkPD5wdxfu",
+  "payer": "9NTebUUdiqDzZDrBARaopnaN78YWeDbkM452Jb2EoZkR",
+  "networkTransactionVerified": true,
+  "appPaymentVerified": true,
+  "totalLamports": "6000000",
+  "totalSol": "0.006",
+  "feeLamports": "5000",
+  "checks": {
+    "confirmedOrFinalized": true,
+    "finalizedForPublication": true,
+    "expectedPayer": true,
+    "singleSignature": true,
+    "twoOrThreeTransfers": true,
+    "distinctDestinations": true,
+    "allTransfersFromFeePayer": true,
+    "onlyIntendedNativeTransferInstructions": true,
+    "withinAppTransferCaps": true,
+    "matchesOriginalPlan": null,
+    "matchesPublishedDemoRecipients": true,
+    "exactTransferOrderAndAmounts": true,
+    "exactReviewedFeeControls": true
+  },
+  "recipients": [
+    {
+      "id": "devnet-0",
+      "name": "Ada",
+      "address": "EgpR8wT9oSnYxbB3tbAtBzdMCiP1Krez84YJ5id6MRxp",
+      "description": "Disposable Devnet test recipient, no retained private key",
+      "lamports": "2000000"
+    },
+    {
+      "id": "devnet-1",
+      "name": "Chidi",
+      "address": "B5FrY8tQL73E14k4uHvk1GqtpJeBWGhaNy6z8vtnup5d",
+      "description": "Disposable Devnet test recipient, no retained private key",
+      "lamports": "1000000"
+    },
+    {
+      "id": "devnet-2",
+      "name": "Reserve",
+      "address": "5LB7gzK1WFG6hEkeym25r9vjFEDCdBBZFpsVoSGUCBYz",
+      "description": "Disposable Devnet test recipient, no retained private key",
+      "lamports": "3000000"
+    }
+  ],
+  "receipt": {
+    "signature": "5mfAUjRWXLVDRjV74L9nL8Uk5heLW9NMiJyKpPoHVQmKRjen7DAcEh66DDTJGYDFj72zqRr3zfvzEzkPD5wdxfu",
+    "network": "devnet",
+    "state": "finalized",
+    "payer": "9NTebUUdiqDzZDrBARaopnaN78YWeDbkM452Jb2EoZkR",
+    "transfers": [
+      {
+        "source": "9NTebUUdiqDzZDrBARaopnaN78YWeDbkM452Jb2EoZkR",
+        "destination": "EgpR8wT9oSnYxbB3tbAtBzdMCiP1Krez84YJ5id6MRxp",
+        "lamports": "2000000",
+        "inner": false
+      },
+      {
+        "source": "9NTebUUdiqDzZDrBARaopnaN78YWeDbkM452Jb2EoZkR",
+        "destination": "B5FrY8tQL73E14k4uHvk1GqtpJeBWGhaNy6z8vtnup5d",
+        "lamports": "1000000",
+        "inner": false
+      },
+      {
+        "source": "9NTebUUdiqDzZDrBARaopnaN78YWeDbkM452Jb2EoZkR",
+        "destination": "5LB7gzK1WFG6hEkeym25r9vjFEDCdBBZFpsVoSGUCBYz",
+        "lamports": "3000000",
+        "inner": false
+      }
+    ],
+    "instructionCount": 5,
+    "signatureCount": 1,
+    "feeLamports": "5000",
+    "slot": "519858574",
+    "timestamp": 1794102030,
+    "matchesPlan": null,
+    "issues": [],
+    "otherInstructions": [],
+    "feeControls": [
+      {
+        "index": 0,
+        "kind": "compute-unit-limit"
+      },
+      {
+        "index": 1,
+        "kind": "compute-unit-price"
+      }
+    ]
+  },
+  "originalPlanEvidence": {
+    "available": false,
+    "independentlyMatched": false,
+    "description": "No original frozen review snapshot or exported receipt is present in this repository. Comparison is with the published demo address book and requested amounts, not independent proof of original intent."
+  },
+  "reportedApplicationReceipt": {
+    "source": "Owner report and inspected genuine production screenshot",
+    "status": "Payment completed",
+    "verification": "Finalized & matched",
+    "independentSnapshotAvailable": false,
+    "screenshot": {
+      "source": "Owner-supplied genuine production-browser screenshot",
+      "localOriginal": "demo/raw/SplitBrief_Successful_Devnet_Receipt.png",
+      "publicCrop": "/evidence/successful-devnet-receipt.webp",
+      "originalSha256": "72ae34a8ad10ffd3b99fb8e325ed581a0509322b3389d7be2943318378a9e35c",
+      "cropSha256": "7c6c929d8d142b56f851970238c97d9634471743890458f75e0a1e65d0a8952d",
+      "changes": "Rectangular crop excludes browser chrome and wallet account UI; no receipt content altered.",
+      "visuallyInspected": true,
+      "signatureMatchesRpc": true,
+      "originalFrozenPlanRecovered": false
+    }
+  },
+  "walletApproval": "Owner reports personally approving in Phantom on the deployed app. No approval popup footage was supplied to this workspace.",
+  "fundingEvidence": "/evidence/devnet-funding.json"
+}

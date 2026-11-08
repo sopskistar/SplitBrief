@@ -1,0 +1,138 @@
+WEBVTT
+
+1
+00:00:00.400 --> 00:00:02.390
+Imagine running a small business.
+
+2
+00:00:02.500 --> 00:00:05.890
+Your designer, delivery partner, and project reserve all need
+
+3
+00:00:05.800 --> 00:00:06.490
+payments.
+
+4
+00:00:06.800 --> 00:00:10.290
+The instructions arrive in one message, but preparing separate
+
+5
+00:00:10.200 --> 00:00:13.790
+wallet transfers takes time and creates more opportunities for
+
+6
+00:00:13.700 --> 00:00:14.490
+mistakes.
+
+7
+00:00:16.300 --> 00:00:19.790
+Meet SplitBrief, built for the MLH Solana Hackathon.
+
+8
+00:00:20.100 --> 00:00:23.090
+Describe who needs to be paid in ordinary language
+
+9
+00:00:23.200 --> 00:00:25.390
+instead of repeating the same payment steps.
+
+10
+00:00:25.600 --> 00:00:28.290
+SplitBrief turns that message into a clear payment
+
+11
+00:00:28.200 --> 00:00:28.590
+plan.
+
+12
+00:00:30.100 --> 00:00:34.990
+Google Gemini extracts the exact amounts, 0.002 SOL for
+
+13
+00:00:34.900 --> 00:00:40.390
+Ada, 0.001 for Chidi, and 0.003 for reserve.
+
+14
+00:00:40.600 --> 00:00:43.590
+This is an editable draft, not an automatic payment.
+
+15
+00:00:45.100 --> 00:00:48.290
+Names resolve against public addresses you have saved.
+
+16
+00:00:48.400 --> 00:00:52.190
+Check every destination, edit the amounts, and review the
+
+17
+00:00:52.100 --> 00:00:54.390
+total and network fee before signing.
+
+18
+00:00:54.800 --> 00:00:57.790
+Gemini never controls your private keys or approves a
+
+19
+00:00:57.700 --> 00:00:58.290
+payment.
+
+20
+00:01:00.000 --> 00:01:02.890
+When you are satisfied, approve once in Phantom.
+
+21
+00:01:03.200 --> 00:01:06.690
+Solana groups the three native transfers into one atomic
+
+22
+00:01:06.600 --> 00:01:07.390
+transaction.
+
+23
+00:01:07.800 --> 00:01:11.290
+Their transfer effects succeed together or roll back together.
+
+24
+00:01:11.500 --> 00:01:13.490
+Network fees can still apply on failure.
+
+25
+00:01:15.500 --> 00:01:18.390
+Here is the actual Solana Devnet result.
+
+26
+00:01:18.500 --> 00:01:23.690
+Three transfers totaling 0.006 SOL in one finalized transaction.
+
+27
+00:01:24.200 --> 00:01:27.890
+SplitBrief checks the on-chain recipients, amounts, instructions, and
+
+28
+00:01:27.800 --> 00:01:31.290
+status, producing a receipt anyone can inspect independently.
+
+29
+00:01:33.500 --> 00:01:36.990
+SplitBrief makes payment preparation simpler while the final
+
+30
+00:01:36.900 --> 00:01:38.290
+decision stays with you.
+
+31
+00:01:38.600 --> 00:01:41.290
+Solana makes settlement atomic and verifiable.
+
+32
+00:01:41.600 --> 00:01:44.590
+One brief, one approval, a clearer way to pay
+
+33
+00:01:44.500 --> 00:01:44.990
+a team.
+
+34
+00:01:45.300 --> 00:01:46.490
+Try SplitBrief today.
+

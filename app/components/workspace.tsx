@@ -26,6 +26,7 @@ import { z } from 'zod';
 import { useWalletClient } from './providers';
 import { Contacts } from './contacts';
 import { DemoRecipientSetup } from './demo-recipient-setup';
+import { ProductStory } from './product-story';
 import { ReceiptView } from './receipt';
 import { WalletMessageMismatchError, type SigningDiagnostic } from '@/lib/signing-diagnostics';
 import {
@@ -464,8 +465,8 @@ export function Workspace() {
         <div>
           <h1>Pay multiple people in one Solana transaction.</h1>
           <p>
-            Describe who needs to be paid, let AI organize the amounts, review every recipient, and
-            approve one atomic transaction in Phantom.
+            Turn everyday payment instructions into an editable plan. Review every recipient,
+            approve once with Phantom, and verify the result on Solana.
           </p>
         </div>
         <div className="intro-actions">
@@ -478,9 +479,9 @@ export function Workspace() {
           >
             Create payment <ArrowRight size={15} />
           </a>
-          <a className="text-button" href="#history">
-            Find a receipt
-          </a>
+          <Link className="button" href="/demo">
+            Watch demo <ArrowRight size={15} />
+          </Link>
         </div>
       </div>
       <div className="workspace-toolbar">
@@ -1098,12 +1099,12 @@ export function Workspace() {
         </div>
         <ol>
           {[
-            'Save the public wallet addresses of your recipients.',
-            'Describe who to pay and how much in ordinary language.',
-            'AI creates an editable payment draft.',
-            'Check every recipient, address, amount and fee.',
-            'Approve one transaction with Phantom.',
-            'Inspect the verified on-chain receipt.',
+            'Save the recipients.',
+            'Describe the payments.',
+            'Let Gemini prepare the draft.',
+            'Review every amount and address.',
+            'Approve once in Phantom.',
+            'Verify the Solana receipt.',
           ].map((text, index) => (
             <li key={text}>
               <span>{index + 1}</span>
@@ -1195,6 +1196,7 @@ export function Workspace() {
           </div>
         )}
       </section>
+      <ProductStory />
     </>
   );
 }

@@ -1,0 +1,10 @@
+{
+  "source": "Google Gemini official neural TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Sulafat",
+  "checkedAt": "2026-11-08T09:20:40.715Z",
+  "elapsedMs": 4491,
+  "bytes": 612838,
+  "script": "Meet SplitBrief, built for the MLH Solana Hackathon. Describe who needs to be paid in ordinary language, instead of repeating the same payment steps. SplitBrief turns that message into a clear payment plan.",
+  "terms": "https://ai.google.dev/gemini-api/terms"
+}

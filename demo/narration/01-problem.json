@@ -1,0 +1,10 @@
+{
+  "source": "Google Gemini official neural TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Sulafat",
+  "checkedAt": "2026-11-08T09:20:36.219Z",
+  "elapsedMs": 7371,
+  "bytes": 697318,
+  "script": "Imagine running a small business. Your designer, delivery partner, and project reserve all need payments. The instructions arrive in one message, but preparing separate wallet transfers takes time and creates more opportunities for mistakes.",
+  "terms": "https://ai.google.dev/gemini-api/terms"
+}
