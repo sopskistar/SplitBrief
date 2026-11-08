@@ -52,10 +52,10 @@ A working browser wallet is needed to approve a payment. Anyone can explore the 
 
 - **Gemini:** A genuine structured interpretation of the three sample payments succeeded locally and through the deployed API. Response time can be high; Manual Mode remains available. [AI evidence](public/evidence/gemini.json).
 - **Solana local execution:** Surfpool tests exercised an actual three-recipient transfer and an atomic rollback. These are local-chain tests, **not** public Devnet payment proof. [Local-chain evidence](public/evidence/local-chain.json).
-- **Public Devnet:** The publicly recorded 2.5 SOL transaction was **incoming wallet funding**, not a SplitBrief batch payout. A public three-recipient Phantom payout and original-plan match have **not yet been verified**. [Devnet evidence](public/evidence/devnet.json).
+- **Public Devnet batch (November 8, 2026):** The participant completed a Phantom-approved test from the live Vercel app. The browser receipt displayed **Finalized & matched** for **one 0.006 SOL transaction containing three native transfers**: Ada 0.002 SOL, Chidi 0.001 SOL, Reserve 0.003 SOL; **0.000005 SOL network fee**, with a resulting displayed wallet balance of approximately **2.494 SOL**. The original browser screenshot confirms the application's decoded result; the exact transaction signature and downloadable receipt still need to be published in this repository for independent third-party re-verification. Earlier [Devnet evidence](public/evidence/devnet.json) concerns a separate 2.5 SOL incoming funding transaction, **not** this batch.
 - **Quality checks:** 192 unit/integration tests, 17 browser tests, and 8 local-chain assertions passed in the latest documented run. [Testing details](docs/TESTING.md).
 
-This is a hackathon MVP, not a production payroll or custody service. Public wallet signing is still being validated with the participant's Phantom version. Never use a mainnet wallet or real funds for this demo.
+This is a hackathon MVP, not a production payroll or custody service. A live Phantom signing compatibility issue was fixed by predeclaring reviewed compute-budget controls while retaining strict message/signature verification; the subsequent browser test displayed a finalized and matched batch. Never use a mainnet wallet or real funds for this demo.
 
 ## Run locally
 
@@ -82,7 +82,7 @@ See [architecture](docs/ARCHITECTURE.md), [test instructions](docs/TESTING.md), 
 
 SplitBrief was built for the **MLH Solana Hackathon, November 6–8, 2026**.
 
-Start with the **[judge walkthrough](docs/JUDGE_WALKTHROUGH.md)** for an ordered tour. The [submission guide](docs/SUBMISSION.md) contains track-specific explanations; [public evidence](public/evidence) separates genuine Gemini responses, local-chain transactions, and public Devnet activity. Claims of a confirmed public batch payout will be added only once independently verified.
+Start with the **[judge walkthrough](docs/JUDGE_WALKTHROUGH.md)** for an ordered tour. The [submission guide](docs/SUBMISSION.md) contains track-specific explanations; [public evidence](public/evidence) separates genuine Gemini responses, local-chain transactions, and public Devnet activity. A November 8 live-browser receipt showed **three transfers in one finalized, plan-matched Devnet transaction**; public machine-readable evidence for that new signature should be archived next.
 
 Project-specific work was created during the event with assistance from **OpenAI Codex**. The app uses **Google Gemini** at runtime and builds on the public **Solana Foundation Kit Next.js starter** and open-source dependencies.
 
