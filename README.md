@@ -1,50 +1,46 @@
 <p align="center">
-  <img src="public/branding/splitbrief-wordmark.png" width="310" alt="SplitBrief logo">
+  <img src="public/branding/splitbrief-wordmark.png" width="310" alt="SplitBrief">
 </p>
 
 # SplitBrief
 
 **One brief. Multiple recipients. One Solana transaction.**
 
-SplitBrief is an AI-assisted payment app for freelancers, small businesses, and teams. Describe who needs to be paid, review an editable plan, then approve **one atomic Solana transaction** with Phantom. A public receipt lets anyone inspect what actually happened on-chain.
+SplitBrief turns everyday payment instructions into an editable plan. Users review every recipient and amount, approve once in Phantom, and receive an independently verifiable Solana receipt. Built for small businesses, freelancers and teams who need to pay several people without preparing separate transfers.
 
-**[Live app](https://splitbrief-zeta.vercel.app)** · **[Watch the narrated demo](https://splitbrief-zeta.vercel.app/demo)** · **[YouTube demo](https://youtu.be/WdmFjonqd5E)** · **[Verified transaction](https://splitbrief-zeta.vercel.app/verify?signature=5mfAUjRWXLVDRjV74L9nL8Uk5heLW9NMiJyKpPoHVQmKRjen7DAcEh66DDTJGYDFj72zqRr3zfvzEzkPD5wdxfu)** · **[Judge walkthrough](docs/JUDGE_WALKTHROUGH.md)**
+**[Live app](https://splitbrief-zeta.vercel.app)** · **[Watch the narrated demo](https://splitbrief-zeta.vercel.app/demo)** · **[YouTube](https://youtu.be/WdmFjonqd5E)** · **[Verified receipt](https://splitbrief-zeta.vercel.app/verify?signature=5mfAUjRWXLVDRjV74L9nL8Uk5heLW9NMiJyKpPoHVQmKRjen7DAcEh66DDTJGYDFj72zqRr3zfvzEzkPD5wdxfu)** · **[For judges](https://splitbrief-zeta.vercel.app/judges)**
 
 ![SplitBrief payment workspace](docs/screenshots/production-workspace-desktop.png)
 
 ## The problem
 
-A business owner needs to pay a designer, a delivery partner, and a project reserve. The instructions are in one message, but preparing separate wallet transfers means repeatedly entering addresses and amounts, with more opportunities for mistakes.
+A small-business owner needs to pay a designer, delivery partner and project reserve. The instructions arrive in one message, but repeatedly entering wallet addresses and amounts takes time and creates room for mistakes.
 
-**SplitBrief makes the whole payment reviewable before anything moves.** AI helps organize the instructions; the user remains responsible for every destination and approval.
+**SplitBrief brings the entire payment into one reviewable workflow.** AI organizes the instructions; the user controls the destinations, signs the payment, and can verify what happened.
 
 ## How it works
 
-1. **Add recipients.** Save names and checked public Solana addresses in a browser-local address book.
-2. **Describe the payment.** Write naturally: “Pay Ada 0.002 SOL for design, Chidi 0.001 SOL for delivery, and 0.003 SOL to Reserve.”
-3. **Review the draft.** Gemini can extract names, amounts, and purposes. Edit the result or use Manual Mode. Addresses come from the saved contact book, not the AI.
-4. **Approve once.** Check the full destinations, exact total, and estimated network fee before authorizing one transaction in Phantom.
-5. **Verify on-chain.** Inspect the finalized transaction, actual transfers, fee, signature, and Solana Explorer link.
+1. **Add recipients** — Save names and checked public Solana addresses in a browser-local address book.
+2. **Describe the payment** — Write a brief such as “Pay Ada 0.002 SOL, Chidi 0.001 SOL, and 0.003 SOL to Reserve.”
+3. **Review the plan** — Gemini extracts amounts and purposes into an editable draft. Manual Mode is available. AI never chooses addresses.
+4. **Approve once** — Inspect recipients, amounts and fees, then sign one transaction through Phantom.
+5. **Verify on-chain** — Inspect the actual transfers, fee, finalization status and public Solana Explorer link.
 
-**AI organizes. You approve. Solana verifies.** Multiple native transfers share one atomic transaction: their transfer effects succeed together or roll back together, although network fees can still apply on failure.
+**AI organizes. You approve. Solana verifies.** All native transfers share one atomic transaction: they succeed together or roll back together, although failed transactions may still incur a network fee.
 
-## What's included
+## Features
 
-| Capability | Implementation |
+| | |
 | --- | --- |
-| Payment planning | Natural-language Gemini interpretation, editable drafts, and explicit Manual Mode |
-| Recipient management | Reviewed public wallet addresses, local address book, and disposable Devnet demo contacts |
-| Atomic settlement | Two or three native SOL transfers in one Phantom-approved transaction |
-| Payment safeguards | Exact lamport arithmetic, spending limits, fee review, and protected wallet signing |
-| Independent receipts | Fresh Solana RPC checks, transaction detail and status, Explorer links, and local history |
-| Guided product demo | Narrated video, accessible transcript, and a read-only judge walkthrough |
+| **AI payment briefs** | Genuine Gemini interpretation, editable drafts and Manual Mode |
+| **Recipient address book** | Saved public addresses with reviewable name-to-wallet mapping |
+| **Atomic payments** | Multiple native SOL transfers in one Phantom-approved transaction |
+| **Payment safety** | Exact lamport arithmetic, fee review, spending limits and strict transaction validation |
+| **Verified receipts** | Fresh RPC verification, signature, transfers, Explorer links and local history |
 
-## Verified results
+## Working Devnet proof
 
-<details open>
-<summary><strong>Real three-recipient Solana Devnet transaction</strong></summary>
-
-A genuine Phantom-approved payment from the live app was finalized on Devnet: **0.006 SOL sent to three recipients in one transaction**, with a **0.000005 SOL network fee**.
+A real transaction approved through the deployed app **finalized three native SOL transfers totaling 0.006 SOL**, with a **0.000005 SOL** network fee.
 
 | Recipient | Amount |
 | --- | ---: |
@@ -53,35 +49,25 @@ A genuine Phantom-approved payment from the live app was finalized on Devnet: **
 | Reserve | 0.003 SOL |
 | **Total** | **0.006 SOL** |
 
-**[View the transaction in SplitBrief](https://splitbrief-zeta.vercel.app/verify?signature=5mfAUjRWXLVDRjV74L9nL8Uk5heLW9NMiJyKpPoHVQmKRjen7DAcEh66DDTJGYDFj72zqRr3zfvzEzkPD5wdxfu)** · **[Solana Explorer](https://explorer.solana.com/tx/5mfAUjRWXLVDRjV74L9nL8Uk5heLW9NMiJyKpPoHVQmKRjen7DAcEh66DDTJGYDFj72zqRr3zfvzEzkPD5wdxfu?cluster=devnet)** · **[RPC evidence](public/evidence/devnet-batch.json)**
+**[Inspect in SplitBrief](https://splitbrief-zeta.vercel.app/verify?signature=5mfAUjRWXLVDRjV74L9nL8Uk5heLW9NMiJyKpPoHVQmKRjen7DAcEh66DDTJGYDFj72zqRr3zfvzEzkPD5wdxfu)** · **[Open Solana Explorer](https://explorer.solana.com/tx/5mfAUjRWXLVDRjV74L9nL8Uk5heLW9NMiJyKpPoHVQmKRjen7DAcEh66DDTJGYDFj72zqRr3zfvzEzkPD5wdxfu?cluster=devnet)** · **[RPC evidence](public/evidence/devnet-batch.json)**
 
-Independent RPC verification confirms the payer, three destinations, exact amounts, instruction order, reviewed fee controls, and finalization against the published demo configuration. The app's genuine [receipt screenshot](public/evidence/successful-devnet-receipt.webp) displays “Finalized & matched.” The original frozen review snapshot was not recovered separately, so an independent match to that earlier snapshot is not claimed.
+Independent RPC inspection confirms the payer, recipients, amounts, order and fee controls against the published demo configuration. The genuine [app screenshot](public/evidence/successful-devnet-receipt.webp) displays “Finalized & matched”; the original frozen review snapshot was not separately recovered.
 
-</details>
-
-- **Gemini:** Real structured interpretation succeeded locally and through the deployed API. Provider response times can be long; Manual Mode remains available. [AI evidence](public/evidence/gemini.json).
-- **Atomicity:** Surfpool tests proved three transfers in one local transaction, exact balance deltas, and rollback on failure. This is separate from public Devnet evidence. [Local test proof](public/evidence/local-chain.json).
-- **Quality:** The latest documented checks passed **192 unit/integration tests, 21 browser tests, and 8 Surfpool assertions**, plus lint, TypeScript, and production build. [Testing details](docs/TESTING.md).
-
-This is a **Devnet hackathon MVP**, using test SOL with no monetary value. It is not a mainnet payment or custodial payroll service.
+Additional verified evidence: [Gemini structured response](public/evidence/gemini.json) and [local atomic execution/rollback](public/evidence/local-chain.json). Latest documented checks passed **192 unit/integration tests, 21 browser tests and 8 local-chain assertions**. [Testing details](docs/TESTING.md).
 
 ## Try it
 
-Use the **[live payment app](https://splitbrief-zeta.vercel.app)** to explore the workflow or **[watch the 108-second narrated demo](https://splitbrief-zeta.vercel.app/demo)** without connecting a wallet.
+Start with the [live app](https://splitbrief-zeta.vercel.app), or [watch the 108-second narrated demo](https://splitbrief-zeta.vercel.app/demo), which includes an accessible transcript. The [judge walkthrough](docs/JUDGE_WALKTHROUGH.md) explains the product and evidence step by step.
 
-For a live transaction, install Phantom, enable Testnet Mode, choose **Solana Devnet**, and use test SOL. The app can load disposable sample recipients; always review the public addresses before approving. No private keys are collected or stored by SplitBrief.
+To send a test payment, connect Phantom in **Solana Devnet** mode and use test SOL. You can load disposable example recipients or enter public addresses you control. SplitBrief does not collect private keys.
 
-Judges can start at the **[guided walkthrough](https://splitbrief-zeta.vercel.app/judges)**, inspect the [verified batch receipt](public/evidence/devnet-batch.json), and review the [demo transcript](https://splitbrief-zeta.vercel.app/demo).
+This is a **Devnet hackathon MVP**, not a mainnet payroll or custody service. Test SOL has no monetary value.
 
-## Built with
+## Tech stack and local setup
 
-**Next.js, React, TypeScript, Tailwind CSS, Solana Kit, Wallet Standard, Phantom, Google Gemini, Zod, and Vercel.**
+Built with **Next.js, React, TypeScript, Tailwind CSS, Solana Kit, Wallet Standard, Phantom, Google Gemini, Zod and Vercel**. There is no custom smart contract, custodial wallet backend or application database.
 
-The frontend handles payment review and wallet signing; a server-side route calls Gemini for structured interpretation. Transaction verification independently reads Solana RPC data. Contacts and recent receipts are stored locally in the browser. SplitBrief has no custom smart contract, custodial signing backend, or application database.
-
-## Run locally
-
-Requires **Node.js 24**.
+Requires Node.js 24:
 
 ```bash
 git clone https://github.com/sopskistar/SplitBrief.git
@@ -92,16 +78,14 @@ test -e .env.local || cp .env.example .env.local
 npm run dev
 ```
 
-Add `GEMINI_API_KEY` to your ignored `.env.local` file to enable AI interpretation. Manual Mode works without the key. Do not commit secrets or wallet recovery phrases.
+Add `GEMINI_API_KEY` to the ignored `.env.local` file for AI interpretation; Manual Mode works without it. Never commit wallet secrets or API keys.
 
-Run checks with `npm run lint`, `npm run typecheck`, `npm run test`, `npm run test:e2e`, and `npm run build`. Local-chain checks use `npm run test:local`.
+Tests: `npm run lint`, `npm run typecheck`, `npm run test`, `npm run test:e2e` and `npm run build`.
 
-[Architecture](docs/ARCHITECTURE.md) · [Testing](docs/TESTING.md) · [Wallet safety](docs/TEST_WALLETS.md) · [Deployment](docs/DEPLOYMENT.md)
+[Architecture](docs/ARCHITECTURE.md) · [Testing](docs/TESTING.md) · [Deployment](docs/DEPLOYMENT.md)
 
-## Hackathon submission
+## Hackathon
 
-**Submitted to the MLH Solana Hackathon (November 6–8, 2026).** Built with OpenAI Codex assistance and based on the public Solana Foundation Kit Next.js starter and open-source dependencies.
+**Submitted to the MLH Solana Hackathon, November 6–8, 2026.** The project includes a [108-second narrated demo](https://splitbrief-zeta.vercel.app/demo), an independently verified public Devnet batch and open test evidence. Built with **OpenAI Codex** assistance using the public Solana Foundation Kit Next.js starter and open-source dependencies.
 
-The [narrated 108-second film](https://splitbrief-zeta.vercel.app/demo) uses genuine application footage and the independently checked public batch. Recorded Gemini output is labeled; no Phantom approval popup is fabricated.
-
-[Submission details](docs/SUBMISSION.md) · [Judge walkthrough](docs/JUDGE_WALKTHROUGH.md) · [MIT License](LICENSE)
+[Judges and evidence](https://splitbrief-zeta.vercel.app/judges) · [Submission details](docs/SUBMISSION.md) · [MIT License](LICENSE)
