@@ -66,7 +66,7 @@ git clone https://github.com/sopskistar/SplitBrief.git
 cd SplitBrief
 nvm use 24
 npm ci
-cp .env.example .env.local
+test -e .env.local || cp .env.example .env.local
 npm run dev
 ```
 
