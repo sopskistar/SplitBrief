@@ -25,6 +25,8 @@ import { getTransferSolInstruction } from '@solana-program/system';
 import { assertAffordable, validatePlan, type PaymentPlan } from './payments';
 import { decodeReceipt, signatureSchema, type Receipt } from './verification';
 import { evaluatePaymentEvidence } from './payment-evidence';
+import { FIXED_FEE_POLICY, reviewedFeeInstructions, bytesEqual } from './transaction-policy';
+import { inspectTransaction, WalletMessageMismatchError } from './signing-diagnostics';
 
 export const DEVNET_GENESIS = 'EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG';
 export const RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || 'https://api.devnet.solana.com';
@@ -59,7 +61,13 @@ export function buildPaymentMessage(
     createTransactionMessage({ version: 0 }),
     (tx) => setTransactionMessageFeePayer(address(plan.payer), tx),
     (tx) => setTransactionMessageLifetimeUsingBlockhash(lifetime, tx),
-    (tx) => appendTransactionMessageInstructions(instructions, tx),
+    (tx) =>
+      appendTransactionMessageInstructions(
+        plan.feePolicy === FIXED_FEE_POLICY
+          ? [...reviewedFeeInstructions(), ...instructions]
+          : instructions,
+        tx,
+      ),
   );
 }
 
@@ -87,7 +95,7 @@ export async function preparePayment(rpc: AppRpc, plan: PaymentPlan) {
   assertAffordable(plan, balance.value, fee.value);
   return {
     transaction,
-    plan,
+    plan: Object.freeze({ ...plan, approvedFeeLamports: fee.value.toString() }),
     fee: fee.value,
     balance: balance.value,
     blockhash: latest.value.blockhash,
@@ -124,26 +132,35 @@ export async function validateSignedTransaction(
   signed: Transaction,
   payer: string,
 ): Promise<void> {
+  const sig = signed.signatures[address(payer)];
+  let signatureValid = false;
+  try {
+    signatureValid =
+      !!sig &&
+      (await verifySignature(
+        await getPublicKeyFromAddress(address(payer)),
+        sig,
+        signed.messageBytes,
+      ));
+  } catch {
+    /* Invalid bytes never pass signature validation. */
+  }
+  if (!bytesEqual(signed.messageBytes, unsigned.messageBytes))
+    throw new WalletMessageMismatchError(unsigned, signed, signatureValid);
+  const message = inspectTransaction(signed);
   if (
-    signed.messageBytes.length !== unsigned.messageBytes.length ||
-    signed.messageBytes.some((byte, index) => byte !== unsigned.messageBytes[index])
+    !message.canonicalEncoding ||
+    message.version !== 0 ||
+    message.payer !== payer ||
+    message.header.numSignerAccounts !== 1 ||
+    message.addressTableLookups.length
   )
-    throw new Error(
-      'Wallet changed the reviewed transaction. Nothing was broadcast. Review a fresh draft.',
-    );
+    throw new Error('Unexpected message structure or signer. Nothing was broadcast.');
   assertIsFullySignedTransaction(signed);
   const signatures = Object.entries(signed.signatures);
   if (signatures.length !== 1 || signatures[0][0] !== payer)
     throw new Error('Unexpected transaction signer. Nothing was broadcast.');
-  const sig = signed.signatures[address(payer)];
-  if (
-    !sig ||
-    !(await verifySignature(
-      await getPublicKeyFromAddress(address(payer)),
-      sig,
-      signed.messageBytes,
-    ))
-  )
+  if (!signatureValid)
     throw new Error('Wallet returned an invalid signature. Nothing was broadcast.');
 }
 
@@ -272,7 +289,27 @@ export async function signAndSubmit(
     validatePlan(prepared.plan);
     if (signer.address !== prepared.plan.payer || !isTransactionModifyingSigner(signer))
       throw new Error('Wallet changed or does not support reviewable signing.');
+    const reviewed = compileTransaction(
+      buildPaymentMessage(prepared.plan, {
+        blockhash: prepared.blockhash,
+        lastValidBlockHeight: prepared.lastValidBlockHeight,
+      }),
+    );
+    if (!bytesEqual(reviewed.messageBytes, prepared.transaction.messageBytes))
+      throw new Error('Prepared transaction differs from the frozen plan. Nothing was broadcast.');
     await assertDevnet(rpc);
+    const quotedFee = await rpc
+      .getFeeForMessage(
+        getBase64Decoder().decode(reviewed.messageBytes) as TransactionMessageBytesBase64,
+        { commitment: 'confirmed' },
+      )
+      .send({ abortSignal: AbortSignal.timeout(10_000) });
+    if (
+      quotedFee.value !== prepared.fee ||
+      (prepared.plan.approvedFeeLamports !== undefined &&
+        prepared.plan.approvedFeeLamports !== prepared.fee.toString())
+    )
+      throw new Error('The network fee estimate changed. Refresh the review before signing.');
     const [height, balance] = await Promise.all([
       rpc
         .getBlockHeight({ commitment: 'confirmed' })
@@ -287,11 +324,19 @@ export async function signAndSubmit(
     if (!callbacks.isCurrentWallet())
       throw new Error('The connected wallet changed. Review the payment again.');
     callbacks.onAwaiting();
-    const signedTransactions = await signer.modifyAndSignTransactions([prepared.transaction]);
+    // Keep the reviewed bytes separate from mutable data supplied to an external signer.
+    const walletInput = {
+      ...reviewed,
+      messageBytes: new Uint8Array(
+        reviewed.messageBytes,
+      ) as unknown as typeof reviewed.messageBytes,
+      signatures: { ...reviewed.signatures },
+    };
+    const signedTransactions = await signer.modifyAndSignTransactions([walletInput]);
     if (signedTransactions.length !== 1)
       throw new Error('Expected exactly one signed transaction.');
     const signed = signedTransactions[0];
-    await validateSignedTransaction(prepared.transaction, signed, prepared.plan.payer);
+    await validateSignedTransaction(reviewed, signed, prepared.plan.payer);
     if (!callbacks.isCurrentWallet())
       throw new Error('Wallet disconnected or changed during signing. Nothing was broadcast.');
     const currentHeight = await rpc

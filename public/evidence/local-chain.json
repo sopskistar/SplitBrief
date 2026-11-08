@@ -1,10 +1,10 @@
 {
-  "checkedAt": "2026-11-07T23:42:50.646Z",
+  "checkedAt": "2026-11-08T01:16:54.136Z",
   "network": "local Surfpool (NOT public Devnet)",
   "node": "v24.22.2",
   "success": true,
   "checks": [
-    "Exactly 3 System Program transfer instructions in ONE message",
+    "Exactly 3 System transfers plus 2 reviewed zero-priority fee controls in ONE message",
     "One signed transaction submitted with the expected signature",
     "Full decoded chain transaction matches payer, destinations, amounts, order, and count",
     "All 3 recipient balance deltas equal their exact bigint lamport amounts",
@@ -13,62 +13,72 @@
     "Atomic rollback: no recipient retains any transfer from the failed transaction",
     "Independent verifier rejects a mismatched expected payer"
   ],
-  "payer": "BLenWgVWrrYqp8aSCiZUVvRrGLyhQHwYZUo8K5xBi6uh",
+  "payer": "CNZWfsj5AEAx33Uo4gq9vrsq7BfAryq9hVY1UFFPKoAV",
   "recipients": [
     {
       "id": "local-0",
       "name": "Ada",
-      "address": "4G1ZxyvNjmiAj5jUV7iV9xDyHwdrNAvM7RCqngxiigcK",
+      "address": "BkUtuwLPaHzUijWHnRFwKiAD4KfVNw6pULaL5ZpuqJ3K",
       "description": "Disposable local test address"
     },
     {
       "id": "local-1",
       "name": "Chidi",
-      "address": "Ej39yD5qbaidjRPHQpbiHb7TVUsA9FXa7hS8b3EwBtAN",
+      "address": "CL4kkuGhfRNgRoJ33PKu5y435gSa4rCw3hkthLogJ8tL",
       "description": "Disposable local test address"
     },
     {
       "id": "local-2",
       "name": "Reserve",
-      "address": "3CoxUtF3irYHshnJGXdg7wHLdQyh3dKEXWknUJxp6LvH",
+      "address": "7UFCx2UMGBCwLYYuHhwCw32FJggw6fppNMYEihGHRD8a",
       "description": "Disposable local test address"
     }
   ],
-  "signature": "2ipkcLfxAah42VBViWaXjLxrH8MC19b6wQfK3on5jfvecnfFwoPqHgWSEDeibzYbcV77uu7fLM5mM3pMeTKxMe5Z",
-  "failedSignature": "Kog4S1fFaPaiV6eHBsVS8P1EZyUuyA4d7XPBrLHNPpXEYw6nLoHHtVeu8pX9uzEhCZoNRHQR1XeoMDN2Y241YaZ",
+  "signature": "3MRBpUg8RA92TvPq5s1NwRWAUcDDEJEuFNkZCtT9bUehHnvgUATKiJcmCUcMEVyFn59JXyFTkYtyb9fqZx9Jwstw",
+  "failedSignature": "z32TY81E81vsisQNuQz24bs5EfvpZR7nK6vhgGWu93V7vLETgBLSkBszjdDHZqBxAhUxh7kc5SZcVRkBwuLrXzM",
   "receipt": {
-    "signature": "2ipkcLfxAah42VBViWaXjLxrH8MC19b6wQfK3on5jfvecnfFwoPqHgWSEDeibzYbcV77uu7fLM5mM3pMeTKxMe5Z",
+    "signature": "3MRBpUg8RA92TvPq5s1NwRWAUcDDEJEuFNkZCtT9bUehHnvgUATKiJcmCUcMEVyFn59JXyFTkYtyb9fqZx9Jwstw",
     "network": "local Surfpool",
     "state": "confirmed",
-    "payer": "BLenWgVWrrYqp8aSCiZUVvRrGLyhQHwYZUo8K5xBi6uh",
+    "payer": "CNZWfsj5AEAx33Uo4gq9vrsq7BfAryq9hVY1UFFPKoAV",
     "transfers": [
       {
-        "source": "BLenWgVWrrYqp8aSCiZUVvRrGLyhQHwYZUo8K5xBi6uh",
-        "destination": "4G1ZxyvNjmiAj5jUV7iV9xDyHwdrNAvM7RCqngxiigcK",
+        "source": "CNZWfsj5AEAx33Uo4gq9vrsq7BfAryq9hVY1UFFPKoAV",
+        "destination": "BkUtuwLPaHzUijWHnRFwKiAD4KfVNw6pULaL5ZpuqJ3K",
         "lamports": "2000000",
         "inner": false
       },
       {
-        "source": "BLenWgVWrrYqp8aSCiZUVvRrGLyhQHwYZUo8K5xBi6uh",
-        "destination": "Ej39yD5qbaidjRPHQpbiHb7TVUsA9FXa7hS8b3EwBtAN",
+        "source": "CNZWfsj5AEAx33Uo4gq9vrsq7BfAryq9hVY1UFFPKoAV",
+        "destination": "CL4kkuGhfRNgRoJ33PKu5y435gSa4rCw3hkthLogJ8tL",
         "lamports": "1000000",
         "inner": false
       },
       {
-        "source": "BLenWgVWrrYqp8aSCiZUVvRrGLyhQHwYZUo8K5xBi6uh",
-        "destination": "3CoxUtF3irYHshnJGXdg7wHLdQyh3dKEXWknUJxp6LvH",
+        "source": "CNZWfsj5AEAx33Uo4gq9vrsq7BfAryq9hVY1UFFPKoAV",
+        "destination": "7UFCx2UMGBCwLYYuHhwCw32FJggw6fppNMYEihGHRD8a",
         "lamports": "3000000",
         "inner": false
       }
     ],
-    "instructionCount": 3,
+    "instructionCount": 5,
     "signatureCount": 1,
     "feeLamports": "5000",
     "slot": "31",
-    "timestamp": 1794094970,
+    "timestamp": 1794100614,
     "matchesPlan": true,
     "issues": [],
-    "otherInstructions": []
+    "otherInstructions": [],
+    "feeControls": [
+      {
+        "index": 0,
+        "kind": "compute-unit-limit"
+      },
+      {
+        "index": 1,
+        "kind": "compute-unit-price"
+      }
+    ]
   },
   "assertions": 8,
   "privateKeys": "Generated in memory only; discarded when this process exits."

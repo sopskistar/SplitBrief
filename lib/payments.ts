@@ -1,5 +1,6 @@
 import { address } from '@solana/kit';
 import { z } from 'zod';
+import { FIXED_FEE_POLICY } from './transaction-policy';
 
 export const LAMPORTS_PER_SOL = 1_000_000_000n;
 export const MAX_TRANSFER = 100_000_000n;
@@ -38,6 +39,8 @@ export const planSchema = z
       .min(2)
       .max(3),
     totalLamports: z.string().regex(/^\d+$/),
+    feePolicy: z.literal(FIXED_FEE_POLICY).optional(),
+    approvedFeeLamports: z.string().regex(/^\d+$/).optional(),
   })
   .strict();
 export type PaymentPlan = z.infer<typeof planSchema>;
@@ -102,6 +105,7 @@ export function createPlan(
   });
   const plan = {
     payer,
+    feePolicy: FIXED_FEE_POLICY,
     createdAt: now.toISOString(),
     items,
     totalLamports: items.reduce((n, item) => n + BigInt(item.lamports), 0n).toString(),

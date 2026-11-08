@@ -1,8 +1,13 @@
 import type { Receipt } from './verification';
 
-export function evaluatePaymentEvidence(receipt: Receipt, expectedPayer?: string) {
+export function evaluatePaymentEvidence(
+  receipt: Receipt,
+  expectedPayer?: string,
+  requireFinalized = false,
+) {
   const checks = {
     confirmedOrFinalized: ['confirmed', 'finalized'].includes(receipt.state),
+    finalizedForPublication: requireFinalized ? receipt.state === 'finalized' : null,
     expectedPayer: expectedPayer ? receipt.payer === expectedPayer : null,
     singleSignature: receipt.signatureCount === 1,
     twoOrThreeTransfers: receipt.transfers.length >= 2 && receipt.transfers.length <= 3,
@@ -13,7 +18,8 @@ export function evaluatePaymentEvidence(receipt: Receipt, expectedPayer?: string
       (transfer) => transfer.source === receipt.payer && !transfer.inner,
     ),
     onlyIntendedNativeTransferInstructions:
-      receipt.issues.length === 0 && receipt.instructionCount === receipt.transfers.length,
+      receipt.issues.length === 0 &&
+      receipt.instructionCount === receipt.transfers.length + receipt.feeControls.length,
     withinAppTransferCaps:
       receipt.transfers.every(
         (transfer) => BigInt(transfer.lamports) > 0n && BigInt(transfer.lamports) <= 100_000_000n,

@@ -1,0 +1,160 @@
+{
+  "checkedAt": "2026-11-08T01:26:57.338Z",
+  "node": "v24.22.2",
+  "source": "Disposable in-memory reproduction of documented Phantom priority-fee enhancement, through the SDK wire codec. NOT captured original Phantom transaction bytes.",
+  "userObservedFailure": "Wallet changed the reviewed transaction. Nothing was broadcast. Review a fresh draft.",
+  "instruction": "Pay Ada 0.002 SOL for design, Chidi 0.001 SOL for delivery, and send 0.003 SOL to Reserve.",
+  "failureReproduced": true,
+  "documentedFeeInjection": {
+    "format": "splitbrief-signing-diagnostic-v1",
+    "checkedAt": "2026-11-08T01:26:57.334Z",
+    "bytesEqual": false,
+    "differences": ["messageLength", "header", "accountKeys", "instructions"],
+    "returnedSignatureValid": true,
+    "before": {
+      "messageLength": 250,
+      "canonicalEncoding": true,
+      "version": 0,
+      "payer": "GVkZrfEconMn36AEWNCH9wVqVvum9YKNHNnmntyZsvdM",
+      "blockhash": "11111111111111111111111111111111",
+      "header": {
+        "numSignerAccounts": 1,
+        "numReadonlySignerAccounts": 0,
+        "numReadonlyNonSignerAccounts": 1
+      },
+      "accountKeys": [
+        "GVkZrfEconMn36AEWNCH9wVqVvum9YKNHNnmntyZsvdM",
+        "5LB7gzK1WFG6hEkeym25r9vjFEDCdBBZFpsVoSGUCBYz",
+        "B5FrY8tQL73E14k4uHvk1GqtpJeBWGhaNy6z8vtnup5d",
+        "EgpR8wT9oSnYxbB3tbAtBzdMCiP1Krez84YJ5id6MRxp",
+        "11111111111111111111111111111111"
+      ],
+      "addressTableLookups": [],
+      "instructions": [
+        {
+          "programIndex": 4,
+          "programAddress": "11111111111111111111111111111111",
+          "accountIndices": [0, 3],
+          "accounts": [
+            "GVkZrfEconMn36AEWNCH9wVqVvum9YKNHNnmntyZsvdM",
+            "EgpR8wT9oSnYxbB3tbAtBzdMCiP1Krez84YJ5id6MRxp"
+          ],
+          "dataHex": "0200000080841e0000000000"
+        },
+        {
+          "programIndex": 4,
+          "programAddress": "11111111111111111111111111111111",
+          "accountIndices": [0, 2],
+          "accounts": [
+            "GVkZrfEconMn36AEWNCH9wVqVvum9YKNHNnmntyZsvdM",
+            "B5FrY8tQL73E14k4uHvk1GqtpJeBWGhaNy6z8vtnup5d"
+          ],
+          "dataHex": "0200000040420f0000000000"
+        },
+        {
+          "programIndex": 4,
+          "programAddress": "11111111111111111111111111111111",
+          "accountIndices": [0, 1],
+          "accounts": [
+            "GVkZrfEconMn36AEWNCH9wVqVvum9YKNHNnmntyZsvdM",
+            "5LB7gzK1WFG6hEkeym25r9vjFEDCdBBZFpsVoSGUCBYz"
+          ],
+          "dataHex": "02000000c0c62d0000000000"
+        }
+      ],
+      "signatures": [
+        {
+          "signer": "GVkZrfEconMn36AEWNCH9wVqVvum9YKNHNnmntyZsvdM",
+          "present": false
+        }
+      ]
+    },
+    "after": {
+      "messageLength": 302,
+      "canonicalEncoding": true,
+      "version": 0,
+      "payer": "GVkZrfEconMn36AEWNCH9wVqVvum9YKNHNnmntyZsvdM",
+      "blockhash": "11111111111111111111111111111111",
+      "header": {
+        "numSignerAccounts": 1,
+        "numReadonlySignerAccounts": 0,
+        "numReadonlyNonSignerAccounts": 2
+      },
+      "accountKeys": [
+        "GVkZrfEconMn36AEWNCH9wVqVvum9YKNHNnmntyZsvdM",
+        "5LB7gzK1WFG6hEkeym25r9vjFEDCdBBZFpsVoSGUCBYz",
+        "B5FrY8tQL73E14k4uHvk1GqtpJeBWGhaNy6z8vtnup5d",
+        "EgpR8wT9oSnYxbB3tbAtBzdMCiP1Krez84YJ5id6MRxp",
+        "11111111111111111111111111111111",
+        "ComputeBudget111111111111111111111111111111"
+      ],
+      "addressTableLookups": [],
+      "instructions": [
+        {
+          "programIndex": 4,
+          "programAddress": "11111111111111111111111111111111",
+          "accountIndices": [0, 3],
+          "accounts": [
+            "GVkZrfEconMn36AEWNCH9wVqVvum9YKNHNnmntyZsvdM",
+            "EgpR8wT9oSnYxbB3tbAtBzdMCiP1Krez84YJ5id6MRxp"
+          ],
+          "dataHex": "0200000080841e0000000000"
+        },
+        {
+          "programIndex": 4,
+          "programAddress": "11111111111111111111111111111111",
+          "accountIndices": [0, 2],
+          "accounts": [
+            "GVkZrfEconMn36AEWNCH9wVqVvum9YKNHNnmntyZsvdM",
+            "B5FrY8tQL73E14k4uHvk1GqtpJeBWGhaNy6z8vtnup5d"
+          ],
+          "dataHex": "0200000040420f0000000000"
+        },
+        {
+          "programIndex": 4,
+          "programAddress": "11111111111111111111111111111111",
+          "accountIndices": [0, 1],
+          "accounts": [
+            "GVkZrfEconMn36AEWNCH9wVqVvum9YKNHNnmntyZsvdM",
+            "5LB7gzK1WFG6hEkeym25r9vjFEDCdBBZFpsVoSGUCBYz"
+          ],
+          "dataHex": "02000000c0c62d0000000000"
+        },
+        {
+          "programIndex": 5,
+          "programAddress": "ComputeBudget111111111111111111111111111111",
+          "accountIndices": [],
+          "accounts": [],
+          "dataHex": "02400d0300"
+        },
+        {
+          "programIndex": 5,
+          "programAddress": "ComputeBudget111111111111111111111111111111",
+          "accountIndices": [],
+          "accounts": [],
+          "dataHex": "03e803000000000000"
+        }
+      ],
+      "signatures": [
+        {
+          "signer": "GVkZrfEconMn36AEWNCH9wVqVvum9YKNHNnmntyZsvdM",
+          "present": true
+        }
+      ]
+    },
+    "note": "Public message comparison only. No private keys, signature bytes, or broadcastable signed transaction. Nothing was submitted by this diagnostic."
+  },
+  "fixedPolicy": {
+    "computeUnitLimit": 10000,
+    "unitPriceMicroLamports": "0",
+    "bytesUnchanged": true,
+    "signatureVerified": true
+  },
+  "actualUserMessageDifferences": "Unavailable from the error recording alone. A repeated mismatch can export the exact public message comparison from the app.",
+  "broadcast": false,
+  "privateKeys": "In-memory disposable signer only; discarded at process exit; never exported.",
+  "references": [
+    "https://docs.phantom.com/developer-powertools/solana-priority-fees",
+    "https://github.com/anza-xyz/kit/blob/main/packages/wallet-account-signer/src/wallet-account-transaction-signer.ts"
+  ]
+}

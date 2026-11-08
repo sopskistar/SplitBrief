@@ -1,6 +1,27 @@
 import { expect, test, type Page } from '@playwright/test';
-import { address, getAddressEncoder } from '@solana/kit';
-import { CONTACTS, DEVNET, PAYER, PLAN, TEST_SIGNATURE, chainFixture } from '../fixtures';
+import {
+  address,
+  getAddressEncoder,
+  generateKeyPairSigner,
+  getTransactionCodec,
+  getSignatureFromTransaction,
+  partiallySignTransaction,
+  compileTransaction,
+  setTransactionMessageComputeUnitPrice,
+} from '@solana/kit';
+import { readFile } from 'node:fs/promises';
+import { createPlan, type PaymentPlan } from '../../lib/payments';
+import { buildPaymentMessage } from '../../lib/solana';
+import { blockhash } from '@solana/kit';
+import {
+  CONTACTS,
+  DEVNET,
+  PAYER,
+  PLAN,
+  TEST_SIGNATURE,
+  DRAFT,
+  chainFixtureForPlan,
+} from '../fixtures';
 const browserErrors = new WeakMap<Page, string[]>();
 test.beforeEach(async ({ page }) => {
   const errors: string[] = [];
@@ -17,7 +38,11 @@ async function seedContacts(page: Page) {
     CONTACTS,
   );
 }
-async function rpcFixture(page: Page, overrides: Record<string, unknown> = {}) {
+async function rpcFixture(
+  page: Page,
+  overrides: Record<string, unknown> = {},
+  expected: PaymentPlan = PLAN,
+) {
   const calls: string[] = [];
   await page.route('https://api.devnet.solana.com/', async (route) => {
     const body = route.request().postDataJSON();
@@ -31,13 +56,17 @@ async function rpcFixture(page: Page, overrides: Record<string, unknown> = {}) {
       },
       getFeeForMessage: { context: { slot: 123 }, value: 5000 },
       getBlockHeight: 100,
-      getTransaction: chainFixture(),
+      getTransaction: chainFixtureForPlan(expected, body.params?.[0] || TEST_SIGNATURE),
       getSignatureStatuses: {
         context: { slot: 123 },
         value: [{ confirmationStatus: 'finalized', err: null, slot: 123, confirmations: null }],
       },
       ...overrides,
     };
+    if (body.method === 'sendTransaction')
+      results.sendTransaction = getSignatureFromTransaction(
+        getTransactionCodec().decode(Buffer.from(body.params[0], 'base64')),
+      );
     await route.fulfill({
       contentType: 'application/json',
       body: JSON.stringify(
@@ -48,10 +77,14 @@ async function rpcFixture(page: Page, overrides: Record<string, unknown> = {}) {
   });
   return calls;
 }
-async function qaWallet(page: Page) {
+async function qaWallet(page: Page, payerAddress = PAYER, mode: 'reject' | 'sign' = 'reject') {
   await page.addInitScript(
-    ({ payer, publicKey }) => {
-      const qa = window as unknown as { qaWalletSignRequests: number; qaRequestedChain: string };
+    ({ payer, publicKey, mode }) => {
+      const qa = window as unknown as {
+        qaWalletSignRequests: number;
+        qaRequestedChain: string;
+        qaSignTransaction: (wire: number[]) => Promise<number[]>;
+      };
       qa.qaWalletSignRequests = 0;
       const account = {
         address: payer,
@@ -86,10 +119,17 @@ async function qaWallet(page: Page) {
           'solana:signTransaction': {
             version: '1.0.0',
             supportedTransactionVersions: [0],
-            signTransaction: async (input: { chain: string }) => {
+            signTransaction: async (input: { chain: string; transaction: Uint8Array }) => {
               qa.qaWalletSignRequests++;
               qa.qaRequestedChain = input.chain;
-              throw new Error('User rejected request (QA simulated)');
+              if (mode === 'reject') throw new Error('User rejected request (QA simulated)');
+              return [
+                {
+                  signedTransaction: new Uint8Array(
+                    await qa.qaSignTransaction(Array.from(input.transaction)),
+                  ),
+                },
+              ];
             },
           },
         },
@@ -102,7 +142,11 @@ async function qaWallet(page: Page) {
         new CustomEvent('wallet-standard:register-wallet', { detail: register }),
       );
     },
-    { payer: PAYER, publicKey: Array.from(getAddressEncoder().encode(address(PLAN.payer))) },
+    {
+      payer: payerAddress,
+      publicKey: Array.from(getAddressEncoder().encode(address(payerAddress))),
+      mode,
+    },
   );
 }
 async function connect(page: Page) {
@@ -394,4 +438,89 @@ test('Manual Mode cancels waiting for a slow provider and cannot be overwritten 
     '0.004',
   );
   await expect(page.getByRole('button', { name: 'Review payment' })).toBeEnabled();
+});
+
+test('real Wallet Standard adapter round-trips the fixed-fee message, signs once, and exports the matched receipt (QA wallet)', async ({
+  page,
+}) => {
+  const payer = await generateKeyPairSigner(); // in-memory QA signer; never the user's Phantom
+  const expected = createPlan(payer.address, DRAFT, CONTACTS);
+  await page.exposeFunction('qaSignTransaction', async (wire: number[]) => {
+    const tx = getTransactionCodec().decode(new Uint8Array(wire));
+    const signed = await partiallySignTransaction([payer.keyPair], tx);
+    return Array.from(getTransactionCodec().encode(signed));
+  });
+  await seedContacts(page);
+  const calls = await rpcFixture(page, {}, expected);
+  await qaWallet(page, payer.address, 'sign');
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Manual Mode', exact: true }).click();
+  await connect(page);
+  await page.getByRole('button', { name: 'Review payment', exact: true }).click();
+  await expect(page.getByText('Priority fee: 0 SOL.', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: 'Approve & open Phantom', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Payment completed', exact: true })).toBeVisible();
+  expect(calls.filter((method) => method === 'sendTransaction')).toHaveLength(1);
+  expect(
+    await page.evaluate(
+      () => (window as unknown as { qaWalletSignRequests: number }).qaWalletSignRequests,
+    ),
+  ).toBe(1);
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download receipt JSON', exact: true }).click();
+  const download = await downloadPromise;
+  const exported = JSON.parse(await readFile((await download.path())!, 'utf8'));
+  expect(exported.reviewedPlan.feePolicy).toBe('fixed-zero-priority-v1');
+  expect(exported.reviewedPlan.approvedFeeLamports).toBe('5000');
+  expect(exported.transfers.map((t: { lamports: string }) => t.lamports)).toEqual([
+    '2000000',
+    '1000000',
+    '3000000',
+  ]);
+  expect(exported.instructionCount).toBe(5);
+  expect(exported.matchesPlan).toBe(true);
+});
+
+test('Wallet Standard fee mutation is blocked with a safe diagnostic and zero broadcasts (QA wallet)', async ({
+  page,
+}) => {
+  const payer = await generateKeyPairSigner();
+  const expected = createPlan(payer.address, DRAFT, CONTACTS);
+  await page.exposeFunction('qaSignTransaction', async () => {
+    const message = setTransactionMessageComputeUnitPrice(
+      1n,
+      buildPaymentMessage(expected, {
+        blockhash: blockhash('11111111111111111111111111111111'),
+        lastValidBlockHeight: 500n,
+      }),
+    );
+    return Array.from(
+      getTransactionCodec().encode(
+        await partiallySignTransaction([payer.keyPair], compileTransaction(message)),
+      ),
+    );
+  });
+  await seedContacts(page);
+  const calls = await rpcFixture(page, {}, expected);
+  await qaWallet(page, payer.address, 'sign');
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Manual Mode', exact: true }).click();
+  await connect(page);
+  await page.getByRole('button', { name: 'Review payment', exact: true }).click();
+  await page.getByRole('button', { name: 'Approve & open Phantom', exact: true }).click();
+  await expect(page.locator('p[role=alert]')).toContainText(
+    'Wallet changed the reviewed transaction',
+  );
+  await expect(
+    page.getByRole('button', { name: 'Download signing diagnostic', exact: true }),
+  ).toBeVisible();
+  expect(calls).not.toContain('sendTransaction');
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download signing diagnostic', exact: true }).click();
+  const diagnostic = JSON.parse(await readFile((await (await downloadPromise).path())!, 'utf8'));
+  expect(diagnostic.differences).toContain('instructions');
+  expect(diagnostic.bytesEqual).toBe(false);
+  expect(JSON.stringify(diagnostic)).not.toMatch(
+    /secretKey|privateKey|keyPair|signedTransaction|messageBytes/,
+  );
 });

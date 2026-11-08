@@ -25,7 +25,7 @@ flowchart LR
 
 The supported Solana wallet plugin discovers Wallet Standard wallets for `solana:devnet`; `@solana/react` provides its client. The app requires version 0 and inspectable `signTransaction` capability. Wallet Standard advertises supported chains rather than exposing every extension's currently selected UI network: the app requests Devnet explicitly, verifies RPC genesis, and tells the owner to select Devnet in Phantom. Human approval remains a real wallet interaction.
 
-`lib/solana.ts` builds one Kit message with 2–3 `@solana-program/system` native transfer instructions. It compiles that message to estimate fees, rechecks balance and blockheight before signing, checks the returned bytes and Ed25519 signature, and broadcasts exactly once. No backend key exists.
+`lib/solana.ts` builds one Kit message with 2–3 `@solana-program/system` native transfer instructions. It compiles that message to estimate fees, rechecks balance and blockheight before signing, checks the returned bytes and Ed25519 signature, and broadcasts exactly once. No backend key exists. New plans explicitly include a 10,000 CU limit and zero unit price before the native transfers; this prevents documented Phantom automatic fee additions without relaxing byte equality. A separately copied signer input protects the frozen baseline. The RPC quote is rechecked before signing, and the approved fee travels in the plan snapshot. See [the signing investigation](WALLET_SIGNING.md).
 
 ## Server and model
 
@@ -37,7 +37,7 @@ Rate limiting stores six AI request attempts per minute per best-effort client i
 
 ## Chain verification and uncertainty
 
-Every product RPC path checks the full Devnet genesis hash `EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG`. `fetchReceipt` retrieves both the actual `jsonParsed` transaction at confirmed commitment and current signature status. The decoder inspects execution metadata, payer/signer, all outer instructions, and inner instructions. Unexpected programs/extra transfers produce issues. An expected plan matches only on successful execution with identical payer, source, destinations, amounts, instruction count/order, and no unexpected instructions.
+Every product RPC path checks the full Devnet genesis hash `EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG`. `fetchReceipt` retrieves both the actual `jsonParsed` transaction at confirmed commitment and current signature status. The decoder inspects execution metadata, payer/signer, all outer instructions, and inner instructions. Unexpected programs/extra transfers produce issues. An expected plan matches only on successful execution with identical payer, source, destinations, amounts, instruction count/order, and no unexpected instructions. Plans with the fixed fee policy require exactly the two reviewed fee controls and an actual fee no higher than the approved estimate; historical transfer-only plans keep their original expectations.
 
 Without an expected plan, `/verify` says **On-chain transaction decoded**. It cannot claim to match an unknown payment brief. RPC remains a trust boundary: this is an inspection of RPC-reported chain data, not a cryptographic light client. Missing, pruned, reset, rate-limited, or unavailable history stays unverified.
 

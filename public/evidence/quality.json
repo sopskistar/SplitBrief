@@ -1,16 +1,16 @@
 {
-  "checkedAt": "2026-11-08T00:26:52.455Z",
+  "checkedAt": "2026-11-08T01:25:17.459938+00:00",
   "node": "v24.22.2",
   "source": "Observed command outputs in this delivery session; not a CI artifact.",
   "lint": "passed",
   "typecheck": "passed",
   "unitTests": {
-    "passed": 168,
+    "passed": 192,
     "files": 9,
     "failed": 0
   },
   "playwright": {
-    "passed": 15,
+    "passed": 17,
     "failed": 0,
     "fixtureDisclosure": "QA RPC and wallet fixtures are not public-chain evidence."
   },
@@ -28,5 +28,13 @@
   "publicProofCommand": {
     "exitCode": 1,
     "note": "Correctly rejects the supplied incoming funding as SplitBrief batch evidence."
+  },
+  "signingRegression": {
+    "failureReproduced": true,
+    "actualWalletBytesCaptured": false,
+    "strictByteEqualityRetained": true,
+    "fixedPolicy": "10000 CU; zero priority fee; fresh RPC fee quote; full chain matching",
+    "walletStandardBrowserTests": 2,
+    "publicBatchSettlementVerified": false
   }
 }

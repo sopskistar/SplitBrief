@@ -30,13 +30,13 @@ All transfers in the batch are included in a single Solana transaction: the tran
 
 ## What’s built
 
-| Area | What it does |
-| --- | --- |
-| Payment composer | Natural-language brief, Gemini interpretation, Manual Mode, editable recipient amounts |
+| Area                   | What it does                                                                           |
+| ---------------------- | -------------------------------------------------------------------------------------- |
+| Payment composer       | Natural-language brief, Gemini interpretation, Manual Mode, editable recipient amounts |
 | Recipient address book | Browser-local names and public addresses; optional disposable Devnet sample recipients |
-| Solana payments | Native SOL transfers, exact lamport validation, Devnet-only Phantom wallet flow |
-| Review and safety | Balance and fee checks, spending limits, reviewed transaction details, guarded signing |
-| Receipt verification | Independent RPC inspection, copy/share links, transfer details, local receipt history |
+| Solana payments        | Native SOL transfers, exact lamport validation, Devnet-only Phantom wallet flow        |
+| Review and safety      | Balance and fee checks, spending limits, reviewed transaction details, guarded signing |
+| Receipt verification   | Independent RPC inspection, copy/share links, transfer details, local receipt history  |
 
 Built with **Next.js, React, TypeScript, Tailwind CSS, Solana Kit, Wallet Standard, Google Gemini, and Zod**. Hosted on **Vercel**. No custom smart contract, custodial backend wallet, or application database is required.
 
@@ -53,7 +53,7 @@ A working browser wallet is needed to approve a payment. Anyone can explore the 
 - **Gemini:** A genuine structured interpretation of the three sample payments succeeded locally and through the deployed API. Response time can be high; Manual Mode remains available. [AI evidence](public/evidence/gemini.json).
 - **Solana local execution:** Surfpool tests exercised an actual three-recipient transfer and an atomic rollback. These are local-chain tests, **not** public Devnet payment proof. [Local-chain evidence](public/evidence/local-chain.json).
 - **Public Devnet:** The publicly recorded 2.5 SOL transaction was **incoming wallet funding**, not a SplitBrief batch payout. A public three-recipient Phantom payout and original-plan match have **not yet been verified**. [Devnet evidence](public/evidence/devnet.json).
-- **Quality checks:** 168 unit/integration tests, 15 browser tests, and 8 local-chain assertions passed in the latest documented run. [Testing details](docs/TESTING.md).
+- **Quality checks:** 192 unit/integration tests, 17 browser tests, and 8 local-chain assertions passed in the latest documented run. [Testing details](docs/TESTING.md).
 
 This is a hackathon MVP, not a production payroll or custody service. Public wallet signing is still being validated with the participant's Phantom version. Never use a mainnet wallet or real funds for this demo.
 

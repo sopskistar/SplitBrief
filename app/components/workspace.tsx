@@ -27,6 +27,7 @@ import { useWalletClient } from './providers';
 import { Contacts } from './contacts';
 import { DemoRecipientSetup } from './demo-recipient-setup';
 import { ReceiptView } from './receipt';
+import { WalletMessageMismatchError, type SigningDiagnostic } from '@/lib/signing-diagnostics';
 import {
   broadcastStorage,
   PENDING_KEY,
@@ -119,6 +120,7 @@ export function Workspace() {
   const [prepared, setPrepared] = useState<PreparedPayment | null>(null);
   const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [receiptPlan, setReceiptPlan] = useState<PaymentPlan | undefined>();
+  const [signingDiagnostic, setSigningDiagnostic] = useState<SigningDiagnostic | null>(null);
   const [submittedSignature, setSubmittedSignature] = useState('');
   const [historyStates, setHistoryStates] = useState<Record<string, string>>({});
   const [historyTotals, setHistoryTotals] = useState<Record<string, string>>({});
@@ -363,6 +365,7 @@ export function Workspace() {
   }
   async function approve() {
     setError('');
+    setSigningDiagnostic(null);
     cancel.current = false;
     setCancelRequested(false);
     if (!prepared || !connected) {
@@ -413,6 +416,7 @@ export function Workspace() {
       }
       void refreshBalance();
     } catch (error) {
+      if (error instanceof WalletMessageMismatchError) setSigningDiagnostic(error.diagnostic);
       setError(errorMessage(error));
       if (!gate.current || !localStorage.getItem(PENDING_KEY))
         setStage((current) => (current === 'submitted' ? 'submitted' : 'review'));
@@ -792,6 +796,32 @@ export function Workspace() {
               </p>
             )}
           </div>
+          {signingDiagnostic && (
+            <details className="notice warning" open>
+              <summary>Wallet message comparison — nothing broadcast</summary>
+              <p className="small">
+                Changed fields: {signingDiagnostic.differences.join(', ') || 'message bytes'}. This
+                report contains public message fields, with no private keys or signature bytes.
+              </p>
+              <button
+                className="button"
+                onClick={() => {
+                  const url = URL.createObjectURL(
+                    new Blob([JSON.stringify(signingDiagnostic, null, 2)], {
+                      type: 'application/json',
+                    }),
+                  );
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.download = 'splitbrief-signing-diagnostic.json';
+                  link.click();
+                  URL.revokeObjectURL(url);
+                }}
+              >
+                Download signing diagnostic
+              </button>
+            </details>
+          )}
         </div>
         <aside className="summary-column">
           <section className="payment-summary" aria-labelledby="summary-title">
@@ -941,6 +971,11 @@ export function Workspace() {
             <p className="small">
               One version 0 transaction with exactly {prepared.plan.items.length} System Program SOL
               transfers. AI cannot modify this snapshot.
+            </p>
+            <p className="small muted">
+              Priority fee: 0 SOL. Two reviewed fee controls set a 10,000 CU limit and zero unit
+              price so Phantom does not automatically add fees. Any wallet message change is
+              blocked.
             </p>
             <dl className="review-payer">
               <dt>From your wallet</dt>

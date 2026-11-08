@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-07T23:42:55.530Z",
+  "checkedAt": "2026-11-08T01:25:21.651Z",
   "network": "devnet",
   "source": "User-provided public transaction, independently reverified",
   "success": false,
@@ -54,7 +54,8 @@
         "programId": "ComputeBudget111111111111111111111111111111",
         "inner": false
       }
-    ]
+    ],
+    "feeControls": []
   },
   "walletApproval": "User reported a Phantom test; wallet approval was not observed by this read-only script."
 }

@@ -1,6 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { decodeReceipt } from '../lib/verification';
-import { CONTACTS, PLAN, TEST_SIGNATURE, chainFixture } from './fixtures';
+import { createPlan } from '../lib/payments';
+import { COMPUTE_BUDGET_PROGRAM } from '../lib/transaction-policy';
+import {
+  CONTACTS,
+  PLAN,
+  DRAFT,
+  TEST_SIGNATURE,
+  chainFixture,
+  chainFixtureForPlan,
+} from './fixtures';
 
 describe('full transaction decoding and matching', () => {
   it('matches a successful decoded transaction against every reviewed instruction', () => {
@@ -99,5 +108,64 @@ describe('full transaction decoding and matching', () => {
     const raw = chainFixture();
     const modified = { ...raw, meta: { ...raw.meta, fee: Number.MAX_SAFE_INTEGER + 1 } };
     expect(() => decodeReceipt(TEST_SIGNATURE, modified)).toThrow();
+  });
+});
+
+describe('reviewed fee control verification', () => {
+  const plan = createPlan(PLAN.payer, DRAFT, CONTACTS);
+  it('matches exactly the two reviewed fee controls and three native transfers', () => {
+    const receipt = decodeReceipt(TEST_SIGNATURE, chainFixtureForPlan(plan), 'finalized', {
+      ...plan,
+      approvedFeeLamports: '5000',
+    });
+    expect(receipt.matchesPlan).toBe(true);
+    expect(receipt.instructionCount).toBe(5);
+    expect(receipt.feeControls).toEqual([
+      { index: 0, kind: 'compute-unit-limit' },
+      { index: 1, kind: 'compute-unit-price' },
+    ]);
+    expect(receipt.transfers).toHaveLength(3);
+    expect(receipt.otherInstructions).toEqual([]);
+  });
+  it('rejects a fee above the approved estimate', () => {
+    const raw = chainFixtureForPlan(plan);
+    raw.meta.fee = 5001n;
+    expect(
+      decodeReceipt(TEST_SIGNATURE, raw, 'finalized', { ...plan, approvedFeeLamports: '5000' })
+        .matchesPlan,
+    ).toBe(false);
+  });
+  it('rejects arbitrary or modified compute instructions rather than allowlisting the program', () => {
+    const raw = chainFixtureForPlan(plan);
+    raw.transaction.message.instructions[0] = {
+      programId: COMPUTE_BUDGET_PROGRAM,
+      accounts: [],
+      data: 'bad',
+    };
+    expect(decodeReceipt(TEST_SIGNATURE, raw, 'finalized', plan).matchesPlan).toBe(false);
+  });
+  it('rejects duplicated, missing, reordered, or attached-to-legacy fee controls', () => {
+    const raw = chainFixtureForPlan(plan);
+    const reversed = {
+      ...raw,
+      transaction: {
+        ...raw.transaction,
+        message: {
+          ...raw.transaction.message,
+          instructions: [
+            raw.transaction.message.instructions[1],
+            raw.transaction.message.instructions[0],
+            ...raw.transaction.message.instructions.slice(2),
+          ],
+        },
+      },
+    };
+    expect(decodeReceipt(TEST_SIGNATURE, reversed, 'finalized', plan).matchesPlan).toBe(false);
+    expect(decodeReceipt(TEST_SIGNATURE, raw, 'finalized', PLAN).matchesPlan).toBe(false);
+    raw.transaction.message.instructions.push(raw.transaction.message.instructions[0]);
+    expect(decodeReceipt(TEST_SIGNATURE, raw, 'finalized', plan).matchesPlan).toBe(false);
+    expect(decodeReceipt(TEST_SIGNATURE, chainFixture(plan), 'finalized', plan).matchesPlan).toBe(
+      false,
+    );
   });
 });

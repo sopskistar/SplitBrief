@@ -56,8 +56,10 @@ async function main() {
   );
   const lifetime = (await rpc.getLatestBlockhash().send()).value;
   const message = buildPaymentMessage(plan, lifetime);
-  assert.equal(message.instructions.length, 3);
-  checks.push('Exactly 3 System Program transfer instructions in ONE message');
+  assert.equal(message.instructions.length, 5);
+  checks.push(
+    'Exactly 3 System transfers plus 2 reviewed zero-priority fee controls in ONE message',
+  );
   const signed = await partiallySignTransaction([payer.keyPair], compileTransaction(message));
   const signature = getSignatureFromTransaction(signed);
   const returned = await rpc

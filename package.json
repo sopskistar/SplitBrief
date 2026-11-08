@@ -31,7 +31,8 @@
     "demo:capture": "node --import tsx scripts/capture-demo.ts",
     "demo:assemble": "bash scripts/assemble-demo.sh",
     "proof:record": "node --env-file-if-exists=.env.local --import tsx scripts/record-proof.ts",
-    "demo:screenshots": "node --import tsx scripts/screenshots.ts"
+    "demo:screenshots": "node --import tsx scripts/screenshots.ts",
+    "test:signing": "node --import tsx scripts/signing-repro.ts"
   },
   "dependencies": {
     "@solana-program/system": "0.14.1",

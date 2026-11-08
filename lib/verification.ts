@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { validatePlan, type PaymentPlan } from './payments';
+import { FIXED_FEE_POLICY, reviewedFeeInstructionKind } from './transaction-policy';
 
 export const SYSTEM_PROGRAM = '11111111111111111111111111111111';
 export const signatureSchema = z
@@ -25,6 +26,7 @@ export type Receipt = {
   matchesPlan: boolean | null;
   issues: string[];
   otherInstructions: { index: number; programId: string; inner: boolean }[];
+  feeControls: { index: number; kind: 'compute-unit-limit' | 'compute-unit-price' }[];
 };
 
 const keySchema = z.object({ pubkey: z.string(), signer: z.boolean(), writable: z.boolean() });
@@ -79,6 +81,7 @@ export function decodeReceipt(
   const issues: string[] = [];
   const transfers: ChainTransfer[] = [];
   const otherInstructions: Receipt['otherInstructions'] = [];
+  const feeControls: Receipt['feeControls'] = [];
   const payer = tx.transaction.message.accountKeys[0];
   if (!payer.signer) issues.push('Fee payer is not a signer.');
   const outer = tx.transaction.message.instructions;
@@ -88,6 +91,11 @@ export function decodeReceipt(
     [inner, true],
   ] as const) {
     for (const [index, instruction] of instructions.entries()) {
+      const feeKind = reviewedFeeInstructionKind(instruction);
+      if (feeKind && !isInner) {
+        feeControls.push({ index, kind: feeKind });
+        continue;
+      }
       const parsed = z
         .object({
           type: z.literal('transfer'),
@@ -110,6 +118,15 @@ export function decodeReceipt(
     }
   }
   if (inner.length) issues.push('Transaction contains inner instructions.');
+  if (
+    feeControls.length &&
+    (feeControls.length !== 2 ||
+      feeControls[0]?.index !== 0 ||
+      feeControls[0]?.kind !== 'compute-unit-limit' ||
+      feeControls[1]?.index !== 1 ||
+      feeControls[1]?.kind !== 'compute-unit-price')
+  )
+    issues.push('Fee control instructions differ from the fixed zero-priority policy.');
   const state: Receipt['state'] = !tx.meta
     ? 'unverified'
     : tx.meta.err != null
@@ -128,7 +145,19 @@ export function decodeReceipt(
     if (tx.transaction.signatures.length !== 1)
       issues.push('Signature count differs from the single-signer review plan.');
     if (payer.pubkey !== plan.payer) issues.push('Fee payer differs from the reviewed plan.');
-    if (outer.length !== plan.items.length || transfers.length !== plan.items.length)
+    const expectedFeeControls = plan.feePolicy === FIXED_FEE_POLICY ? 2 : 0;
+    if (feeControls.length !== expectedFeeControls)
+      issues.push('Fee control policy differs from the reviewed plan.');
+    if (
+      plan.approvedFeeLamports !== undefined &&
+      tx.meta &&
+      BigInt(integerString(tx.meta.fee)) > BigInt(plan.approvedFeeLamports)
+    )
+      issues.push('Actual network fee exceeds the approved review estimate.');
+    if (
+      outer.length !== plan.items.length + expectedFeeControls ||
+      transfers.length !== plan.items.length
+    )
       issues.push('Transfer or instruction count differs from the reviewed plan.');
     plan.items.forEach((item, index) => {
       const transfer = transfers[index];
@@ -159,5 +188,6 @@ export function decodeReceipt(
     matchesPlan,
     issues,
     otherInstructions,
+    feeControls,
   };
 }

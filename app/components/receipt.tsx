@@ -149,6 +149,12 @@ export function ReceiptView({
             </dd>
           </div>
         </dl>
+        {(receipt.feeControls?.length ?? 0) > 0 && (
+          <p className="notice small">
+            Fee controls decoded: 10,000 CU limit and zero priority fee. These are separate from the
+            native SOL transfers.
+          </p>
+        )}
         {receipt.issues.length > 0 && (
           <ul className="notice warning">
             {receipt.issues.map((issue, index) => (

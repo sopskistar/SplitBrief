@@ -118,8 +118,13 @@ export default async function JudgesPage() {
             <tr>
               <td>Human Phantom approval</td>
               <td>
-                The Wallet Standard flow requires the wallet owner’s real browser approval.
-                Automated disposable-signer tests do not prove a human Phantom approval.
+                The owner recorded a blocked wallet-message change. Explicit reviewed fee controls
+                now prevent documented automatic fee additions, and SDK adapter regression tests
+                pass. A real extension retry and finalized outgoing batch remain unverified.
+                <br />
+                <a className="evidence-link" href="/evidence/signing.json">
+                  Read signing investigation evidence
+                </a>
               </td>
             </tr>
           </tbody>

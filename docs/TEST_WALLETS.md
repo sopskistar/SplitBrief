@@ -21,7 +21,7 @@ Solana Devnet: `https://api.devnet.solana.com`. Solana Testnet is a separate led
 3. In SplitBrief, use **Set up recipients** beside the editor and click **Load disposable demo recipients**. If contacts already exist, explicitly confirm **Replace saved contacts with demo recipients**. Alternatively use **Review address book** to add three of your own. Read all full addresses.
 4. For a reliable payment acceptance test independently of Gemini availability, click **Manual Mode**. Confirm Ada `0.002`, Chidi `0.001`, Reserve `0.003` SOL, total `0.006` SOL.
 5. Click **Connect wallet → Phantom** and approve the connection in Phantom. Confirm the connected public address and fresh Devnet balance.
-6. Click **Review payment**. Check payer, every full destination, amounts, RPC fee estimate, and estimated debit. Cancel review once to confirm that no signature is requested.
+6. Click **Review payment**. Check payer, every full destination, amounts, RPC fee estimate, zero priority fee, and estimated debit. New payments contain three native transfers plus two explicitly reviewed fee controls. Cancel review once to confirm that no signature is requested.
 7. Review again, then click **Approve & open Phantom**. Read the wallet's transaction details and personally approve once. Automation must not approve it for you.
 8. Wait for **Payment completed**, with **Confirmed & matched** or **Finalized & matched** status. Open Explorer and confirm the Devnet signature and three transfers. Paste the same signature into **Verify receipt**.
 9. Download receipt JSON. Run `npm run proof:record -- /path/to/receipt.json` to independently refresh public evidence. A signature alone also works, with no brief-match claim.
@@ -29,3 +29,5 @@ Solana Devnet: `https://api.devnet.solana.com`. Solana Testnet is a separate led
 Also manually test rejecting a wallet request. A rejection should produce no broadcast. If submission is uncertain, recheck its **original signature**; do not simply click pay again.
 
 The supplied public signature was independently verified as incoming funding, not an outgoing SplitBrief batch. See [exact proof results](DEVNET_PROOF.md). No Phantom approval footage was captured by the automated browser.
+
+For the recorded Phantom message-change failure, use the deployed [signing fix and acceptance steps](WALLET_SIGNING.md). A repeated mismatch exposes a public diagnostic without private keys or signature bytes.

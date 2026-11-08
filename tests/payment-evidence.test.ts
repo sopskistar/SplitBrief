@@ -40,7 +40,10 @@ describe('honest public payment evidence', () => {
       false,
     );
   });
-  it('never accepts failed execution as settlement evidence', () => {
+  it('never publishes failed or unfinalized execution as settlement evidence', () => {
+    const confirmed = decodeReceipt(TEST_SIGNATURE, chainFixture(), 'confirmed');
+    expect(evaluatePaymentEvidence(confirmed, PLAN.payer).success).toBe(true);
+    expect(evaluatePaymentEvidence(confirmed, PLAN.payer, true).success).toBe(false);
     const raw = chainFixture();
     raw.meta.err = { InstructionError: [0, 'InsufficientFunds'] };
     expect(evaluatePaymentEvidence(decodeReceipt(TEST_SIGNATURE, raw, 'confirmed')).success).toBe(

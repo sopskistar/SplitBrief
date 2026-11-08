@@ -20,7 +20,7 @@ if (input.endsWith('.json')) {
   if (file.reviewedPlan) expected = validatePlan(file.reviewedPlan);
 } else signature = signatureSchema.parse(input);
 const receipt = await fetchReceipt(rpcClient(), signature, expected);
-const { success, checks } = evaluatePaymentEvidence(receipt, expectedPayer);
+const { success, checks } = evaluatePaymentEvidence(receipt, expectedPayer, true);
 const evidence = {
   checkedAt: new Date().toISOString(),
   network: 'devnet',

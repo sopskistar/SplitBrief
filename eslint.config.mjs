@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
+    // Generated QA bundles and traces are not project source.
+    'playwright-report/**',
+    'test-results/**',
+    'demo/output/**',
   ]),
 ]);
 
