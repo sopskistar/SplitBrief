@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-11-08T00:26:52.455Z",
+  "output": "demo/output/splitbrief-105s.mp4",
+  "durationSeconds": 104.266667,
+  "sha256": "f899b43c69059626568f230e95c8a00a11f32fca8f1e147465af6bb1b3b14557",
+  "format": "1920x1080 H.264, captioned and intentionally silent",
+  "inspection": {
+    "checkedAt": "2026-11-08T00:26:52.455Z",
+    "fullDecodeFrames": 3128,
+    "decodeErrors": 0,
+    "blackIntervalsAtLeast025Seconds": 0,
+    "visualReview": "Sampled complete contact sheet, original-size AI and chain frames, closing frame; readable captions and no clipping found.",
+    "audio": "Intentionally silent"
+  },
+  "published": false,
+  "limits": "Supplied signature proves funding, not a multi-recipient payout. Local atomic execution is distinguished from public evidence. Phantom approval not captured."
+}

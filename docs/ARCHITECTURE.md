@@ -29,7 +29,7 @@ The supported Solana wallet plugin discovers Wallet Standard wallets for `solana
 
 ## Server and model
 
-`POST /api/interpret` accepts at most 4,096 body bytes, a 500-character instruction, and three distinct names. It invokes Google GenAI 3.0.0's documented Interactions API with a JSON `response_format`, a low thinking level, `store:false`, no automatic continuation, a 1,024-token cap, a 20-second application deadline, and no SDK retries. Provider errors never create a valid draft. The server maps errors to nonsecret status/code messages.
+`POST /api/interpret` accepts at most 4,096 body bytes, a 500-character instruction, and three distinct names. It invokes Google GenAI 3.0.0's documented Interactions API with a JSON `response_format`, a low thinking level, `store:false`, no automatic continuation, a 1,024-token cap, a 270-second application deadline (285 seconds in the browser and 300 seconds on Vercel), and no SDK retries. Provider errors never create a valid draft. The server maps errors to nonsecret status/code messages.
 
 Model output has only recipient label, decimal SOL string, purpose, warnings, and clarification status. It cannot return an address or transaction. Output labels must belong to the supplied list and appear as complete labels in the brief; amounts must be explicitly present numeric literals. These checks constrain output but do not replace human review of language interpretation or recipient identity.
 
@@ -46,3 +46,5 @@ Submission callbacks retain the original signature and review snapshot even if a
 ## Storage and tests
 
 Only browser-local contacts, submitted references, pending expiry metadata, and review snapshots persist. They are revalidated and never treated as settlement proof or automatically rebuilt into a transaction. The separate test harness generates signers in memory, executes against offline Surfpool, and discards keys on exit. It does not share a signer with the deployed product or the owner's Phantom.
+
+Verified-only bookmarks can store a signature without a plan; they never invent a prior review. History validates each entry separately so one corrupt entry does not erase valid references. History is origin-specific: localhost and the deployed site have separate localStorage. Connected-wallet recovery reads recent public signatures, filters the actual batch profile, and stores references without claiming original intent. Every displayed status is refreshed from RPC.

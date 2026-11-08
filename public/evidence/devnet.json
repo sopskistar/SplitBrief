@@ -1,29 +1,60 @@
 {
-  "checkedAt": "2026-11-07T22:02:26.712Z",
+  "checkedAt": "2026-11-07T23:42:55.530Z",
   "network": "devnet",
+  "source": "User-provided public transaction, independently reverified",
   "success": false,
-  "maxTotalTransferSol": "0.006",
-  "privateKeys": "In-memory disposable signers only; never persisted or uploaded.",
-  "payer": "x95eTdgpMekXzMwRqxjzpgiZgNLmh8N9TsS4q5zYXfB",
-  "recipients": [
-    {
-      "id": "devnet-0",
-      "name": "Ada",
-      "address": "EgpR8wT9oSnYxbB3tbAtBzdMCiP1Krez84YJ5id6MRxp",
-      "description": "Disposable Devnet test recipient, no retained private key"
-    },
-    {
-      "id": "devnet-1",
-      "name": "Chidi",
-      "address": "B5FrY8tQL73E14k4uHvk1GqtpJeBWGhaNy6z8vtnup5d",
-      "description": "Disposable Devnet test recipient, no retained private key"
-    },
-    {
-      "id": "devnet-2",
-      "name": "Reserve",
-      "address": "5LB7gzK1WFG6hEkeym25r9vjFEDCdBBZFpsVoSGUCBYz",
-      "description": "Disposable Devnet test recipient, no retained private key"
-    }
-  ],
-  "error": "Official Devnet RPC airdrop unavailable: HTTP error (410): Gone. No public payment was sent. Use faucet.solana.com for manual funding; local Surfpool evidence is separate."
+  "signature": "iyxcjE2BWwJkmbHQiUcyeit6UTzhQwKq9zrdYXwJFubN94haGLKqaWYPx85eFYeLBrH3avgEjR2vPCim9XV15gh",
+  "payer": "dev2JBjyB5CshoGsiJCwzdmJYiEUwAXMdqDR7txoFBJ",
+  "expectedPayer": "9NTebUUdiqDzZDrBARaopnaN78YWeDbkM452Jb2EoZkR",
+  "networkTransactionVerified": true,
+  "appPaymentVerified": false,
+  "checks": {
+    "confirmedOrFinalized": true,
+    "expectedPayer": false,
+    "singleSignature": true,
+    "twoOrThreeTransfers": false,
+    "distinctDestinations": true,
+    "allTransfersFromFeePayer": true,
+    "onlyIntendedNativeTransferInstructions": false,
+    "withinAppTransferCaps": false,
+    "matchesOriginalPlan": null
+  },
+  "verificationSummary": "Transaction decoded, but it does not meet the supplied SplitBrief payment requirements. Inspect payer, transfer count, amounts, and extra instructions.",
+  "receipt": {
+    "signature": "iyxcjE2BWwJkmbHQiUcyeit6UTzhQwKq9zrdYXwJFubN94haGLKqaWYPx85eFYeLBrH3avgEjR2vPCim9XV15gh",
+    "network": "devnet",
+    "state": "finalized",
+    "payer": "dev2JBjyB5CshoGsiJCwzdmJYiEUwAXMdqDR7txoFBJ",
+    "transfers": [
+      {
+        "source": "dev2JBjyB5CshoGsiJCwzdmJYiEUwAXMdqDR7txoFBJ",
+        "destination": "9NTebUUdiqDzZDrBARaopnaN78YWeDbkM452Jb2EoZkR",
+        "lamports": "2500000000",
+        "inner": false
+      }
+    ],
+    "instructionCount": 3,
+    "signatureCount": 1,
+    "feeLamports": "5495",
+    "slot": "519777275",
+    "timestamp": 1794082572,
+    "matchesPlan": null,
+    "issues": [
+      "Outer instruction is not a plain native SOL transfer.",
+      "Outer instruction is not a plain native SOL transfer."
+    ],
+    "otherInstructions": [
+      {
+        "index": 1,
+        "programId": "ComputeBudget111111111111111111111111111111",
+        "inner": false
+      },
+      {
+        "index": 2,
+        "programId": "ComputeBudget111111111111111111111111111111",
+        "inner": false
+      }
+    ]
+  },
+  "walletApproval": "User reported a Phantom test; wallet approval was not observed by this read-only script."
 }

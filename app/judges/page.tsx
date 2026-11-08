@@ -27,7 +27,7 @@ export default async function JudgesPage() {
     <>
       <div className="page-intro">
         <span className="badge">MLH Solana Hackathon 2026</span>
-        <h1>The brief becomes the payment.</h1>
+        <h1>SplitBrief for the judges</h1>
         <p>
           SplitBrief turns messy collaborator payment instructions into one reviewed, atomic Solana
           transaction and an independently decoded receipt.
@@ -44,7 +44,7 @@ export default async function JudgesPage() {
               <td>Gemini interpretation</td>
               <td>
                 {ai.success
-                  ? `Live structured call verified using ${String(ai.model)}.`
+                  ? `Live structured call verified using ${String(ai.model)} in ${(Number(ai.elapsedMs) / 1000).toFixed(1)} seconds. Ada 0.002, Chidi 0.001, Reserve 0.003 SOL; no addresses generated. Provider demand can cause slow responses; Manual Mode remains available.`
                   : 'Live AI proof is unavailable or not yet verified. Manual Mode works independently.'}
                 <br />
                 <a
@@ -96,8 +96,17 @@ export default async function JudgesPage() {
                   </>
                 ) : (
                   <>
-                    No public Devnet payment is claimed yet. Complete the Phantom test or
-                    disposable-payer smoke test.
+                    The supplied signature is a finalized incoming funding transfer, not a
+                    SplitBrief payout. It sends 2.5 SOL from a different payer into the owner’s
+                    wallet. Multi-recipient public payment proof remains incomplete.
+                  </>
+                )}
+                {!devnet.success && signature && (
+                  <>
+                    <p className="address">{signature}</p>
+                    <Link className="evidence-link" href={`/verify?signature=${signature}`}>
+                      Inspect the actual transaction <ArrowUpRight size={12} />
+                    </Link>
                   </>
                 )}
                 <br />
@@ -189,6 +198,9 @@ export default async function JudgesPage() {
           provider spending.
         </p>
         <div className="button-row">
+          <a className="button button-primary" href="https://splitbrief-zeta.vercel.app">
+            Live application <ArrowUpRight size={14} />
+          </a>
           <a
             className="button"
             href="https://github.com/sopskistar/SplitBrief"

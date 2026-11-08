@@ -7,7 +7,7 @@ export default function PrivacyPage() {
   return (
     <article className="article">
       <div className="page-intro">
-        <h1>Your brief, your wallet.</h1>
+        <h1>Privacy and wallet safety</h1>
         <p>SplitBrief is a hackathon prototype for Solana Devnet. Updated November 7, 2026.</p>
       </div>
       <section>

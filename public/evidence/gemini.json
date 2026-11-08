@@ -1,13 +1,74 @@
 {
-  "checkedAt": "2026-11-07T22:18:58.948Z",
+  "checkedAt": "2026-11-07T23:32:57.991Z",
   "model": "gemini-3.8-flash",
   "instruction": "Pay Ada 0.002 SOL for design, Chidi 0.001 SOL for delivery, and send 0.003 SOL to Reserve.",
   "source": "live Google Gemini API",
-  "success": false,
-  "error": {
-    "status": 504,
-    "code": "TIMEOUT",
-    "message": "Gemini timed out. Use Manual Mode or try again."
+  "success": true,
+  "providerResponseReceived": true,
+  "response": {
+    "items": [
+      {
+        "recipientLabel": "Ada",
+        "amountSol": "0.002",
+        "purpose": "design"
+      },
+      {
+        "recipientLabel": "Chidi",
+        "amountSol": "0.001",
+        "purpose": "delivery"
+      },
+      {
+        "recipientLabel": "Reserve",
+        "amountSol": "0.003",
+        "purpose": ""
+      }
+    ],
+    "warnings": [],
+    "clarificationNeeded": false
   },
-  "elapsedMs": 22235
+  "elapsedMs": 117180,
+  "productionHTTP": {
+    "checkedAt": "2026-11-07T23:56:36.965206+00:00",
+    "source": "https://splitbrief-zeta.vercel.app/api/interpret",
+    "status": 200,
+    "elapsedMs": 147892,
+    "success": true,
+    "response": {
+      "items": [
+        {
+          "recipientLabel": "Ada",
+          "amountSol": "0.002",
+          "purpose": "design"
+        },
+        {
+          "recipientLabel": "Chidi",
+          "amountSol": "0.001",
+          "purpose": "delivery"
+        },
+        {
+          "recipientLabel": "Reserve",
+          "amountSol": "0.003",
+          "purpose": ""
+        }
+      ],
+      "warnings": [],
+      "clarificationNeeded": false,
+      "model": "gemini-3.8-flash",
+      "source": "gemini"
+    },
+    "measurement": "curl time_total 147.891854 seconds; independently validated exact labels and amounts"
+  },
+  "productionBrowserCapture": {
+    "checkedAt": "2026-11-08T00:05:08.463Z",
+    "source": "https://splitbrief-zeta.vercel.app/api/interpret",
+    "status": null,
+    "elapsedMs": 315565,
+    "success": false,
+    "error": {
+      "error": "Browser response deadline exceeded; inspect recorded client state."
+    },
+    "clientMessages": ["Failed to fetch", ""],
+    "transportDiagnostic": "Chromium reported net::ERR_NETWORK_CHANGED; no HTTP response was observed. This does not invalidate the separately recorded successful production HTTP provider response.",
+    "manualFallbackShown": true
+  }
 }

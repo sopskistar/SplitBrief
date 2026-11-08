@@ -1,28 +1,54 @@
 {
-  "capturedAt": "2026-11-07T22:49:44.581Z",
+  "capturedAt": "2026-11-07T23:59:22.199Z",
+  "source": "https://splitbrief-zeta.vercel.app",
   "clips": [
     {
-      "path": "demo/raw/01-opening.webm",
-      "elapsedMs": 15338,
-      "source": "http://127.0.0.1:3002"
+      "name": "01-opening",
+      "path": "demo/raw/delivery/01-opening.webm",
+      "elapsedMs": 10404,
+      "source": "https://splitbrief-zeta.vercel.app"
     },
     {
-      "path": "demo/raw/02-product.webm",
-      "elapsedMs": 43066,
-      "source": "http://127.0.0.1:3002"
+      "name": "02-product",
+      "path": "demo/raw/delivery/02-product.webm",
+      "elapsedMs": 483140,
+      "source": "https://splitbrief-zeta.vercel.app"
     },
     {
-      "path": "demo/raw/04-close.webm",
-      "elapsedMs": 13129,
-      "source": "http://127.0.0.1:3002"
+      "name": "03-verification",
+      "path": "demo/raw/delivery/03-verification.webm",
+      "elapsedMs": 38364,
+      "source": "https://splitbrief-zeta.vercel.app"
+    },
+    {
+      "name": "04-local-proof",
+      "path": "demo/raw/delivery/04-local-proof.webm",
+      "elapsedMs": 24939,
+      "source": "https://splitbrief-zeta.vercel.app"
+    },
+    {
+      "name": "05-close",
+      "path": "demo/raw/delivery/05-close.webm",
+      "elapsedMs": 11381,
+      "source": "https://splitbrief-zeta.vercel.app"
+    },
+    {
+      "name": "06-recorded-ai",
+      "path": "demo/raw/delivery/06-recorded-ai.webm",
+      "elapsedMs": 22946,
+      "source": "https://splitbrief-zeta.vercel.app/evidence/gemini.json"
     }
   ],
+  "marks": {
+    "aiStart": 20.002,
+    "aiEnd": 335.567,
+    "receiptVisible": 4.504
+  },
   "realAIClip": false,
   "walletApprovalClip": false,
-  "publicDevnetReceiptClip": false,
-  "missing": [
-    "demo/raw/03-phantom-receipt.mp4: user records genuine Phantom review, approval, confirmed receipt, and Explorer",
-    "Replace 02-product with a successful live Gemini interpretation before claiming the AI Track demo is verified."
-  ],
-  "notes": "No simulated wallet, model, or RPC was used. Opening/closing title slates are motion-title material, not blockchain evidence."
+  "publicDevnetReceiptClip": true,
+  "publicBatchPaymentVerified": false,
+  "signature": "iyxcjE2BWwJkmbHQiUcyeit6UTzhQwKq9zrdYXwJFubN94haGLKqaWYPx85eFYeLBrH3avgEjR2vPCim9XV15gh",
+  "notes": "Actual production UI and network responses. Provider waiting may be shortened with an explicit caption. No wallet approval footage exists. Funding is never presented as a batch payout; Surfpool is explicitly local. The captured production request hit Chromium net::ERR_NETWORK_CHANGED and visibly selected Manual Mode. The separate AI evidence clip shows the published genuine provider record, not a simulated live UI response.",
+  "recordedAIClip": true
 }

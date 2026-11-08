@@ -42,6 +42,10 @@ describe('POST /api/interpret', () => {
     expect(input.store).toBe(false);
     expect(input.automatic_continuation).toBe(false);
     expect(input.input).not.toContain('address');
+    const options = modelCall.mock.calls[0][1];
+    expect(options.maxRetries).toBe(0);
+    expect(options.timeout_ms).toBe(270_000);
+    expect(options.fetch_options.signal).toBeInstanceOf(AbortSignal);
   });
   it('handles an absent server API key with explicit manual fallback', async () => {
     vi.stubEnv('GEMINI_API_KEY', '');

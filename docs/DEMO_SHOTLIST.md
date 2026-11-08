@@ -1,38 +1,29 @@
-# Authentic recording and assembly
+# Recording and export provenance
 
-## Captured material
+Original clips under `demo/raw/` are preserved. The final-delivery capture writes new genuine clips under **`demo/raw/delivery/`** and records their timing/provenance in [CAPTURE_MANIFEST.json](../demo/CAPTURE_MANIFEST.json). Raw footage and export files are ignored by Git and deployment.
 
-`npm run demo:capture` records the actual local app using installed Playwright Chromium. It does not mock an API, chain, or wallet. Raw footage is ignored by Git and deployment.
+| New source             | Content                                                                                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `01-opening.webm`      | Supplied wordmark and MLH Solana Hackathon opening                                                                                       |
+| `02-product.webm`      | Real production onboarding, typed brief, actual bounded model request, actual result or explicit Manual Mode, editable draft and summary |
+| `03-verification.webm` | Fresh Devnet RPC lookup of the supplied incoming funding transaction; no unknown-plan match                                              |
+| `04-local-proof.webm`  | Production judges page and actual published local Surfpool evidence                                                                      |
+| `06-recorded-ai.webm`  | Published genuine Gemini JSON result; clearly labeled recorded evidence after the capture browser network failure                        |
+| `05-close.webm`        | Supplied branding, live app, and honest evidence limitations                                                                             |
 
-| File                              | Target | Current content                                                                                                       |
-| --------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------- |
-| `demo/raw/01-opening.webm`        | 10s    | Event/title slate, then actual workspace                                                                              |
-| `demo/raw/02-product.webm`        | 40s    | Real contact onboarding, typed brief, explicitly labeled Manual Mode, editable payment draft; **not live AI success** |
-| `demo/raw/03-phantom-receipt.mp4` | 45s    | **Missing. User must record genuine review, wallet approval, receipt, and Explorer**                                  |
-| `demo/raw/04-close.webm`          | 10s    | Real judges/evidence screen and closing title                                                                         |
-
-The exact source origins, recording times, and caveats are in [demo/CAPTURE_MANIFEST.json](../demo/CAPTURE_MANIFEST.json). Screenshots in [docs/screenshots](screenshots) are actual screens and never use fixture confirmations. E2E QA traces are separate and must not be reused as proof footage.
-
-## The user-controlled clip
-
-1. Open the actual app in the browser that has Phantom. Use a full-desktop recorder or extension-capable capture so the real Phantom window is included. A tab-only browser recording may omit extension prompts.
-2. Follow [TEST_WALLETS.md](TEST_WALLETS.md). Frame the full frozen review and total. Keep Phantom on **Solana Devnet** and personally approve only the expected 0.006 SOL plus real fee.
-3. Film Submitted, then Confirmed/Finalized & matched. If a request fails, do not cut in a fake confirmation. Recheck the original signature before any new payment.
-4. Show Explorer with `?cluster=devnet` and the actual transaction's three transfers under one signature. Show `/verify` with that same signature.
-5. Save the genuine 45-second source clip to `demo/raw/03-phantom-receipt.mp4`. Do not record the recovery phrase, private-key export, API-key settings, or other sensitive tabs.
-
-Once live Gemini succeeds, rerun `npm run test:ai` and replace/re-record `02-product.webm` with actual interpretation footage. The capture script only attempts to film live AI when its recorded smoke evidence reports success; otherwise it clearly shows Manual Mode.
-
-## Assemble when proof is complete
+No fixture wallet, mocked model, or intercepted RPC is used by the capture scripts. The provider wait is shortened in assembly and explicitly labeled. The user-reported Phantom test has **no supplied approval clip**, and its signature is funding, so the video does not claim an observed outgoing wallet approval.
 
 ```bash
-npm run proof:record -- YOUR_PUBLIC_DEVNET_SIGNATURE
-npm run test:ai
+# A deliberate real provider call can take up to 270 seconds.
 npm run demo:capture
-# Place genuine user-recorded 03-phantom-receipt.mp4 under demo/raw/.
-npm run demo:assemble
+FFMPEG_PATH=/tmp/splitbrief-video-tools/ffmpeg \
+FFPROBE_PATH=/tmp/splitbrief-video-tools/ffprobe npm run demo:assemble
 ```
 
-The assembly script checks for every real input and requires successful public AI/chain evidence before creating the intended final submission cut. It does not invent missing clips. It uses a full `ffmpeg` and `ffprobe` installation (`sudo apt install ffmpeg` on Ubuntu if absent). Playwright has its own recording helper, but a full system FFmpeg binary was not installed in this environment. Remotion was not installed and is not required.
+The assembly validates genuine chain and captured API evidence, refuses unsupported wallet/public-batch claims, and emits **`demo/output/splitbrief-105s.mp4`**. [EXPORT_MANIFEST.json](../demo/EXPORT_MANIFEST.json) records the completed **104.266667-second** export and source trims. The maintained static FFmpeg/ffprobe binaries were downloaded to `/tmp` with SHA256 verification; no system runtime was overwritten. Use an installed full FFmpeg instead by omitting those two variables.
 
-Intended output: `demo/output/splitbrief-105s.mp4`, or `splitbrief-105s-narrated.mp4` if an optional narration WAV is present. **No final video is currently claimed.** Watch the entire assembled cut, check its actual duration with ffprobe, and keep it between 90 and 115 seconds. Upload only after reviewing it; no video publication was performed.
+The completed 104.27-second cut is 1920×1080 H.264 with large captions and short fades. It is intentionally silent. Watch/inspect the complete export for blanks, clipping, caption legibility, transitions, and duration before uploading. No video account publication or MLH submission is claimed.
+
+To replace the funding section with real payout proof: personally record the full review, Phantom Devnet approval, confirmed/matched receipt, and Explorer. Use a desktop recorder capable of filming the extension prompt. Never record keys, recovery phrases, API-key settings, or sensitive tabs. Save as `demo/raw/03-phantom-receipt.mp4`; independently verify the exported receipt and update the script/narration together. Current assembly intentionally refuses to silently substitute a different transaction.
+
+Export QA decoded **all 3,128 frames** without errors; no black interval of 0.25 seconds or longer was detected. Chapter frames, the complete sampled contact sheet, actual chain details, captions, and the closing title were visually inspected. The current cut honestly shows Manual Mode following the captured browser transport failure and separately shows the genuine published Gemini result. It is a reviewable current-evidence demo, not footage of a completed public batch approval.

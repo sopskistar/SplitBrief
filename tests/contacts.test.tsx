@@ -1,12 +1,16 @@
 // @vitest-environment jsdom
 import React from 'react';
 import '@testing-library/jest-dom/vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Contacts } from '../app/components/contacts';
+import { DemoRecipientSetup } from '../app/components/demo-recipient-setup';
 import { CONTACTS } from './fixtures';
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.unstubAllGlobals();
+});
 describe('contact manager', () => {
   it('shows useful empty onboarding', () => {
     render(<Contacts contacts={[]} onChange={vi.fn()} />);
@@ -56,5 +60,45 @@ describe('contact manager', () => {
     render(<Contacts contacts={CONTACTS} onChange={vi.fn()} disabled />);
     expect(screen.getByRole('button', { name: 'Edit Ada' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Remove Ada' })).toBeDisabled();
+  });
+});
+
+describe('visible demo recipient setup', () => {
+  it('stays available with saved contacts and requires confirmation before replacing them', () => {
+    const save = vi.fn();
+    render(<DemoRecipientSetup contacts={CONTACTS} onChange={save} disabled={false} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Load disposable demo recipients' }));
+    expect(save).not.toHaveBeenCalled();
+    expect(
+      screen.getByRole('button', { name: 'Replace saved contacts with demo recipients' }),
+    ).toBeVisible();
+    fireEvent.click(screen.getByRole('button', { name: 'Keep my contacts' }));
+    expect(save).not.toHaveBeenCalled();
+    expect(screen.getByRole('button', { name: 'Load disposable demo recipients' })).toBeVisible();
+  });
+  it('loads and validates three public recipients from the independent onboarding file', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({ ok: true, json: async () => ({ recipients: CONTACTS }) }),
+    );
+    const save = vi.fn();
+    render(<DemoRecipientSetup contacts={[]} onChange={save} disabled={false} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Load disposable demo recipients' }));
+    await waitFor(() => expect(save).toHaveBeenCalledWith(CONTACTS));
+    expect(fetch).toHaveBeenCalledWith('/demo-recipients.json');
+  });
+  it('does not erase the address book when the demo payload is incomplete', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({ ok: true, json: async () => ({ recipients: [] }) }),
+    );
+    const save = vi.fn();
+    render(<DemoRecipientSetup contacts={CONTACTS} onChange={save} disabled={false} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Load disposable demo recipients' }));
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Replace saved contacts with demo recipients' }),
+    );
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('could not be saved'));
+    expect(save).not.toHaveBeenCalled();
   });
 });

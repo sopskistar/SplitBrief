@@ -25,6 +25,7 @@ import {
 import { z } from 'zod';
 import { useWalletClient } from './providers';
 import { Contacts } from './contacts';
+import { DemoRecipientSetup } from './demo-recipient-setup';
 import { ReceiptView } from './receipt';
 import {
   broadcastStorage,
@@ -34,12 +35,13 @@ import {
   useStoredValue,
   useHydrated,
 } from './browser-storage';
-import { rememberSubmission } from '@/lib/history';
+import { rememberSubmission, rememberVerifiedSignature } from '@/lib/history';
 import {
   assertWalletReady,
   assertDevnet,
   canRetirePendingSubmission,
   fetchReceipt,
+  findRecentPayments,
   preparePayment,
   rpcClient,
   signAndSubmit,
@@ -53,6 +55,7 @@ import {
   SAMPLE_BRIEF,
   solToLamportsExact,
   type DraftItem,
+  type PaymentPlan,
 } from '@/lib/payments';
 import type { Receipt } from '@/lib/verification';
 
@@ -115,15 +118,30 @@ export function Workspace() {
   const [balanceLoading, setBalanceLoading] = useState(false);
   const [prepared, setPrepared] = useState<PreparedPayment | null>(null);
   const [receipt, setReceipt] = useState<Receipt | null>(null);
+  const [receiptPlan, setReceiptPlan] = useState<PaymentPlan | undefined>();
   const [submittedSignature, setSubmittedSignature] = useState('');
   const [historyStates, setHistoryStates] = useState<Record<string, string>>({});
+  const [historyTotals, setHistoryTotals] = useState<Record<string, string>>({});
+  const [recovering, setRecovering] = useState(false);
+  const [recoveryMessage, setRecoveryMessage] = useState('');
   const [checkingPending, setCheckingPending] = useState(false);
   const [cancelRequested, setCancelRequested] = useState(false);
   const gate = useRef(new SubmissionGate());
   const cancel = useRef(false);
+  const parseAbort = useRef<AbortController | null>(null);
   const reviewRef = useRef<HTMLElement>(null);
+  const receiptRef = useRef<HTMLDivElement>(null);
   const frozen = stage !== 'draft';
   const payer = connected?.account.address;
+  useEffect(() => {
+    if (receipt) {
+      const frame = requestAnimationFrame(() => {
+        receiptRef.current?.focus();
+        receiptRef.current?.scrollIntoView({ behavior: 'instant', block: 'start' });
+      });
+      return () => cancelAnimationFrame(frame);
+    }
+  }, [receipt]);
 
   const refreshBalance = useCallback(async () => {
     if (!payer) {
@@ -156,14 +174,22 @@ export function Workspace() {
     let active = true;
     void (async () => {
       const results: Record<string, string> = {};
+      const totals: Record<string, string> = {};
       for (const entry of history.slice(0, 3)) {
         try {
           const checked = await fetchReceipt(rpc, entry.signature, entry.plan);
+          if (checked.state === 'confirmed' || checked.state === 'finalized')
+            totals[entry.signature] = checked.transfers
+              .reduce((sum, transfer) => sum + BigInt(transfer.lamports), 0n)
+              .toString();
+          if (checked.state === 'failed') totals[entry.signature] = '0';
           results[entry.signature] = checked.matchesPlan
             ? `${checked.state} & matched`
             : checked.state === 'failed'
               ? 'Failed on-chain'
-              : 'Mismatch / unverified';
+              : checked.matchesPlan === null
+                ? `${checked.state} / decoded`
+                : 'Mismatch / unverified';
           if (checked.state !== 'unverified') {
             try {
               const stored = localStorage.getItem(PENDING_KEY);
@@ -182,12 +208,42 @@ export function Workspace() {
           results[entry.signature] = 'Unable to reverify';
         }
       }
-      if (active) setHistoryStates(results);
+      if (active) {
+        setHistoryStates(results);
+        setHistoryTotals(totals);
+      }
     })();
     return () => {
       active = false;
     };
   }, [history, rpc]);
+  async function recoverPayments() {
+    if (!payer) {
+      setRecoveryMessage(
+        'Connect your wallet to search its public Devnet history, or verify a signature directly.',
+      );
+      return;
+    }
+    setRecovering(true);
+    setRecoveryMessage('Checking the latest five public wallet transactions…');
+    try {
+      const recovered = await findRecentPayments(rpc, payer);
+      for (const result of recovered)
+        rememberVerifiedSignature(localStorage, result.signature, 'recovered');
+      broadcastStorage();
+      setRecoveryMessage(
+        recovered.length
+          ? `Recovered ${recovered.length} verified native payment reference(s). Original brief matching is not claimed without its saved plan.`
+          : 'No outgoing batch payments found in the latest five transactions. Incoming funding transfers are not SplitBrief payouts. You can still verify any signature.',
+      );
+    } catch {
+      setRecoveryMessage(
+        'Wallet history could not be checked. Saved receipts are preserved; retry or verify a known signature.',
+      );
+    } finally {
+      setRecovering(false);
+    }
+  }
   const total = useMemo(() => {
     try {
       return items.reduce((sum, item) => sum + solToLamportsExact(item.amountSol), 0n);
@@ -208,11 +264,22 @@ export function Workspace() {
     setMode('manual');
     setDraftBlocked(false);
   }
+  function chooseManual() {
+    parseAbort.current?.abort();
+    parseAbort.current = null;
+    setParsing(false);
+    setMode('manual');
+    setSource('Manual Mode');
+    setError('');
+    setDraftBlocked(false);
+  }
   async function parseBrief() {
     setError('');
     setWarnings([]);
     setParsing(true);
     setDraftBlocked(true);
+    const controller = new AbortController();
+    parseAbort.current = controller;
     try {
       if (contacts.length < 2)
         throw new Error('Add at least two named recipients to your address book first.');
@@ -223,7 +290,7 @@ export function Workspace() {
           instruction,
           recipientNames: contacts.map((contact) => contact.name),
         }),
-        signal: AbortSignal.timeout(25_000),
+        signal: AbortSignal.any([controller.signal, AbortSignal.timeout(285_000)]),
       });
       const data = await response.json();
       if (!response.ok)
@@ -246,13 +313,17 @@ export function Workspace() {
       setSource(`Gemini draft (${result.model})`);
       setDraftBlocked(false);
     } catch (error) {
+      if (controller.signal.aborted) return;
       setError(
         error instanceof Error && error.name === 'TimeoutError'
           ? 'Gemini timed out. Use Manual Mode or try again.'
           : errorMessage(error),
       );
     } finally {
-      setParsing(false);
+      if (parseAbort.current === controller) {
+        parseAbort.current = null;
+        setParsing(false);
+      }
     }
   }
   async function review() {
@@ -334,6 +405,7 @@ export function Workspace() {
         },
       });
       setReceipt(result);
+      setReceiptPlan(prepared.plan);
       setStage('receipt');
       if (result.state !== 'unverified') {
         localStorage.removeItem(PENDING_KEY);
@@ -353,6 +425,7 @@ export function Workspace() {
       const expected = history.find((entry) => entry.signature === signature)?.plan;
       const checked = await fetchReceipt(rpc, signature, expected);
       setReceipt(checked);
+      setReceiptPlan(expected);
       setStage('receipt');
       if (checked.state !== 'unverified') {
         localStorage.removeItem(PENDING_KEY);
@@ -385,12 +458,26 @@ export function Workspace() {
     <>
       <div className="workspace-intro">
         <div>
-          <h1>A brief. A batch. All settled.</h1>
-          <p>From payment instructions to one Solana transaction.</p>
+          <h1>Pay multiple people in one Solana transaction.</h1>
+          <p>
+            Describe who needs to be paid, let AI organize the amounts, review every recipient, and
+            approve one atomic transaction in Phantom.
+          </p>
         </div>
-        <Link className="quiet-link" href="/how-it-works">
-          A little clarity before you pay <ArrowUpRight size={15} />
-        </Link>
+        <div className="intro-actions">
+          <a
+            className="button button-primary"
+            href="#payment-editor"
+            onClick={() =>
+              requestAnimationFrame(() => document.getElementById('payment-brief')?.focus())
+            }
+          >
+            Create payment <ArrowRight size={15} />
+          </a>
+          <a className="text-button" href="#history">
+            Find a receipt
+          </a>
+        </div>
       </div>
       <div className="workspace-toolbar">
         <div className="workspace-label">
@@ -446,13 +533,18 @@ export function Workspace() {
           </div>
         </div>
       )}
-      <div className="workspace-grid">
+      <DemoRecipientSetup
+        contacts={contacts}
+        onChange={setContacts}
+        disabled={frozen || !hydrated}
+      />
+      <div className="workspace-grid" id="payment-editor">
         <div className="composer-column">
           <section className="panel brief-panel" aria-labelledby="brief-title">
             <div className="panel-heading">
               <div className="heading-with-icon">
                 <FileText size={18} />
-                <h2 id="brief-title">Start with the brief</h2>
+                <h2 id="brief-title">Payment instructions</h2>
               </div>
               <div className="mode-switch" aria-label="Composer mode">
                 <button
@@ -466,16 +558,7 @@ export function Workspace() {
                   <Sparkles size={13} />
                   AI brief
                 </button>
-                <button
-                  aria-pressed={mode === 'manual'}
-                  disabled={frozen}
-                  onClick={() => {
-                    setMode('manual');
-                    setSource('Manual Mode');
-                    setError('');
-                    setDraftBlocked(false);
-                  }}
-                >
+                <button aria-pressed={mode === 'manual'} disabled={frozen} onClick={chooseManual}>
                   Manual Mode
                 </button>
               </div>
@@ -514,7 +597,7 @@ export function Workspace() {
                 <div className="brief-actions">
                   <p className="small muted">
                     <ShieldCheck size={14} />
-                    AI drafts. You decide.
+                    AI cannot approve payments.
                   </p>
                   <button
                     className="button button-primary"
@@ -526,6 +609,12 @@ export function Workspace() {
                     <ArrowRight size={15} />
                   </button>
                 </div>
+                {parsing && (
+                  <p className="small muted ai-wait-note" role="status">
+                    Gemini can take up to 4½ minutes during high demand. You can switch to Manual
+                    Mode at any time. No payment is being sent.
+                  </p>
+                )}
               </div>
             ) : (
               <div className="manual-note">
@@ -707,7 +796,7 @@ export function Workspace() {
         <aside className="summary-column">
           <section className="payment-summary" aria-labelledby="summary-title">
             <div className="summary-heading">
-              <h2 id="summary-title">The payment, together.</h2>
+              <h2 id="summary-title">Payment summary</h2>
               <Layers3 size={18} />
             </div>
             <div className="total-label">Total to recipients</div>
@@ -785,7 +874,7 @@ export function Workspace() {
           <section className="atomic-explainer">
             <div className="heading-with-icon">
               <Layers3 size={16} />
-              <h3>One signature. Every recipient.</h3>
+              <h3>One atomic payment</h3>
             </div>
             <p>
               All transfer effects succeed together or fail together. A failed transaction may still
@@ -932,7 +1021,7 @@ export function Workspace() {
         <section className="notice submitted-state">
           <Clock3 size={24} />
           <div>
-            <h2>Submitted. Checking the original signature.</h2>
+            <h2>Payment submitted. Verifying on-chain.</h2>
             <p className="small">Do not send again while confirmation is uncertain.</p>
             <p className="address small">{submittedSignature}</p>
             <button
@@ -947,7 +1036,9 @@ export function Workspace() {
       )}
       {receipt && (
         <>
-          <ReceiptView receipt={receipt} reviewedPlan={prepared?.plan} />
+          <div ref={receiptRef} tabIndex={-1} className="receipt-anchor">
+            <ReceiptView receipt={receipt} reviewedPlan={receiptPlan} />
+          </div>
           {stage === 'receipt' && (
             <button
               className="button new-payment"
@@ -965,6 +1056,32 @@ export function Workspace() {
           )}
         </>
       )}
+      <section className="how-panel" aria-labelledby="how-title">
+        <div>
+          <h2 id="how-title">How SplitBrief works</h2>
+          <p>AI organizes the brief. You control the wallet.</p>
+        </div>
+        <ol>
+          {[
+            'Save the public wallet addresses of your recipients.',
+            'Describe who to pay and how much in ordinary language.',
+            'AI creates an editable payment draft.',
+            'Check every recipient, address, amount and fee.',
+            'Approve one transaction with Phantom.',
+            'Inspect the verified on-chain receipt.',
+          ].map((text, index) => (
+            <li key={text}>
+              <span>{index + 1}</span>
+              {text}
+            </li>
+          ))}
+        </ol>
+        <p className="how-safety">
+          AI never controls private keys or approves payments. Solana executes multiple native
+          transfers in one atomic transaction: if an instruction fails, transfer effects are rolled
+          back, although network fees may still be charged.
+        </p>
+      </section>
       <Contacts
         contacts={contacts}
         disabled={frozen || parsing}
@@ -978,16 +1095,30 @@ export function Workspace() {
           }
         }}
       />
-      <section className="panel history-panel" aria-labelledby="history-title">
+      <section className="panel history-panel" id="history" aria-labelledby="history-title">
         <div className="panel-heading">
           <div className="heading-with-icon">
             <Clock3 size={18} />
             <h2 id="history-title">Recent receipts</h2>
           </div>
-          <Link href="/verify" className="text-button">
-            Verify any signature <ArrowUpRight size={14} />
-          </Link>
+          <div className="button-row">
+            <button className="text-button" onClick={recoverPayments} disabled={recovering}>
+              {recovering ? 'Finding payments…' : 'Find my payments'}
+            </button>
+            <Link href="/verify" className="text-button">
+              Verify any signature <ArrowUpRight size={14} />
+            </Link>
+          </div>
         </div>
+        <p className="history-note small muted">
+          Saved on this site and browser. Changing from localhost to a deployed URL uses separate
+          storage. A fresh chain check verifies every reference.
+        </p>
+        {recoveryMessage && (
+          <p className="notice" role="status">
+            {recoveryMessage}
+          </p>
+        )}
         {history.length === 0 ? (
           <div className="empty-history">
             <Clock3 size={23} />
@@ -1003,11 +1134,21 @@ export function Workspace() {
                 className="history-row"
               >
                 <div>
-                  <strong>{entry.plan.items.map((item) => item.recipientLabel).join(', ')}</strong>
+                  <strong>
+                    {entry.plan
+                      ? entry.plan.items.map((item) => item.recipientLabel).join(', ')
+                      : entry.source === 'recovered'
+                        ? 'Recovered native payment'
+                        : 'Verified Devnet transaction'}
+                  </strong>
                   <p className="small muted address">{entry.signature}</p>
                 </div>
                 <strong className="tabular">
-                  {lamportsToSolExact(entry.plan.totalLamports)} SOL
+                  {historyTotals[entry.signature]
+                    ? `${lamportsToSolExact(historyTotals[entry.signature])} SOL`
+                    : entry.plan
+                      ? `${lamportsToSolExact(entry.plan.totalLamports)} SOL (plan)`
+                      : 'Check amount'}
                 </strong>
                 <span className="badge">
                   {historyStates[entry.signature] ??

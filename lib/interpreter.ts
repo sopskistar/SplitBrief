@@ -23,7 +23,8 @@ export const interpretationSchema = z
   .strict();
 export type Interpretation = z.infer<typeof interpretationSchema>;
 export type InterpretationRequest = z.infer<typeof interpretRequestSchema>;
-export const AI_TIMEOUT_MS = 20_000;
+// Long enough for the measured overloaded provider; still bounded independently of SDK timers.
+export const AI_TIMEOUT_MS = 270_000;
 export class InterpreterError extends Error {
   constructor(
     public status: number,
@@ -158,7 +159,7 @@ export function geminiGenerator(apiKey: string, model: string): GenerateDraft {
           },
         },
       },
-      { timeout_ms: AI_TIMEOUT_MS, maxRetries: 0, signal },
+      { timeout_ms: AI_TIMEOUT_MS, maxRetries: 0, fetch_options: { signal } },
     );
     return response.output_text ?? '';
   };

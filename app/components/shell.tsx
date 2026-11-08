@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { ArrowUpRight, GitBranch, Layers3, ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 import { WalletControl } from './wallet-control';
 
 export function Header() {
@@ -7,14 +8,20 @@ export function Header() {
     <header className="site-header">
       <div className="header-inner">
         <Link href="/" className="wordmark" aria-label="SplitBrief home">
-          <span className="brand-symbol">
-            <GitBranch size={21} strokeWidth={2.2} />
-          </span>
-          SplitBrief
+          <Image
+            src="/branding/splitbrief-wordmark.png"
+            alt="SplitBrief"
+            width={1950}
+            height={450}
+            className="brand-wordmark"
+            priority
+            unoptimized
+          />
         </Link>
         <nav aria-label="Main navigation">
-          <Link href="/">Workspace</Link>
+          <Link href="/">New payment</Link>
           <Link href="/verify">Verify receipt</Link>
+          <Link href="/how-it-works">How it works</Link>
           <Link href="/judges">
             For judges <ArrowUpRight size={13} />
           </Link>
@@ -34,7 +41,7 @@ export function Footer() {
   return (
     <footer className="site-footer">
       <div>
-        <Layers3 size={15} />
+        <Image src="/branding/splitbrief-icon.png" alt="" width={27} height={27} unoptimized />
         <span>Built for the MLH Solana Hackathon 2026</span>
       </div>
       <nav aria-label="Footer">

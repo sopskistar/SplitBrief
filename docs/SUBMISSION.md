@@ -1,54 +1,52 @@
 # MLH submission material
 
-## Project
+**Project:** SplitBrief
 
-**SplitBrief**
-
-**Short pitch:** From payment instructions to one Solana transaction.
+**Short description:** Pay multiple people in one Solana transaction. SplitBrief turns ordinary payment instructions into a reviewed draft, maps names to saved public addresses, and verifies every native SOL transfer after one wallet approval.
 
 **Repository:** https://github.com/sopskistar/SplitBrief
 
-**Live demo:** Not deployed yet; Vercel sign-in is required. Add only a verified deployed URL.
+**Verified live app:** https://splitbrief-zeta.vercel.app
 
-**Video:** Final video is not assembled. Genuine non-wallet clips exist locally; Phantom approval, public Devnet receipt footage, and successful live AI footage are pending.
+**Judge evidence:** https://splitbrief-zeta.vercel.app/judges
 
-## Long summary
+**Submission form:** https://www.mlh.com/events/solana-hackathon/submissions/new (requires the team's MLH sign-in)
 
-Small teams often receive collaborator payments as unstructured messages. Re-entering names, amounts, and addresses across separate wallet approvals creates repeated work and opportunities for mistakes.
+**Video:** Exported `demo/output/splitbrief-105s.mp4`, **104.27 seconds**, 1920×1080 H.264, intentionally silent with readable captions. Full decode and chapter-frame inspection passed. See [demo export manifest](../demo/EXPORT_MANIFEST.json) and [shot list](DEMO_SHOTLIST.md). Do not invent a published video URL. The cut must distinguish local atomic proof from public wallet funding; genuine Phantom approval footage is unavailable.
 
-SplitBrief turns an ordinary-language payment brief into an editable draft. Gemini returns structured recipient labels, exact SOL strings, purposes, warnings, and clarification states. Public addresses come only from a reviewed local address book. Deterministic code checks decimal precision, duplicate and unknown recipients, self-payment, spending caps, balance, and fees before freezing a human-readable review.
+## Long description for the form
 
-The payer signs one Solana version 0 transaction containing two or three native System Program transfers. All transfer effects succeed or roll back together, although failed transactions may still charge fees. After submission, SplitBrief independently retrieves and decodes the full chain transaction and compares payer, destinations, amounts, order, count, and unexpected instructions against the frozen plan. A standalone verifier inspects any Devnet signature and makes a brief-match claim only when an expected plan exists.
+Small teams receive collaborator payments as messages: a name, an amount, and a purpose spread across ordinary language. Preparing separate transfers repeats work and increases the chance of an address or amount mistake.
 
-The app is Devnet-only, noncustodial, database-free, and intentionally small. Contacts and recent receipt references stay in the browser. Manual Mode remains usable during provider failures and is never presented as AI output.
+SplitBrief turns a payment instruction into an editable draft. A genuine Gemini 3.8 Flash structured response extracts only known recipient labels, exact SOL strings, purposes, warnings, and clarification states. Addresses come from the user's reviewed browser-local address book. AI never chooses an address, holds a key, signs, or sends. Deterministic bigint validation checks precision, known recipients, duplicate destinations, self-payment, spending caps, balance, and fees before the payer reviews a frozen plan.
 
-## Technology and attribution
+Solana makes the workflow useful: one version 0 transaction contains two or three native System Program transfers and requires one payer signature. All transfer effects succeed together or roll back together, although fees can still apply on failure. Wallet Standard provides noncustodial Phantom approval on Devnet. SplitBrief then independently retrieves the full actual transaction and compares its payer, sources, destinations, order, amounts, count, signatures, and unexpected instructions against the frozen plan. Receipts show full addresses, actual amounts and fees, copy/share controls, Explorer links, and fresh RPC verification. Without a saved plan, the verifier claims only chain decoding.
 
-- Next.js 16.4.3 App Router, React, TypeScript, Tailwind CSS, Geist, Lucide
-- Solana Kit 8.6.0, supported wallet plugin and React bindings, Wallet Standard, `@solana-program/system`
-- Google GenAI 3.0.0, `gemini-3.8-flash`, Interactions structured JSON, Zod
-- Vitest, Testing Library, Playwright, offline Surfpool 1.7.0
-- Vercel deployment configuration; browser-local storage; no custom contract or database
+The working Vercel application has 168 passing unit/integration tests, 15 browser tests, and 8 actual Surfpool assertions proving successful three-recipient execution and atomic rollback. Live Gemini interpretation succeeded with the exact sample amounts in 117.2 seconds; temporary provider demand can still cause slow responses or failures, and Manual Mode stays explicit. The supplied public signature was honestly identified as finalized incoming funding of 2.5 SOL, not a batch payout. Public multi-recipient wallet proof and Phantom approval footage remain to be completed by the wallet owner. All activity is Devnet/local; no mainnet funds, custody, custom contract, or database is involved.
 
-AI coding assistance: **OpenAI Codex with `gpt-6.1-sol`**, verified from the current session's runtime `turn_context.model` metadata on November 7, 2026. Used for implementation, UI, test authoring/execution, debugging, documentation, and demo preparation. The public Solana Foundation Kit Next.js starter and permitted open-source dependencies are credited in README. Project-specific code was written during the event. The original repository and MIT license were preserved.
+## Track explanations
 
-## Applicable categories
+| Category           | Submission explanation                                                                                                                                                                                                                                                                                                  |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Top 3 Overall      | Converts a complex payment message into one inspectable Solana transaction. The editor, human review, atomic execution, and independent receipt form one coherent working product. Local execution and rollback are proven; public batch proof remains incomplete. Eligible entries are automatically considered.       |
+| DeFi Track         | Real native multi-recipient settlement using a noncustodial wallet and open RPC receipts. Multiple transfers share one transaction, with deterministic review and verification. Describe it as a payment application; do not claim custody, payroll compliance, or a new financial protocol.                            |
+| AI Track           | Live Gemini functionality is genuinely verified. AI extracts exact labels/amounts and purposes; deterministic code supplies reviewed addresses and validates output. Solana supplies atomic settlement and verifiability. Disclose measured latency and distinguish local-chain proof from the incomplete public batch. |
+| Best Beginner Hack | **Eligibility not established. Leave unselected unless the team confirms that more than half its members meet the event's first-time-hacker requirement.**                                                                                                                                                              |
 
-| Category           | Rationale and current evidence                                                                                                                                                                                                                                                   |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Top 3 Overall      | A useful working payment workspace centered on Solana's native multi-instruction atomic transactions. Actual local-chain success and rollback are proven; public wallet proof is pending. Event information says eligible entries are automatically considered.                  |
-| AI Track           | Natural-language interpretation makes payment preparation easier while deterministic review and wallet approval retain control. **Select only after live Gemini access is verified and show genuine model output.** Current API requests time out; do not claim AI proof passed. |
-| DeFi Track         | A financial payment application using open native SOL transfers and independently inspectable receipts. Explain the payment use case without custody, payroll-compliance, mainnet, or sophisticated DeFi claims.                                                                 |
-| Best Beginner Hack | **Eligibility not established. Leave unselected unless the team confirms that more than half its members meet the event's first-time hacker criterion.** Do not infer eligibility from this being a new repo.                                                                    |
+## Technology and disclosure
 
-## Evidence and submission checklist
+Next.js 16.4.3, React, TypeScript, Tailwind CSS, Geist, Lucide; Solana Kit 8.6.0, supported wallet plugins, Wallet Standard, `@solana-program/system`; Google GenAI 3.0.0, `gemini-3.8-flash` Interactions structured output, Zod; Vitest, Testing Library, Playwright, Surfpool 1.7.0; Node 24 and Vercel. Demo tools include Playwright and FFmpeg. Browser-local contacts/history; no database or backend custody.
 
-- Unit/component/route suite: 157 passing tests; current details in [TESTING.md](TESTING.md)
-- Actual local atomic execution and rollback: [local-chain.json](../public/evidence/local-chain.json)
-- Actual live Gemini status: [gemini.json](../public/evidence/gemini.json), currently timeout/unverified
-- Actual public Devnet status: [devnet.json](../public/evidence/devnet.json), currently airdrop blocked/no payment
-- Screenshots: [actual app captures](screenshots)
-- Human Phantom approval: pending
-- Verified live URL and final video URL: pending; never invent links
+**AI coding assistance:** OpenAI Codex. The build session's runtime metadata was inspected and recorded as **`gpt-6.1-sol`** on November 7, 2026. Used for implementation, UI, debugging, tests, documentation, deployment, and video preparation. Gemini is the application's payment interpreter and has separate real provider evidence. The Solana Foundation Kit Next.js starter and permitted open-source dependencies are credited in README. The original MIT license, repository identity, and history were preserved; project-specific code was written during the event. Supplied branding is the user's uploaded artwork.
 
-Submit **one entry per team**, select only applicable tracks, credit tools and libraries, and disclose current limitations. The [official event schedule](https://events.mlh.com/events/15200-solana-hackathon) lists initial submissions on **November 8, 2026 at 10:00 AM ET**, then final submission at **11:45 AM ET**. Create the initial entry early rather than waiting for the final cutoff. Review the [standard MLH rules](https://github.com/MLH/mlh-policies/blob/main/standard-hackathon-rules.md) and event-specific submission instructions before publishing.
+## Evidence and remaining submission actions
+
+- [Genuine Gemini response](../public/evidence/gemini.json) and [diagnostics](GEMINI_DIAGNOSTICS.md)
+- [Actual local execution and rollback](../public/evidence/local-chain.json)
+- [Supplied Devnet transaction](../public/evidence/devnet.json), correctly classified as funding
+- [Production browser checks](../public/evidence/deployment.json), [tests](TESTING.md), and [actual screenshots](screenshots)
+- Human action: complete the tiny public batch with Phantom and record/export its receipt if possible; never reuse funding as payout proof.
+- Human action: review/upload the final captioned MP4 to the submission's video destination; no video account publication is claimed.
+- Human action: sign in to MLH, submit one entry per team, select applicable tracks, and confirm Beginner eligibility only if true.
+
+The [organizer schedule](https://events.mlh.com/events/15200-solana-hackathon) lists initial submission **November 8 at 10:00 AM ET** and final submission **11:45 AM ET**. The MLH form page separately displays a 1:00 PM EST close; use the earlier organizer deadlines. Submit early. Review the [standard MLH rules](https://github.com/MLH/mlh-policies/blob/main/standard-hackathon-rules.md). No MLH entry has been submitted by this agent.

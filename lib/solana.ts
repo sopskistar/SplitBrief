@@ -24,6 +24,7 @@ import {
 import { getTransferSolInstruction } from '@solana-program/system';
 import { assertAffordable, validatePlan, type PaymentPlan } from './payments';
 import { decodeReceipt, signatureSchema, type Receipt } from './verification';
+import { evaluatePaymentEvidence } from './payment-evidence';
 
 export const DEVNET_GENESIS = 'EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG';
 export const RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || 'https://api.devnet.solana.com';
@@ -218,6 +219,19 @@ export async function fetchReceipt(
     status.value[0]?.confirmationStatus ?? null,
     expected,
   );
+}
+
+export async function findRecentPayments(rpc: AppRpc, payer: string): Promise<Receipt[]> {
+  await assertDevnet(rpc);
+  const signatures = await rpc
+    .getSignaturesForAddress(address(payer), { limit: 5, commitment: 'confirmed' })
+    .send({ abortSignal: AbortSignal.timeout(12_000) });
+  const receipts: Receipt[] = [];
+  for (const entry of signatures) {
+    const receipt = await fetchReceipt(rpc, entry.signature);
+    if (evaluatePaymentEvidence(receipt, payer).success) receipts.push(receipt);
+  }
+  return receipts;
 }
 
 export async function waitForReceipt(

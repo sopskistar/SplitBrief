@@ -1,0 +1,23 @@
+{
+  "recipients": [
+    {
+      "id": "devnet-0",
+      "name": "Ada",
+      "address": "EgpR8wT9oSnYxbB3tbAtBzdMCiP1Krez84YJ5id6MRxp",
+      "description": "Disposable Devnet test recipient, no retained private key"
+    },
+    {
+      "id": "devnet-1",
+      "name": "Chidi",
+      "address": "B5FrY8tQL73E14k4uHvk1GqtpJeBWGhaNy6z8vtnup5d",
+      "description": "Disposable Devnet test recipient, no retained private key"
+    },
+    {
+      "id": "devnet-2",
+      "name": "Reserve",
+      "address": "5LB7gzK1WFG6hEkeym25r9vjFEDCdBBZFpsVoSGUCBYz",
+      "description": "Disposable Devnet test recipient, no retained private key"
+    }
+  ],
+  "notice": "Optional disposable public Devnet addresses. No retained private keys. Review all addresses before paying."
+}

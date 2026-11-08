@@ -1,21 +1,19 @@
-# Build report
+# Final delivery report
 
-Built November 7, 2026 in the original `sopskistar/SplitBrief` clone. No new repo, smart contract, database, custody service, or mainnet transaction was created.
+Continued the existing `sopskistar/SplitBrief` repository, preserving its Git history, MIT license, architecture, and Solana Kit payment flow. Fast-forwarded to the supplied branding commit before making changes. Original uploaded PNGs were copied byte-for-byte into public branding, retaining RGBA transparency and aspect ratio; favicon and OG assets derive from that artwork.
 
-Implemented the full product path, safe Devnet Kit transaction construction, independently decoded receipts, local contacts/history, strict Gemini server integration, responsive UI, judge/help/privacy routes, metadata, tests, deployment configuration, and demo tooling.
+The workspace now explains the product immediately, centers the payment editor, uses New payment / Verify receipt / How it works / For judges navigation, offers a six-step guide, and retains the original purple/lime/off-white palette. Receipts prominently expose actual chain details, copy/share/download controls, and honest matching states. Browser history retains valid references across refreshes, salvages valid entries individually, distinguishes origins, and supports public outgoing-payment recovery without inventing an original plan.
 
-Verified Node 24.22.2 in actual install/test processes, an actual offline Surfpool payment and atomic failure rollback, the unit/component suite, browser QA, and production build. Inspect [TESTING.md](TESTING.md) and [`public/evidence`](../public/evidence) for exact current results.
+**Production:** https://splitbrief-zeta.vercel.app, deployed into the existing authenticated Vercel project on Node **24.x**. Anonymous Chromium checked the workspace, logos, wallet picker, metadata/routes, mobile widths 320–1440px, actual RPC receipt, and persistent reference. The server-only Gemini key was configured as a sensitive production value through stdin; no secret is in client variables or source.
 
-Final checks: `npm run ci` passed lint, TypeScript, **157 tests in 8 files**, and the production build. All **12 Playwright tests passed**, each also asserting zero uncaught browser errors. Offline Surfpool passed **8 actual-chain assertions**. Formatting, shell syntax, Git whitespace checks, and the static design check passed. The design render helper lacked puppeteer-core; actual Playwright captures and browser QA supplied visual checks instead.
+**Genuine Gemini:** the configured account supports `gemini-3.8-flash`. A full application interpretation succeeded in **117,180 ms**, and the deployed HTTP route returned **200 in 147,892 ms** with the three exact sample amounts. Temporary provider demand produced 503/504 responses in other diagnostics; no invalid-key or quota-exhaustion claim is inferred. Timeouts are now bounded at 270s provider/application, 285s browser, and 300s Vercel. Manual Mode can cancel the browser wait. [Diagnostics](GEMINI_DIAGNOSTICS.md).
 
-The local production preview served the workspace, verifier, judges, privacy, help, robots, sitemap, OG image, and favicon with HTTP 200. A request for `.env.local` returned 404; invalid interpretation input returned 400 without a model call. The actual local Gemini key was absent from all **21 built client asset files** and all Git-eligible source files. No persistent disposable key files exist. Final screenshots and three non-wallet clips were captured from this production preview, without simulated provider/wallet/RPC responses or development overlays.
+**Public Devnet:** the supplied signature is finalized, but it is **incoming funding**, not a SplitBrief payout. A different payer sends **2.5 SOL** into the owner's address, with **5,495 lamports fee**, one native transfer, and two ComputeBudget instructions. The proof command correctly rejects it as outgoing batch evidence. No original reviewed plan is available. [Exact results](DEVNET_PROOF.md).
 
-External actions still needed:
+**Checks:** lint, TypeScript, production build, **168 tests in 9 files**, **15 Chromium tests**, and **8 actual Surfpool assertions**. Local execution proves three transfers inside one signed transaction, exact balances, and failed-transaction atomic rollback. Browser fixtures remain separate from genuine public evidence. [Current results](TESTING.md).
 
-- Genuine Gemini success: current 20-second calls time out; API secret is present and ignored, never printed. Check the model/account in Google AI Studio and retry the supplied smoke script.
-- Human Phantom approval and a public Devnet signature: free official RPC airdrop returned 410. The owner's separate Phantom had 2.5 SOL on Devnet at balance check. Approval must happen in the owner's browser.
-- Vercel sign-in and deployment: CLI reports Logged out; production source/config is ready.
-- Final demo clip and assembly: three genuine non-wallet clips exist; wallet/receipt and live AI success footage remain missing.
-- MLH account entry/submission: content is prepared in SUBMISSION.md; no entry was submitted automatically.
+Original raw video assets are preserved. New production captures, export provenance, and honest missing-footage handling are documented in [DEMO_SHOTLIST.md](DEMO_SHOTLIST.md). No fake Phantom approval or funding-as-payout claim is permitted. Public batch proof still requires the owner's real browser approval; video publication and the MLH submission require their account interaction. [Submission copy and links](SUBMISSION.md).
 
-Codex model attribution was verified from current-session metadata as `gpt-6.1-sol`; no underlying model was guessed from branding or a global default.
+OpenAI Codex assisted the build and final delivery; runtime metadata recorded model `gpt-6.1-sol`. Gemini is the application's separately verified interpreter. No mainnet transaction, custom contract, database, backend signer, personal seed, or persistent disposable test key was used.
+
+The current demo was exported to `demo/output/splitbrief-105s.mp4` at **104.266667 seconds**, 1920×1080 H.264, silent/captioned. All 3,128 frames decoded successfully, no black interval >=0.25s was found, and chapter/closing frames were visually inspected. Publication and public payout footage remain human actions.

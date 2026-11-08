@@ -1,42 +1,32 @@
-# Vercel deployment
+# Vercel production deployment
 
-The production build passed. Vercel CLI 65.12.1 is available through npx but reports **Logged out**. No live deployment or URL is claimed. GitHub authentication is available, and this repo is the existing `sopskistar/SplitBrief` repository.
+**Verified public application: https://splitbrief-zeta.vercel.app**
 
-## Shortest path: dashboard import
+The existing Vercel account is authenticated as `sopskistar`. The existing `splitbrief` project under `sopskistars-projects` was reused; no second repository or project was created. Its Node runtime was explicitly set to **24.x**. Anonymous Chromium access returned HTTP 200 and rendered the actual app. [Browser acceptance evidence](../public/evidence/deployment.json) records the latest public checks.
 
-1. Sign in at [Vercel](https://vercel.com/new), choose **Import Git Repository**, and select **sopskistar/SplitBrief**. Do not create a second GitHub repository.
-2. Keep Next.js as the framework, root directory `.`, install `npm ci`, build `npm run build`, and Node **24.x**. No database or external storage is required.
-3. Add these environment variables in the project settings:
+Production variables are configured in Vercel:
 
-| Variable                     | Value / handling                                                                |
-| ---------------------------- | ------------------------------------------------------------------------------- |
-| `GEMINI_API_KEY`             | Enter the existing secret directly in Vercel; server-only, never `NEXT_PUBLIC_` |
-| `GEMINI_MODEL`               | `gemini-3.8-flash`                                                              |
-| `AI_REQUESTS_ENABLED`        | `true`, or `false` to stop AI requests                                          |
-| `NEXT_PUBLIC_SOLANA_NETWORK` | `devnet`                                                                        |
-| `NEXT_PUBLIC_SOLANA_RPC_URL` | `https://api.devnet.solana.com` or a compatible Devnet endpoint                 |
-| `NEXT_PUBLIC_SITE_URL`       | The actual production HTTPS origin after Vercel assigns it                      |
-
-4. Deploy. Set the actual site origin and redeploy if necessary so metadata, robots, and sitemap use it. The app also recognizes Vercel's production-domain environment variable.
-5. Open the returned URL and check `/`, `/verify`, `/judges`, `/privacy`, `/how-it-works`, `/robots.txt`, `/sitemap.xml`, `/opengraph-image`, and a missing route.
-6. Try the interpreter once. Check the actual provider result; the local provider requests currently time out. Manual Mode must remain available and visibly labeled.
-7. Personally perform the [Phantom Devnet test](TEST_WALLETS.md), then record/rebuild the public evidence and check `/verify` on the deployed origin.
-
-## CLI alternative
+| Variable                     | Handling                                                                                                                            |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `GEMINI_API_KEY`             | Sensitive server-only value, supplied from the ignored local environment through stdin; never a command argument or client variable |
+| `GEMINI_MODEL`               | `gemini-3.8-flash`                                                                                                                  |
+| `AI_REQUESTS_ENABLED`        | `true`                                                                                                                              |
+| `NEXT_PUBLIC_SOLANA_NETWORK` | `devnet`                                                                                                                            |
+| `NEXT_PUBLIC_SOLANA_RPC_URL` | `https://api.devnet.solana.com`                                                                                                     |
+| `NEXT_PUBLIC_SITE_URL`       | `https://splitbrief-zeta.vercel.app`                                                                                                |
 
 ```bash
 source "$HOME/.nvm/nvm.sh"
 nvm use 24
-npx vercel login
-npx vercel link
-npx vercel env add GEMINI_API_KEY production
-# Enter the secret in Vercel's protected prompt, never as a command argument.
-# Add the other listed variables in project settings or equivalent env prompts.
-npx vercel --prod
+npx vercel whoami
+npx vercel --prod --yes --scope sopskistars-projects
+node --import tsx scripts/check-production.ts
 ```
 
-Keep `.env.local` and `.local-test-keys/` ignored. `.vercelignore` explicitly excludes local secrets, private test artifacts, browser reports, and raw video. Never deploy persistent test signers. Public JSON evidence contains only sample instructions, public addresses/signatures, receipt data, and sanitized provider errors.
+If a future shell has no session, run `npx vercel login` and complete the browser authorization. Do not create a new project. `scripts/configure-vercel.mjs` configures the listed production variables without printing the key; use only when an intentional environment update is needed. `.env.local`, Vercel state, test keys, local evidence, raw video, and browser reports are excluded from deployment.
 
-The server function has a 30-second platform maximum around a 20-second model deadline. The route has no automatic provider retry. Set Google project quota/billing limits; a serverless in-memory map does not enforce a global spend cap. Production runtime environment variables are configured at Vercel, not committed to Git.
+The route deadline is 270 seconds, browser deadline 285 seconds, and function maximum 300 seconds, based on measured genuine Gemini latency. There are no automatic provider retries. Manual Mode remains explicit during temporary provider errors. Set Google project quota/billing safeguards; in-memory throttling cannot enforce a global serverless spending cap.
 
-References: [Next.js on Vercel](https://vercel.com/docs/frameworks/full-stack/nextjs), [Vercel environment variables](https://vercel.com/docs/environment-variables).
+The preview deployment may have Vercel authentication protection. The production alias above was separately checked anonymously. Production screenshots and `deployment.json` are actual browser results, not proof that a human Phantom approval occurred.
+
+References: [Next.js on Vercel](https://vercel.com/docs/frameworks/full-stack/nextjs), [environment variables](https://vercel.com/docs/environment-variables).

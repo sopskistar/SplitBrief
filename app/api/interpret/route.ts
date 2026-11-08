@@ -9,7 +9,7 @@ import {
 import { takeRequest } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
-export const maxDuration = 30;
+export const maxDuration = 300;
 
 export async function POST(request: Request): Promise<Response> {
   const headers = { 'Cache-Control': 'no-store' };

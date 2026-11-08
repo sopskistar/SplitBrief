@@ -18,11 +18,13 @@ export type Receipt = {
   payer: string;
   transfers: ChainTransfer[];
   instructionCount: number;
+  signatureCount: number;
   feeLamports: string;
   slot: string;
   timestamp: number | null;
   matchesPlan: boolean | null;
   issues: string[];
+  otherInstructions: { index: number; programId: string; inner: boolean }[];
 };
 
 const keySchema = z.object({ pubkey: z.string(), signer: z.boolean(), writable: z.boolean() });
@@ -76,6 +78,7 @@ export function decodeReceipt(
     throw new Error('RPC transaction signature does not match the lookup.');
   const issues: string[] = [];
   const transfers: ChainTransfer[] = [];
+  const otherInstructions: Receipt['otherInstructions'] = [];
   const payer = tx.transaction.message.accountKeys[0];
   if (!payer.signer) issues.push('Fee payer is not a signer.');
   const outer = tx.transaction.message.instructions;
@@ -84,7 +87,7 @@ export function decodeReceipt(
     [outer, false],
     [inner, true],
   ] as const) {
-    for (const instruction of instructions) {
+    for (const [index, instruction] of instructions.entries()) {
       const parsed = z
         .object({
           type: z.literal('transfer'),
@@ -92,6 +95,7 @@ export function decodeReceipt(
         })
         .safeParse(instruction.parsed);
       if (instruction.programId !== SYSTEM_PROGRAM || !parsed.success) {
+        otherInstructions.push({ index, programId: instruction.programId, inner: isInner });
         issues.push(
           `${isInner ? 'Inner' : 'Outer'} instruction is not a plain native SOL transfer.`,
         );
@@ -121,6 +125,8 @@ export function decodeReceipt(
   let matchesPlan: boolean | null = null;
   if (expected) {
     const plan = validatePlan(expected);
+    if (tx.transaction.signatures.length !== 1)
+      issues.push('Signature count differs from the single-signer review plan.');
     if (payer.pubkey !== plan.payer) issues.push('Fee payer differs from the reviewed plan.');
     if (outer.length !== plan.items.length || transfers.length !== plan.items.length)
       issues.push('Transfer or instruction count differs from the reviewed plan.');
@@ -146,10 +152,12 @@ export function decodeReceipt(
     payer: payer.pubkey,
     transfers,
     instructionCount: outer.length,
+    signatureCount: tx.transaction.signatures.length,
     feeLamports: tx.meta ? integerString(tx.meta.fee) : '0',
     slot: integerString(tx.slot),
     timestamp: tx.blockTime ?? null,
     matchesPlan,
     issues,
+    otherInstructions,
   };
 }

@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-11-08T00:28:35.712Z",
+  "origin": "https://splitbrief-zeta.vercel.app",
+  "success": true,
+  "checks": [
+    "HTTP 200 /",
+    "HTTP 200 /verify",
+    "HTTP 200 /how-it-works",
+    "HTTP 200 /judges",
+    "HTTP 200 /privacy",
+    "HTTP 200 /robots.txt",
+    "HTTP 200 /sitemap.xml",
+    "HTTP 200 /opengraph-image",
+    "HTTP 200 /icon.png",
+    "HTTP 200 /branding/splitbrief-icon.png",
+    "HTTP 200 /branding/splitbrief-wordmark.png",
+    "Custom 404",
+    "Uploaded wordmark loads at original aspect ratio; metadata favicon correct",
+    "Visible demo recipient setup loads three addresses; existing contacts require explicit replacement approval",
+    "Wallet Standard picker opens; no Phantom signing is claimed",
+    "Workspace/navigation fit 320px",
+    "Workspace/navigation fit 390px",
+    "Workspace/navigation fit 768px",
+    "Workspace/navigation fit 1440px",
+    "Real Devnet funding receipt: actual payer/destination/2.5 SOL/fee/finality; no invented plan match; mobile fit",
+    "Verified reference persists across reload/navigation with a fresh RPC check"
+  ],
+  "browserErrors": [],
+  "transientNotes": [],
+  "note": "Anonymous public browser. Real RPC, no fixtures. Gemini is separately recorded; Phantom needs human approval."
+}

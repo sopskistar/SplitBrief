@@ -3,9 +3,11 @@ import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } fro
 import { useSearchParams } from 'next/navigation';
 import { CircleAlert, Fingerprint, LoaderCircle, Search, ShieldCheck } from 'lucide-react';
 import { fetchReceipt, rpcClient } from '@/lib/solana';
-import { readHistory } from '@/lib/history';
+import { readHistory, rememberVerifiedSignature } from '@/lib/history';
+import { broadcastStorage } from '../components/browser-storage';
 import { signatureSchema, type Receipt } from '@/lib/verification';
 import { ReceiptView } from '../components/receipt';
+import type { PaymentPlan } from '@/lib/payments';
 
 export function VerifyWorkspace() {
   const params = useSearchParams();
@@ -14,6 +16,8 @@ export function VerifyWorkspace() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [receipt, setReceipt] = useState<Receipt | null>(null);
+  const [saved, setSaved] = useState('');
+  const [expectedPlan, setExpectedPlan] = useState<PaymentPlan | undefined>(undefined);
   const rpc = useMemo(() => rpcClient(), []);
   const started = useRef(false);
   const verify = useCallback(
@@ -21,11 +25,24 @@ export function VerifyWorkspace() {
       setLoading(true);
       setError('');
       setReceipt(null);
+      setSaved('');
       try {
         const sig = signatureSchema.parse(value.trim());
         const expected = readHistory(localStorage).find((entry) => entry.signature === sig)?.plan;
+        setExpectedPlan(expected);
         const result = await fetchReceipt(rpc, sig, expected);
         setReceipt(result);
+        if (result.state === 'confirmed' || result.state === 'finalized') {
+          try {
+            rememberVerifiedSignature(localStorage, sig);
+            broadcastStorage();
+            setSaved('Saved to Recent receipts on this browser.');
+          } catch {
+            setSaved(
+              'Verified on-chain. Browser storage is unavailable; copy or download this receipt.',
+            );
+          }
+        }
       } catch (error) {
         setError(
           error instanceof Error && !error.message.startsWith('[')
@@ -51,7 +68,7 @@ export function VerifyWorkspace() {
   return (
     <>
       <div className="page-intro">
-        <h1>A receipt you can check.</h1>
+        <h1>Verify a Solana receipt</h1>
         <p>
           Inspect the actual transaction on Solana Devnet. Every displayed transfer comes from RPC
           transaction data.
@@ -96,7 +113,9 @@ export function VerifyWorkspace() {
           <div className="verify-empty">
             <Fingerprint size={30} />
             <div>
-              <h2>{loading ? 'Reading the chain transaction…' : 'Independent by design.'}</h2>
+              <h2>
+                {loading ? 'Reading the chain transaction…' : 'Inspect a real Devnet transaction.'}
+              </h2>
               <p>
                 {loading
                   ? 'Checking the Devnet genesis hash, execution status, and full decoded instructions.'
@@ -112,7 +131,12 @@ export function VerifyWorkspace() {
           {error}
         </p>
       )}
-      {receipt && <ReceiptView receipt={receipt} />}
+      {receipt && <ReceiptView receipt={receipt} reviewedPlan={expectedPlan} />}
+      {saved && (
+        <p className="small muted receipt-saved" role="status">
+          {saved}
+        </p>
+      )}
     </>
   );
 }

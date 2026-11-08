@@ -1,36 +1,40 @@
-# SplitBrief
+<h1><img src="public/branding/splitbrief-wordmark.png" alt="SplitBrief" width="340" /></h1>
 
-**From payment instructions to one Solana transaction.**
+**Pay multiple people in one Solana transaction.**
+
+[Live application](https://splitbrief-zeta.vercel.app) · [Judge evidence](https://splitbrief-zeta.vercel.app/judges) · [MLH submission material](docs/SUBMISSION.md)
 
 Built during the November 6–8, 2026 MLH Solana Hackathon. SplitBrief is a Devnet payment workspace for people paying several collaborators: turn a messy message into a reviewable draft, resolve names against a local address book, sign one atomic transaction, and independently inspect what the chain recorded.
 
-![Actual SplitBrief workspace](docs/screenshots/workspace-desktop.png)
+![Actual SplitBrief workspace](docs/screenshots/production-workspace-desktop.png)
 
 ## What works, and what remains unverified
 
 The application includes a responsive workspace, three-contact address book, manual composer, server-only Gemini interpreter, exact bigint validation, Wallet Standard connection, RPC balance and fee checks, a frozen review, one version 0 transaction with 2–3 native SOL transfers, independent receipt matching, refreshed local history, `/verify`, `/judges`, privacy/help pages, metadata, OG image, favicon, robots, and sitemap.
 
-| Evidence                                            | Actual result                                                                                                    |
-| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Unit, route, signing, verification, component tests | 157 passing tests in 8 files                                                                                     |
-| Chromium UI suite                                   | 12 browser tests; see [current results](docs/TESTING.md)                                                         |
-| Actual local chain execution                        | Surfpool passed 8 assertions, including recipient balance deltas and failed-transaction rollback                 |
-| Production build, lint, TypeScript                  | Passed; see [testing notes](docs/TESTING.md)                                                                     |
-| Live Gemini call                                    | **Unverified:** genuine `gemini-3.8-flash` requests exceeded the bounded timeout; Manual Mode is available       |
-| Public Devnet payment                               | **Pending:** official RPC airdrop returned HTTP 410; no public payment is claimed                                |
-| Human Phantom approval                              | **Pending:** the owner must personally approve in their browser                                                  |
-| Vercel                                              | Production-ready configuration; CLI is logged out, so no deployed URL is claimed                                 |
-| Video                                               | Genuine non-wallet clips captured; final Phantom/receipt footage and successful live AI footage are still needed |
+| Evidence                                            | Actual result                                                                                                                                     |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Unit, route, signing, verification, component tests | **168 passing tests in 9 files**                                                                                                                  |
+| Chromium UI suite                                   | **15 passing browser tests**, including mobile and receipt persistence                                                                            |
+| Actual local atomic execution                       | **8 Surfpool assertions passed**, including balance deltas and rollback after failed execution                                                    |
+| Production build, lint, TypeScript                  | Passed                                                                                                                                            |
+| Live Gemini                                         | **Genuine structured response verified** in 117.2 seconds locally; deployed HTTP 200 in **147.9 seconds** with the exact three amounts            |
+| Supplied public Devnet signature                    | **Finalized incoming funding**, 2.5 SOL into the owner's wallet; one transfer, fee 5,495 lamports. **Not a batch payout**                         |
+| Original payment-plan match                         | Unavailable for the supplied signature; no match claimed                                                                                          |
+| Human Phantom approval                              | User reported a test; supplied signature does not establish an outgoing batch. Approval footage was not captured                                  |
+| Vercel                                              | **Deployed and anonymously checked:** https://splitbrief-zeta.vercel.app                                                                          |
+| Demo video                                          | **104.27-second captioned MP4 exported and inspected.** Source provenance: [demo materials](docs/DEMO_SHOTLIST.md). No simulated Phantom approval |
 
 Machine-readable evidence is in [`public/evidence`](public/evidence). Local Surfpool signatures are **not** public Devnet signatures and have no public Explorer proof. QA fixtures never appear as public payment evidence.
 
 ## The workflow
 
-1. Save Ada, Chidi, and Reserve with three distinct public Solana addresses. You can explicitly load disposable demo recipients or add your own reviewed test addresses.
+1. Save Ada, Chidi, and Reserve with three distinct public Solana addresses. The visible **Set up recipients** action loads disposable demo recipients; replacing saved contacts requires confirmation. You can also add your own reviewed test addresses.
 2. Enter: “Pay Ada 0.002 SOL for design, Chidi 0.001 SOL for delivery, and send 0.003 SOL to Reserve.”
-3. Interpret with Gemini when available, or explicitly select **Manual Mode**. Unknown labels, missing amounts, unsupported currencies, and ambiguous instructions need correction. Editing or failing to interpret a brief blocks the previous draft until you reinterpret or select Manual Mode.
+3. Interpret with Gemini when available, or explicitly select **Manual Mode**. Unknown labels, missing amounts, unsupported currencies, and ambiguous instructions need correction. Editing or failing to interpret a brief blocks the previous draft until you reinterpret or select Manual Mode. During high provider demand, a real request can take several minutes; Manual Mode cancels the browser wait.
 4. Connect Phantom on Devnet. Review every full address, exact amount, RPC-estimated fee, balance, and debit. Choose **Approve & open Phantom**, then personally approve once in the wallet.
-5. SplitBrief submits one transaction, retrieves its actual instructions, and compares them against the frozen plan. Copy its signature to `/verify` for a fresh independent lookup.
+5. SplitBrief submits one transaction, retrieves its actual instructions, and compares them against the frozen plan. **Payment completed** appears only for a successful match. The receipt exposes the full signature, source/destinations, amounts, total, actual fee, network state, Explorer, download, and copy/share controls.
+6. Recent receipts store references and available reviewed plans in this browser. Reloading refreshes chain verification. Localhost and production have separate storage; Verify can bookmark a known signature, and **Find my payments** can recover recent outgoing batches from the connected wallet without inventing an original plan.
 
 ## Run locally: Node 24
 
@@ -68,7 +72,7 @@ In Phantom, enable Testnet Mode under Settings and select **Solana Devnet**, not
 
 ## Why AI, why Solana
 
-Gemini interprets the payment language into strict JSON. It sees contact names, not the address book. The server uses the maintained Google GenAI SDK's documented **Interactions API**, `response_format` JSON schema, `store:false`, disabled automatic continuation, a 1,024-token output cap, no automatic provider retries, Zod validation, and a 20-second deadline. It does not choose addresses or execute payments.
+Gemini interprets the payment language into strict JSON. It sees contact names, not the address book. The server uses the maintained Google GenAI SDK's documented **Interactions API**, `response_format` JSON schema, `store:false`, disabled automatic continuation, a 1,024-token output cap, no automatic provider retries, Zod validation, and a 270-second application deadline (285 seconds in the browser and 300 seconds on Vercel). It does not choose addresses or execute payments.
 
 Solana supplies native transfers in **one** transaction. Each recipient gets a System Program transfer instruction, all sharing one fee payer, message, signature, blockhash, and submission. All state effects succeed or roll back together; fees can still be charged on a failed transaction. A separate decoder checks the full RPC transaction, not just the signature status.
 
@@ -110,17 +114,19 @@ That script independently rechecks RPC. A signature alone proves decoded chain a
 
 ## Deployment and judging
 
-Import this existing repository into Vercel as a Next.js project, choose Node 24, and add the server-only Gemini key and listed environment variables. Set the real production origin in `NEXT_PUBLIC_SITE_URL`, deploy, then verify the live workspace, API, `/verify`, and `/judges`. No live URL is claimed until checked. Detailed steps: [deployment](docs/DEPLOYMENT.md).
+The existing Vercel project runs **Node 24** at [splitbrief-zeta.vercel.app](https://splitbrief-zeta.vercel.app). The server-only Gemini secret is configured in production; no client API key is used. Anonymous Playwright checks verified routes, supplied wordmark, metadata, mobile fit, actual Devnet receipt decoding, and persisted references. See [deployment details](docs/DEPLOYMENT.md) and [browser evidence](public/evidence/deployment.json).
+
+The supplied signature was independently verified as incoming funding, with a different fee payer, one 2.5 SOL transfer, and two ComputeBudget instructions. It does not prove the requested payout. See [the exact chain result](docs/DEVNET_PROOF.md). Public multi-recipient proof still requires the wallet owner’s genuine approval; local atomic execution is already proven. Gemini’s supported model and successful responses are documented in [diagnostics](docs/GEMINI_DIAGNOSTICS.md).
 
 - [Two-minute judge walkthrough](docs/JUDGE_WALKTHROUGH.md)
 - [Submission text and category eligibility](docs/SUBMISSION.md)
 - [105-second demo script](docs/DEMO_SCRIPT.md) and [shot list](docs/DEMO_SHOTLIST.md)
 - [Actual desktop/mobile screenshots](docs/screenshots)
 
-The [event schedule](https://events.mlh.com/events/15200-solana-hackathon) lists initial submission **November 8 at 10:00 AM ET** and final submission **11:45 AM ET**. Submit one entry per team early. AI Track proof remains pending until a genuine model call succeeds.
+The [event schedule](https://events.mlh.com/events/15200-solana-hackathon) lists initial submission **November 8 at 10:00 AM ET** and final submission **11:45 AM ET**. Submit one entry per team early. The AI Track now has genuine structured provider evidence. Public batch proof and Phantom recording remain incomplete; disclose them. The MLH form separately shows a later close, so use the earlier organizer deadlines.
 
 ## Attribution and hackathon disclosure
 
 Project-specific implementation was written during the hackathon. The scaffold/configuration and wallet integration patterns come from the public [Solana Foundation Kit Next.js template](https://github.com/solana-foundation/templates/tree/main/kit/nextjs); an original starter README is retained at [docs/OFFICIAL_STARTER.md](docs/OFFICIAL_STARTER.md). Dependencies retain their own licenses. The repository's original MIT [LICENSE](LICENSE), identity, and initial history are preserved.
 
-AI coding assistance: **OpenAI Codex, model `gpt-6.1-sol`**, verified from this session's runtime `turn_context.model` metadata on November 7, 2026. Codex assisted implementation, documentation, debugging, tests, and demo preparation. Gemini is the application interpreter; its live success is separately recorded and is currently unverified.
+AI coding assistance: **OpenAI Codex, model `gpt-6.1-sol`**, verified from this session's runtime `turn_context.model` metadata on November 7, 2026. Codex assisted implementation, documentation, debugging, tests, and demo preparation. Gemini is the application interpreter; its genuine local and production responses are separately recorded in public evidence.

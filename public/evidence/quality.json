@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-11-08T00:26:52.455Z",
+  "node": "v24.22.2",
+  "source": "Observed command outputs in this delivery session; not a CI artifact.",
+  "lint": "passed",
+  "typecheck": "passed",
+  "unitTests": {
+    "passed": 168,
+    "files": 9,
+    "failed": 0
+  },
+  "playwright": {
+    "passed": 15,
+    "failed": 0,
+    "fixtureDisclosure": "QA RPC and wallet fixtures are not public-chain evidence."
+  },
+  "surfpool": {
+    "assertions": 8,
+    "success": true,
+    "network": "local only"
+  },
+  "productionBuild": "passed",
+  "staticDesignCheck": {
+    "failures": 0,
+    "warnings": 3,
+    "note": "Long explicit replacement labels intentionally wrap on mobile; recipient setup is a purposeful callout."
+  },
+  "publicProofCommand": {
+    "exitCode": 1,
+    "note": "Correctly rejects the supplied incoming funding as SplitBrief batch evidence."
+  }
+}

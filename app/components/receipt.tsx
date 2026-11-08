@@ -13,13 +13,14 @@ export function ReceiptView({
 }) {
   const [copied, setCopied] = useState('');
   const success = receipt.state === 'confirmed' || receipt.state === 'finalized';
+  const total = receipt.transfers.reduce((sum, transfer) => sum + BigInt(transfer.lamports), 0n);
   const title =
     receipt.state === 'failed'
       ? 'Transaction failed'
       : receipt.state === 'unverified'
         ? 'Transaction unverified'
         : receipt.matchesPlan === true
-          ? `${receipt.state === 'finalized' ? 'Finalized' : 'Confirmed'} & matched`
+          ? 'Payment completed'
           : receipt.matchesPlan === false
             ? 'Does not match the saved plan'
             : 'On-chain transaction decoded';
@@ -31,7 +32,7 @@ export function ReceiptView({
       setCopied('Clipboard unavailable. Select the text to copy.');
     }
   }
-  const summary = `SplitBrief • SOLANA DEVNET • No real financial value\n${title}\nSignature: ${receipt.signature}\nPayer: ${receipt.payer}\n${receipt.transfers.map((transfer) => `${transfer.source} → ${transfer.destination}: ${lamportsToSolExact(transfer.lamports)} SOL (${transfer.lamports} lamports)`).join('\n')}\nActual fee: ${receipt.feeLamports} lamports\nState: ${receipt.state}\nSlot: ${receipt.slot}\n${explorerUrl(receipt.signature)}`;
+  const summary = `SplitBrief receipt\nSolana Devnet. Test tokens have no real financial value.\n${title}\nSignature: ${receipt.signature}\nFee payer: ${receipt.payer}\n${receipt.transfers.map((transfer) => `${transfer.source} → ${transfer.destination}: ${lamportsToSolExact(transfer.lamports)} SOL (${transfer.lamports} lamports)`).join('\n')}\n${success ? 'Total transferred' : 'Decoded instruction total (not proof of settlement)'}: ${lamportsToSolExact(total)} SOL\nActual fee: ${receipt.state === 'unverified' ? 'unavailable' : `${receipt.feeLamports} lamports`}\nState: ${receipt.state}\nSaved plan match: ${receipt.matchesPlan === null ? 'No expected plan supplied' : receipt.matchesPlan}\nSlot: ${receipt.slot}\n${explorerUrl(receipt.signature)}`;
   return (
     <section className="panel receipt-panel" aria-labelledby="receipt-title">
       <div
@@ -55,6 +56,42 @@ export function ReceiptView({
         <span className="badge">Devnet</span>
       </div>
       <div className="receipt-body">
+        <div className="receipt-overview">
+          <div>
+            <span className="small muted">
+              {success ? 'Total transferred on-chain' : 'Decoded instruction total'}
+            </span>
+            <p className="receipt-total tabular">
+              {lamportsToSolExact(total)} <span>SOL</span>
+            </p>
+            <span className="small muted">
+              {receipt.transfers.length} native transfer{receipt.transfers.length === 1 ? '' : 's'}{' '}
+              in this transaction
+            </span>
+          </div>
+          <div className="receipt-status">
+            {success && receipt.matchesPlan !== false ? (
+              <ShieldCheck size={18} />
+            ) : (
+              <CircleAlert size={18} />
+            )}
+            <strong>
+              {receipt.state === 'finalized'
+                ? 'Finalized'
+                : receipt.state === 'confirmed'
+                  ? 'Confirmed'
+                  : receipt.state === 'failed'
+                    ? 'Execution failed'
+                    : 'Unverified'}
+              {receipt.matchesPlan === true ? ' & matched' : ''}
+            </strong>
+            <span className="small muted">
+              {receipt.matchesPlan === true
+                ? 'Every transfer matches your saved review.'
+                : 'Full transaction decoded from Devnet RPC.'}
+            </span>
+          </div>
+        </div>
         <dl className="receipt-meta">
           <div>
             <dt>Transaction signature</dt>
@@ -89,7 +126,11 @@ export function ReceiptView({
           </div>
           <div>
             <dt>Actual fee</dt>
-            <dd>{lamportsToSolExact(receipt.feeLamports)} SOL</dd>
+            <dd>
+              {receipt.state === 'unverified'
+                ? 'Not available'
+                : `${lamportsToSolExact(receipt.feeLamports)} SOL`}
+            </dd>
           </div>
           <div>
             <dt>Network state</dt>
@@ -115,6 +156,20 @@ export function ReceiptView({
             ))}
           </ul>
         )}
+        {receipt.otherInstructions?.length > 0 && (
+          <details className="receipt-instructions">
+            <summary>Other program instructions ({receipt.otherInstructions.length})</summary>
+            <p className="small muted">
+              These are reported separately from native SOL transfers. They are not part of a
+              transfer-only SplitBrief review.
+            </p>
+            {receipt.otherInstructions.map((instruction, index) => (
+              <p className="address small" key={`${instruction.programId}-${index}`}>
+                Instruction {instruction.index + 1}: {instruction.programId}
+              </p>
+            ))}
+          </details>
+        )}
         <div className="button-row">
           <a
             className="button button-primary"
@@ -129,7 +184,19 @@ export function ReceiptView({
           </button>
           <button className="button" onClick={() => copy('receipt', summary)}>
             <Copy size={15} />
-            Copy receipt
+            Copy receipt summary
+          </button>
+          <button
+            className="button"
+            onClick={() =>
+              copy(
+                'link',
+                `${window.location.origin}/verify?signature=${encodeURIComponent(receipt.signature)}`,
+              )
+            }
+          >
+            <Copy size={15} />
+            Copy receipt link
           </button>
           <button
             className="icon-button"
@@ -158,12 +225,20 @@ export function ReceiptView({
           </button>
         </div>
         <p className="small muted" role="status">
-          {copied === 'receipt'
-            ? 'Receipt summary copied. '
-            : copied.startsWith('Clipboard')
-              ? copied
-              : ''}
+          {copied === 'signature'
+            ? 'Signature copied. '
+            : copied === 'link'
+              ? 'Receipt link copied. '
+              : copied === 'receipt'
+                ? 'Receipt summary copied. '
+                : copied.startsWith('Clipboard')
+                  ? copied
+                  : ''}
           Solana Devnet. Test tokens have no real financial value.
+        </p>
+        <p className="small muted">
+          A shared link verifies the transaction. Your locally saved review plan is not included in
+          the URL.
         </p>
       </div>
     </section>

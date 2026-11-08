@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { HISTORY_KEY, readHistory, rememberSubmission } from '../lib/history';
+import {
+  HISTORY_KEY,
+  readHistory,
+  rememberSubmission,
+  rememberVerifiedSignature,
+} from '../lib/history';
 import { PLAN, TEST_SIGNATURE } from './fixtures';
 function storage() {
   const values = new Map<string, string>();
@@ -16,7 +21,7 @@ describe('untrusted browser history', () => {
     rememberSubmission(s, TEST_SIGNATURE, PLAN);
     const entry = readHistory(s)[0];
     expect(entry.signature).toBe(TEST_SIGNATURE);
-    expect(entry.plan.totalLamports).toBe(PLAN.totalLamports);
+    expect(entry.plan?.totalLamports).toBe(PLAN.totalLamports);
     expect(entry).not.toHaveProperty('confirmed');
   });
   it('deduplicates the original submitted signature', () => {
@@ -43,5 +48,27 @@ describe('untrusted browser history', () => {
       ]),
     );
     expect(readHistory(s)).toEqual([]);
+  });
+  it('preserves valid references when one local history entry is corrupt', () => {
+    const s = storage();
+    rememberSubmission(s, TEST_SIGNATURE, PLAN);
+    const original = JSON.parse(s.getItem(HISTORY_KEY)!);
+    s.setItem(HISTORY_KEY, JSON.stringify([{ signature: 'bad' }, ...original]));
+    expect(readHistory(s)).toHaveLength(1);
+    expect(readHistory(s)[0].signature).toBe(TEST_SIGNATURE);
+  });
+  it('saves an independently verified signature without inventing a payment plan', () => {
+    const s = storage();
+    rememberVerifiedSignature(s, TEST_SIGNATURE);
+    const entry = readHistory(s)[0];
+    expect(entry.source).toBe('verified');
+    expect(entry.plan).toBeUndefined();
+  });
+  it('preserves a real saved review plan when bookmarking the signature again', () => {
+    const s = storage();
+    rememberSubmission(s, TEST_SIGNATURE, PLAN);
+    rememberVerifiedSignature(s, TEST_SIGNATURE);
+    expect(readHistory(s)[0].plan).toEqual(PLAN);
+    expect(readHistory(s)).toHaveLength(1);
   });
 });

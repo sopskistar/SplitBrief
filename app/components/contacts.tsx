@@ -19,7 +19,6 @@ export function Contacts({
   const [error, setError] = useState('');
   const [copied, setCopied] = useState('');
   const [deleting, setDeleting] = useState<string | null>(null);
-  const [loadingDemo, setLoadingDemo] = useState(false);
   function reset() {
     setEditing(null);
     setName('');
@@ -73,25 +72,9 @@ export function Contacts({
               <p>
                 Use Ada, Chidi, and Reserve to try the sample brief. Each needs a different address.
               </p>
-              <button
-                className="text-button"
-                disabled={disabled || loadingDemo}
-                onClick={async () => {
-                  setLoadingDemo(true);
-                  setError('');
-                  try {
-                    const response = await fetch('/evidence/devnet.json');
-                    const data = await response.json();
-                    onChange(validateContacts(data.recipients));
-                  } catch {
-                    setError('Demo recipients are unavailable. Add public addresses in the form.');
-                  } finally {
-                    setLoadingDemo(false);
-                  }
-                }}
-              >
-                {loadingDemo ? 'Loading addresses…' : 'Load disposable demo recipients'}
-              </button>
+              <a className="text-button" href="#recipient-setup">
+                Use the demo recipient setup above
+              </a>
               <p className="small">
                 Optional test addresses with no retained keys. Review the full addresses before
                 paying.

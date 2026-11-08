@@ -114,7 +114,9 @@ test('workspace loads without a wallet and clearly labels its example', async ({
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'A brief. A batch. All settled.' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Pay multiple people in one Solana transaction.' }),
+  ).toBeVisible();
   await expect(page.getByText('Example', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Review payment' })).toBeVisible();
   await page.getByRole('button', { name: 'Review payment' }).click();
@@ -245,9 +247,9 @@ test('public pages, custom 404, metadata essentials, and keyboard entry work', a
   request,
 }) => {
   for (const [path, heading] of [
-    ['/judges', 'The brief becomes the payment.'],
-    ['/privacy', 'Your brief, your wallet.'],
-    ['/how-it-works', 'Plain words. Precise payments.'],
+    ['/judges', 'SplitBrief for the judges'],
+    ['/privacy', 'Privacy and wallet safety'],
+    ['/how-it-works', 'How SplitBrief works'],
   ]) {
     await page.goto(path);
     await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible();
@@ -257,7 +259,7 @@ test('public pages, custom 404, metadata essentials, and keyboard entry work', a
   expect((await request.get('/opengraph-image')).status()).toBe(200);
   const response = await page.goto('/does-not-exist');
   expect(response?.status()).toBe(404);
-  await expect(page.getByRole('heading', { name: 'This page didn’t settle here.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
   await page.goto('/');
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
@@ -325,4 +327,71 @@ test('an expired absent submission requires an explicit new review and never res
   await restart.click();
   await expect(page.getByRole('button', { name: 'Review payment' })).toBeEnabled();
   expect(calls).not.toContain('sendTransaction');
+});
+test('verified references survive reload without inventing a plan', async ({ page }) => {
+  await rpcFixture(page);
+  await page.goto(`/verify?signature=${TEST_SIGNATURE}`);
+  await expect(page.getByRole('heading', { name: 'On-chain transaction decoded' })).toBeVisible();
+  await expect(page.getByText('Saved to Recent receipts on this browser.')).toBeVisible();
+  await page.goto('/');
+  await expect(page.getByText('Verified Devnet transaction', { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByText('Verified Devnet transaction', { exact: true })).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator('.history-row > .badge')).toHaveText('finalized / decoded');
+  await expect(page.locator('.history-row > .badge')).toBeVisible();
+  await page.getByText('Verified Devnet transaction', { exact: true }).click();
+  await expect(page.getByText('No expected plan was supplied.', { exact: false })).toBeVisible();
+});
+test('uploaded wordmark and all four navigation destinations are visible on mobile', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  const logo = page.getByRole('img', { name: 'SplitBrief', exact: true });
+  await expect(logo).toBeVisible();
+  expect(await logo.getAttribute('src')).toBe('/branding/splitbrief-wordmark.png');
+  for (const name of ['New payment', 'Verify receipt', 'How it works', 'For judges'])
+    await expect(
+      page
+        .getByRole('navigation', { name: 'Main navigation' })
+        .getByRole('link', { name, exact: false }),
+    ).toBeVisible();
+  expect(
+    await logo.evaluate(
+      (img: HTMLImageElement) =>
+        Math.abs(img.width / img.height - img.naturalWidth / img.naturalHeight) < 0.1,
+    ),
+  ).toBe(true);
+});
+test('Manual Mode cancels waiting for a slow provider and cannot be overwritten by its late response', async ({
+  page,
+}) => {
+  await seedContacts(page);
+  await page.route('**/api/interpret', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await route
+      .fulfill({
+        contentType: 'application/json',
+        body: JSON.stringify({
+          items: [],
+          warnings: ['late'],
+          clarificationNeeded: true,
+          model: 'QA fixture',
+          source: 'validation',
+        }),
+      })
+      .catch(() => {});
+  });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Use sample brief' }).click();
+  await page.getByRole('button', { name: 'Interpret brief', exact: true }).click();
+  await page.getByRole('button', { name: 'Manual Mode', exact: true }).click();
+  await expect(page.getByText('You are composing this payment.')).toBeVisible();
+  await page.getByRole('textbox', { name: 'Amount SOL 1', exact: true }).fill('0.004');
+  await page.waitForTimeout(1700);
+  await expect(page.getByRole('textbox', { name: 'Amount SOL 1', exact: true })).toHaveValue(
+    '0.004',
+  );
+  await expect(page.getByRole('button', { name: 'Review payment' })).toBeEnabled();
 });

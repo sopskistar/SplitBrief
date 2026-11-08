@@ -1,0 +1,83 @@
+{
+  "exportedAt": "2026-11-08T00:18:24.592Z",
+  "output": "demo/output/splitbrief-105s.mp4",
+  "durationSeconds": 104.266667,
+  "source": "https://splitbrief-zeta.vercel.app",
+  "segments": [
+    {
+      "source": "demo/raw/delivery/01-opening.webm",
+      "start": 0,
+      "duration": 8,
+      "caption": "Built for the MLH Solana Hackathon.\nFrom payment instructions to one Solana transaction."
+    },
+    {
+      "source": "demo/raw/delivery/02-product.webm",
+      "start": 3.001999999999999,
+      "duration": 17,
+      "caption": "Save reviewed public addresses. Describe names and exact SOL amounts.\nThese are disposable Devnet recipients. Nothing has been sent."
+    },
+    {
+      "source": "demo/raw/delivery/02-product.webm",
+      "start": 20.502,
+      "duration": 3,
+      "caption": "Genuine Gemini request. Provider waiting is shortened in this edit.\nAI cannot choose an address, control keys, or approve a payment."
+    },
+    {
+      "source": "demo/raw/delivery/06-recorded-ai.webm",
+      "start": 0.8,
+      "duration": 15,
+      "caption": "Genuine recorded Gemini response: Ada 0.002, Chidi 0.001, Reserve 0.003 SOL.\nThe captured browser request failed; this is the published successful provider record."
+    },
+    {
+      "source": "demo/raw/delivery/02-product.webm",
+      "start": 351.567,
+      "duration": 12,
+      "caption": "Manual Mode is selected after the captured browser network failure.\nThis editable draft is not AI output or a sent payment. Phantom footage is missing."
+    },
+    {
+      "source": "demo/raw/delivery/03-verification.webm",
+      "start": 5.004,
+      "duration": 24,
+      "caption": "Real Devnet lookup: finalized funding of 2.5 SOL into the test wallet.\nOne transfer, fee 0.000005495 SOL. This is NOT a batch payout or plan match."
+    },
+    {
+      "source": "demo/raw/delivery/04-local-proof.webm",
+      "start": 0.5,
+      "duration": 17,
+      "caption": "Local Surfpool proof: one transaction, three transfers, exact balance changes.\nEight assertions include atomic rollback. These signatures are LOCAL, not Devnet."
+    },
+    {
+      "source": "demo/raw/delivery/05-close.webm",
+      "start": 0,
+      "duration": 9,
+      "caption": "Try splitbrief-zeta.vercel.app · Source: github.com/sopskistar/SplitBrief\nPublic batch payment and genuine Phantom approval footage remain outstanding."
+    }
+  ],
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080
+      }
+    ],
+    "format": {
+      "duration": "104.266667",
+      "size": "3541590"
+    }
+  },
+  "audio": "Intentionally silent; readable burned-in captions. No simulated wallet or provider footage.",
+  "limits": "Supplied signature proves funding, not a multi-recipient payout. Local atomic execution is distinguished from public evidence. Phantom approval not captured.",
+  "sha256": "f899b43c69059626568f230e95c8a00a11f32fca8f1e147465af6bb1b3b14557",
+  "inspection": {
+    "checkedAt": "2026-11-08T00:26:52.455Z",
+    "fullDecodeFrames": 3128,
+    "decodeErrors": 0,
+    "blackIntervalsAtLeast025Seconds": 0,
+    "visualReview": "Sampled complete contact sheet, original-size AI and chain frames, closing frame; readable captions and no clipping found.",
+    "audio": "Intentionally silent"
+  }
+}

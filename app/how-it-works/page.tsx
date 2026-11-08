@@ -9,7 +9,7 @@ export default function HowPage() {
   return (
     <article className="article">
       <div className="page-intro">
-        <h1>Plain words. Precise payments.</h1>
+        <h1>How SplitBrief works</h1>
         <p>One brief becomes a payment you can inspect at every step.</p>
       </div>
       <section>
@@ -89,9 +89,9 @@ export default function HowPage() {
       <details>
         <summary>What can I send?</summary>
         <p>
-          Native SOL on Devnet to 2–3 distinct recipients. Each amount must be positive with no more
-          than 9 decimal places, capped at 0.1 SOL per recipient and 0.2 SOL total. Self-payments,
-          currency conversions, and percentages are not supported.
+          Native SOL on Devnet to 2 or 3 distinct recipients. Each amount must be positive with no
+          more than 9 decimal places, capped at 0.1 SOL per recipient and 0.2 SOL total.
+          Self-payments, currency conversions, and percentages are not supported.
         </p>
       </details>
       <div className="button-row">
