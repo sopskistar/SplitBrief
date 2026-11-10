@@ -12,11 +12,28 @@ SplitBrief turns everyday payment instructions into an editable plan. Users revi
 
 ![SplitBrief payment workspace](docs/screenshots/production-workspace-desktop.png)
 
+## For judges: inspect the real result first
+
+| Start here | What it proves |
+| --- | --- |
+| [108-second narrated demo](https://splitbrief-zeta.vercel.app/demo) | The product workflow, with real application footage and an accessible transcript. |
+| [Finalized Devnet receipt](https://splitbrief-zeta.vercel.app/verify?signature=5mfAUjRWXLVDRjV74L9nL8Uk5heLW9NMiJyKpPoHVQmKRjen7DAcEh66DDTJGYDFj72zqRr3zfvzEzkPD5wdxfu) | Three native SOL transfers in one confirmed transaction; independently inspected amounts, recipients and fee. |
+| [Source evidence](public/evidence/devnet-batch.json) | The recorded network evidence underlying the receipt. |
+| [Judge walkthrough](docs/JUDGE_WALKTHROUGH.md) | A safe path through the application, including what is demonstrated versus what is not. |
+
+You can verify the recorded transfer without connecting a wallet. To try a new payment, use **Phantom on Solana Devnet** and disposable test SOL only.
+
 ## The problem
 
 A small-business owner needs to pay a designer, delivery partner and project reserve. The instructions arrive in one message, but repeatedly entering wallet addresses and amounts takes time and creates room for mistakes.
 
 **SplitBrief brings the entire payment into one reviewable workflow.** AI organizes the instructions; the user controls the destinations, signs the payment, and can verify what happened.
+
+## Why we built it
+
+The tedious part of paying several people is not deciding *that* they should be paid. It is translating a brief into separate recipient entries, checking each wallet address and amount, and later reconstructing whether every transfer went through. We built SplitBrief to make those checks **one reviewable decision**, while keeping the private key and final authorization with the payer.
+
+It is intended as a small, testable payment workflow—not a payroll system, an autonomous payment agent, or a service that can choose someone's destination on the user's behalf.
 
 ## How it works
 
@@ -27,6 +44,13 @@ A small-business owner needs to pay a designer, delivery partner and project res
 5. **Verify on-chain** — Inspect the actual transfers, fee, finalization status and public Solana Explorer link.
 
 **AI organizes. You approve. Solana verifies.** All native transfers share one atomic transaction: they succeed together or roll back together, although failed transactions may still incur a network fee.
+
+## What makes the workflow different
+
+- **The model drafts; it does not pay.** Gemini extracts instructions into an editable plan, while recipient addresses come only from a user-reviewed address book. Manual Mode avoids depending on AI availability.
+- **One approval covers a batch.** Native SOL transfers are placed in one atomic transaction rather than presented as independently completed payments; network fees can still apply when a transaction fails.
+- **The receipt is checked after signing.** The application reads the actual transaction through Solana RPC and shows finalization, transfer instructions, amounts, fees and an Explorer link.
+- **Claims have a boundary.** The published payment is genuine Devnet evidence, not a mainnet deployment or a measured reduction in processing time. The original frozen payment-plan snapshot was not independently recovered.
 
 ## Features
 
