@@ -113,3 +113,42 @@ Tests: `npm run lint`, `npm run typecheck`, `npm run test`, `npm run test:e2e` a
 **Submitted to the MLH Solana Hackathon, November 6–8, 2026.** The project includes a [108-second narrated demo](https://splitbrief-zeta.vercel.app/demo), an independently verified public Devnet batch and open test evidence. Built with **OpenAI Codex** assistance using the public Solana Foundation Kit Next.js starter and open-source dependencies.
 
 [Judges and evidence](https://splitbrief-zeta.vercel.app/judges) · [Submission details](docs/SUBMISSION.md) · [MIT License](LICENSE)
+
+---
+
+## Cloud Engineering & DevOps
+
+*Project-specific engineering evidence; only repository-supported capabilities are listed.*
+
+### Cloud platforms
+- Vercel-hosted Next.js application; no application database or custodial backend.
+- Frontend integrates a user-authorized Phantom wallet for Solana Devnet transactions.
+
+### DevOps & CI/CD
+- Project documents local builds and test journeys; published transaction receipts form a reproducible test artifact.
+- No deployed Docker, Terraform or Kubernetes system is claimed.
+
+### Networking & API engineering
+- Gemini-assisted natural-language instruction parsing remains separate from explicit wallet approval.
+- Solana RPC verification and transaction boundaries are documented; one batch is evidenced on **Devnet**, not mainnet.
+
+### Monitoring & reliability
+- Uses atomic multi-transfer transaction semantics and independently viewable chain receipts.
+- Does not claim merchant payment adoption, mainnet transfers or a proven production recovery procedure.
+
+### Architecture & infrastructure diagram
+
+```mermaid
+flowchart LR
+  U[User] --> V[Next.js on Vercel]
+  V --> A[Gemini instruction parsing]
+  U --> W[Phantom wallet approval]
+  W --> S[Solana Devnet]
+  S --> R[RPC receipt verification]
+```
+
+**Deployment:** https://splitbrief-zeta.vercel.app
+
+**Technical documentation and evidence:** [Architecture](docs/ARCHITECTURE.md) · [Deployment](docs/DEPLOYMENT.md) · [Testing](docs/TESTING.md) · [Devnet receipt](https://splitbrief-zeta.vercel.app/verify?signature=5mfAUjRWXLVDRjV74L9nL8Uk5heLW9NMiJyKpPoHVQmKRjen7DAcEh66DDTJGYDFj72zqRr3zfvzEzkPD5wdxfu).
+
+**Current limits:** The public receipt is Devnet evidence only. No application database, Kubernetes or Terraform is claimed.
